@@ -3,6 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
 import GithubAuthButton from "@/components/github-auth-button";
+import GoogleAuthButton from "@/components/google-auth-button";
 
 export default async function Page({
   searchParams,
@@ -88,6 +89,7 @@ export default async function Page({
         <p>Não possui uma conta? <Link href="/sign-up" className="font-bold">Criar agora</Link></p>
       </form>
       <GithubAuthButton />
+      <GoogleAuthButton/>
     </div>
   );
 }
