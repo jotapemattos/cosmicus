@@ -1,26 +1,27 @@
 'use client'
-import { createClient } from "@/utils/supabase/client";
-import Github from "./icons/github"
-
+import { createClient } from '@/utils/supabase/client'
+import Github from './icons/github'
 
 const GithubAuthButton = () => {
-
   const supabase = createClient()
-  
+
   const handleLoginWithGithub = () => {
     supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: `${location.origin}/auth/callback`
-      }
+        redirectTo: `${location.origin}/auth/callback`,
+      },
     })
   }
 
   return (
-      <button className="flex items-center gap-2 justify-center w-full mb-4 border-gray-800 border py-2 rounded-md hover:bg-white/10 transition-all duration-300" onClick={handleLoginWithGithub}>
-          <Github className="w-4 h-4"/>
-          <span>Entrar com Github</span>
-      </button>
+    <button
+      className="mb-4 flex w-full items-center justify-center gap-2 rounded-md border border-gray-800 py-2 transition-all duration-300 hover:bg-white/10"
+      onClick={handleLoginWithGithub}
+    >
+      <Github className="h-4 w-4" />
+      <span>Entrar com Github</span>
+    </button>
   )
 }
 

@@ -16,10 +16,10 @@ const GoogleAuthButton = () => {
 
   return (
     <button
-      className="flex items-center gap-2 justify-center w-full mb-4 border-gray-800 border py-2 rounded-md hover:bg-white/10 transition-all duration-300"
+      className="mb-4 flex w-full items-center justify-center gap-2 rounded-md border border-gray-800 py-2 transition-all duration-300 hover:bg-white/10"
       onClick={handleLoginWithGoogle}
     >
-      <Google className="w-4 h-4" />
+      <Google className="h-4 w-4" />
       <span>Entrar com Google</span>
     </button>
   )

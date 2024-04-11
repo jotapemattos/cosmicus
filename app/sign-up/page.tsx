@@ -1,22 +1,21 @@
-import Link from "next/link";
-import { headers } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { SubmitButton } from "../sign-in/submit-button";
+import Link from 'next/link'
+import { headers } from 'next/headers'
+import { createClient } from '@/utils/supabase/server'
+import { redirect } from 'next/navigation'
+import { SubmitButton } from '../sign-in/submit-button'
 
 export default function Login({
   searchParams,
 }: {
-  searchParams: { message: string };
+  searchParams: { message: string }
 }) {
-  
   const signUp = async (formData: FormData) => {
-    "use server";
+    'use server'
 
-    const origin = headers().get("origin");
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const supabase = createClient();
+    const origin = headers().get('origin')
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+    const supabase = createClient()
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -24,20 +23,20 @@ export default function Login({
       options: {
         emailRedirectTo: `${origin}/auth/callback`,
       },
-    });
+    })
 
     if (error) {
-      return redirect("/sign-up?message=Could not authenticate user");
+      return redirect('/sign-up?message=Could not authenticate user')
     }
 
-    return redirect("/sign-up?message=Check email to continue sign in process");
-  };
+    return redirect('/sign-up?message=Check email to continue sign in process')
+  }
 
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2 overflow-y-hidden">
+    <div className="flex w-full flex-1 flex-col justify-center gap-2 overflow-y-hidden px-8 sm:max-w-md">
       <Link
         href="/"
-        className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
+        className="group absolute left-8 top-8 flex items-center rounded-md bg-btn-background px-4 py-2 text-sm text-foreground no-underline hover:bg-btn-background-hover"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -52,16 +51,16 @@ export default function Login({
           className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
         >
           <polyline points="15 18 9 12 15 6" />
-        </svg>{" "}
+        </svg>{' '}
         Back
       </Link>
 
-      <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
+      <form className="animate-in flex w-full flex-1 flex-col justify-center gap-2 text-foreground">
         <label className="text-md" htmlFor="email">
           Email
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          className="mb-6 rounded-md border bg-inherit px-4 py-2"
           name="email"
           placeholder="you@example.com"
           required
@@ -70,7 +69,7 @@ export default function Login({
           Password
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          className="mb-6 rounded-md border bg-inherit px-4 py-2"
           type="password"
           name="password"
           placeholder="••••••••"
@@ -78,18 +77,23 @@ export default function Login({
         />
         <SubmitButton
           formAction={signUp}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+          className="mb-2 rounded-md border border-foreground/20 px-4 py-2 text-foreground"
           pendingText="Signing Up..."
         >
           Sign Up
         </SubmitButton>
         {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
+          <p className="mt-4 bg-foreground/10 p-4 text-center text-foreground">
             {searchParams.message}
           </p>
         )}
-        <p>Já uma conta? <Link href="/sign-in" className="font-bold">Entrar</Link></p>
+        <p>
+          Já uma conta?{' '}
+          <Link href="/sign-in" className="font-bold">
+            Entrar
+          </Link>
+        </p>
       </form>
     </div>
-  );
+  )
 }

@@ -1,9 +1,9 @@
-import AuthButton from "./auth-button";
+import AuthButton from './auth-button'
 
 export default function Header() {
   return (
-    <header className="w-full py-4 absolute top-0 flex items-center justify-center">
+    <header className="absolute top-0 flex w-full items-center justify-center py-4">
       <AuthButton />
     </header>
-  );
+  )
 }
