@@ -1,84 +1,130 @@
-import Link from 'next/link'
-import { headers } from 'next/headers'
-import { createClient } from '@/utils/supabase/server'
-import { redirect } from 'next/navigation'
-import { SubmitButton } from '../sign-in/submit-button'
+'use client'
 
-export default function Login({
+import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
+import { SubmitButton } from '../sign-in/submit-button'
+import { signUp } from '../actions/sign-up'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { Progress } from '@/components/ui/progress'
+import { useEffect, useState } from 'react'
+
+const emailSchema = z
+  .object({
+    email: z.string().email({
+      message: 'Email inválido',
+    }),
+    password: z
+      .string()
+      .min(8, 'A senha deve ter no mínimo 8 caracteres')
+      .regex(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]$/,
+        'Senha fraca',
+      ),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Senhas incompatíveis',
+    path: ['confirmPassword'],
+  })
+
+type EmailSchema = z.infer<typeof emailSchema>
+
+export default function Page({
   searchParams,
 }: {
   searchParams: { message: string }
 }) {
-  const signUp = async (formData: FormData) => {
-    'use server'
+  const [passwordStrength, setPasswordStrength] = useState(0)
 
-    const origin = headers().get('origin')
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const supabase = createClient()
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<EmailSchema>({
+    resolver: zodResolver(emailSchema),
+  })
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${origin}/auth/callback`,
-      },
-    })
+  const password = watch('password')
 
-    if (error) {
-      return redirect('/sign-up?message=Could not authenticate user')
+  useEffect(() => {
+    setPasswordStrength(0)
+    if (password === undefined) return
+    if (password.match('(?=.*d)')) {
+      setPasswordStrength((prev) => prev + 20)
     }
+    if (password.match('(?=.*[a-z])')) {
+      setPasswordStrength((prev) => prev + 20)
+    }
+    if (password.match('(?=.*[A-Z])')) {
+      setPasswordStrength((prev) => prev + 20)
+    }
+    if (password.match('(?=.*[$*&@#])')) {
+      setPasswordStrength((prev) => prev + 20)
+    }
+    if (password.match('[0-9a-zA-Z$*&@#]')) {
+      setPasswordStrength((prev) => prev + 20)
+    }
+  }, [password])
 
-    return redirect('/sign-up?message=Check email to continue sign in process')
+  const handleSignUp = async ({ email, password }: EmailSchema) => {
+    if (!errors.confirmPassword && !errors.email && !errors.password) {
+      signUp({ email, password })
+    }
   }
 
   return (
     <div className="flex w-full flex-1 flex-col justify-center gap-2 overflow-y-hidden px-8 sm:max-w-md">
-      <Link
-        href="/"
-        className="group absolute left-8 top-8 flex items-center rounded-md bg-btn-background px-4 py-2 text-sm text-foreground no-underline hover:bg-btn-background-hover"
+      <form
+        onSubmit={handleSubmit(handleSignUp)}
+        className="animate-in flex w-full flex-1 flex-col justify-center gap-2 text-foreground"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>{' '}
-        Back
-      </Link>
-
-      <form className="animate-in flex w-full flex-1 flex-col justify-center gap-2 text-foreground">
         <label className="text-md" htmlFor="email">
           Email
         </label>
         <input
           className="mb-6 rounded-md border bg-inherit px-4 py-2"
-          name="email"
-          placeholder="you@example.com"
+          placeholder="email@examplo.com"
           required
+          {...register('email')}
         />
+        {errors.email && (
+          <p className="text-md text-red-500">{errors.email.message}</p>
+        )}
         <label className="text-md" htmlFor="password">
-          Password
+          Senha
         </label>
         <input
           className="mb-6 rounded-md border bg-inherit px-4 py-2"
           type="password"
-          name="password"
           placeholder="••••••••"
           required
+          {...register('password')}
         />
+        {errors.password && (
+          <p className="text-md text-red-500">{errors.password.message}</p>
+        )}
+        <Progress value={passwordStrength} className="bg-red-500" />
+        <label className="text-md" htmlFor="confirmPassword">
+          Confirme sua senha
+        </label>
+        <input
+          className="mb-6 rounded-md border bg-inherit px-4 py-2"
+          type="password"
+          placeholder="••••••••"
+          required
+          {...register('confirmPassword')}
+        />
+        {errors.confirmPassword && (
+          <p className="text-md text-red-500">
+            {errors.confirmPassword.message}
+          </p>
+        )}
         <SubmitButton
-          formAction={signUp}
           className="mb-2 rounded-md border border-foreground/20 px-4 py-2 text-foreground"
           pendingText="Signing Up..."
+          type="submit"
         >
           Sign Up
         </SubmitButton>
@@ -88,7 +134,7 @@ export default function Login({
           </p>
         )}
         <p>
-          Já uma conta?{' '}
+          Já possui uma conta?{' '}
           <Link href="/sign-in" className="font-bold">
             Entrar
           </Link>

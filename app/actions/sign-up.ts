@@ -4,15 +4,16 @@ import { headers } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
-export const signUp = async (formData: FormData) => {
-  'use server'
+interface SignUpProps {
+  email: string
+  password: string
+}
 
+export const signUp = async ({ email, password }: SignUpProps) => {
   const origin = headers().get('origin')
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
   const supabase = createClient()
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -20,7 +21,15 @@ export const signUp = async (formData: FormData) => {
     },
   })
 
+  const emailAlreadyExists =
+    data.user && data.user.identities && data.user.identities.length === 0
+
+  if (emailAlreadyExists) {
+    return redirect('/sign-up?message=Email já existente')
+  }
+
   if (error) {
+    console.log(error)
     return redirect('/sign-up?message=Could not authenticate user')
   }
 
