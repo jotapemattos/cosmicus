@@ -9,7 +9,7 @@ import { Progress } from '@/components/ui/progress'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
-import { Eye } from 'lucide-react'
+import { Eye, EyeOff } from 'lucide-react'
 
 const emailSchema = z
   .object({
@@ -116,7 +116,14 @@ export default function Page({
             type="button"
             onClick={() => setShouldShowPassword((prev) => !prev)}
           >
-            <Eye />
+            <EyeOff
+              size={20}
+              className={`absolute transition-all ${shouldShowPassword ? 'transition-y-1 scale-100' : 'scale-0'}`}
+            />
+            <Eye
+              size={20}
+              className={`transition-all ${shouldShowPassword ? 'transition-y-1 scale-0' : 'scale-100'}`}
+            />
           </button>
         </div>
         {errors.password && (
@@ -152,7 +159,7 @@ export default function Page({
           </p>
         )}
         <button
-          className="mb-2 rounded-md border border-foreground/20 px-4 py-2 text-foreground"
+          className="mb-2 rounded-md border border-foreground/20 bg-primary px-4 py-2 text-secondary"
           type="submit"
         >
           Criar conta
