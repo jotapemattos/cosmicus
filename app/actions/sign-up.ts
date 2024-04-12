@@ -25,13 +25,12 @@ export const signUp = async ({ email, password }: SignUpProps) => {
     data.user && data.user.identities && data.user.identities.length === 0
 
   if (emailAlreadyExists) {
-    return redirect('/sign-up?message=Email já existente')
+    return redirect('/sign-up?error=Email já existente.')
   }
 
   if (error) {
-    console.log(error)
-    return redirect('/sign-up?message=Could not authenticate user')
+    return redirect('/sign-up?error=Não foi possível criar o usuário.')
   }
 
-  return redirect('/sign-up?message=Check email to continue sign in process')
+  return redirect('/sign-up?message=Confira o seu email para continuar')
 }
