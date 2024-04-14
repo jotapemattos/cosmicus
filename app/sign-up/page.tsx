@@ -6,10 +6,10 @@ import { signUp } from '../actions/sign-up'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { Progress } from '@/components/ui/progress'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 
 const emailSchema = z
   .object({
@@ -40,6 +40,8 @@ export default function Page({
   const [shouldShowPasswordInfo, setShouldShowPasswordInfo] = useState(false)
   const [shouldShowPassword, setShouldShowPassword] = useState(false)
 
+  const [isPending, startTransition] = useTransition()
+
   const {
     register,
     handleSubmit,
@@ -65,9 +67,11 @@ export default function Page({
     setPasswordStrength(strength)
   }, [password])
 
-  const handleSignUp = async ({ email, password }: EmailSchema) => {
+  const handleSignUp = ({ email, password }: EmailSchema) => {
     if (!errors.confirmPassword && !errors.email && !errors.password) {
-      signUp({ email, password })
+      startTransition(async () => {
+        await signUp({ email, password })
+      })
     }
   }
 
@@ -80,6 +84,8 @@ export default function Page({
       toast.error(error)
     }
   }, [message, error])
+
+  // TODO: get isPending state (maybe with React Quuery) to disable button and add loading spinner
 
   return (
     <div className="flex w-full flex-1 flex-col justify-center gap-2 overflow-y-hidden px-8 sm:max-w-md">
@@ -148,7 +154,7 @@ export default function Page({
         </label>
         <input
           className="mb-6 rounded-md border bg-inherit px-4 py-2"
-          type="password"
+          type={shouldShowPassword ? 'text' : 'password'}
           placeholder="••••••••"
           required
           {...register('confirmPassword')}
@@ -159,16 +165,19 @@ export default function Page({
           </p>
         )}
         <button
-          className="mb-2 rounded-md border border-foreground/20 bg-primary px-4 py-2 text-secondary"
+          className="mb-2 flex items-center justify-center gap-2 rounded-md border border-foreground/20 bg-primary px-4 py-2 text-secondary"
           type="submit"
+          disabled={isPending}
         >
-          Criar conta
+          {isPending ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Criando...</span>
+            </>
+          ) : (
+            <span>Criar conta</span>
+          )}
         </button>
-        {message && (
-          <p className="mt-4 bg-foreground/10 p-4 text-center text-foreground">
-            {message}
-          </p>
-        )}
         <p>
           Já possui uma conta?{' '}
           <Link href="/sign-in" className="font-bold">
