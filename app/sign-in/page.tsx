@@ -1,63 +1,111 @@
+'use client'
+
 import Link from 'next/link'
-import { createClient } from '@/utils/supabase/server'
-import { redirect } from 'next/navigation'
-import { SubmitButton } from './submit-button'
 import GithubAuthButton from '@/components/github-auth-button'
 import GoogleAuthButton from '@/components/google-auth-button'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { signIn } from '../actions/sign-in'
+import { useState, useTransition } from 'react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 
-export default async function Page({
+const signInSchema = z.object({
+  email: z.string().email({
+    message: 'Email inválido',
+  }),
+  password: z.string(),
+})
+
+type SignInSchema = z.infer<typeof signInSchema>
+
+export default function Page({
   searchParams,
 }: {
   searchParams: { message: string }
 }) {
-  const signIn = async (formData: FormData) => {
-    'use server'
+  const [shouldShowPassword, setShouldShowPassword] = useState(false)
 
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const supabase = createClient()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInSchema>({
+    resolver: zodResolver(signInSchema),
+  })
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+  const [isPending, startTransition] = useTransition()
 
-    if (error) {
-      return redirect('/sign-in?message=Could not authenticate user')
+  const handleSignIn = ({ email, password }: SignInSchema) => {
+    if (!errors.root) {
+      startTransition(async () => {
+        try {
+          await signIn({ email, password })
+        } catch (error) {
+          if (error instanceof Error) {
+            toast.error(error.message)
+          }
+        }
+      })
     }
-
-    return redirect('/')
   }
 
   return (
     <div className="flex w-full flex-1 flex-col justify-center gap-2 overflow-y-hidden px-8 sm:max-w-md">
-      <form className="animate-in flex w-full flex-1 flex-col justify-center gap-2 text-foreground">
+      <form
+        onSubmit={handleSubmit(handleSignIn)}
+        className="flex w-full flex-1 flex-col justify-center gap-2 text-foreground animate-in"
+      >
         <label className="text-md" htmlFor="email">
           Email
         </label>
         <input
           className="mb-6 rounded-md border bg-inherit px-4 py-2"
-          name="email"
           placeholder="you@example.com"
           required
+          {...register('email')}
         />
         <label className="text-md" htmlFor="password">
-          Password
+          Senha
         </label>
-        <input
-          className="mb-6 rounded-md border bg-inherit px-4 py-2"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          required
-        />
-        <SubmitButton
-          formAction={signIn}
-          className="mb-2 rounded-md bg-green-700 px-4 py-2 text-foreground"
-          pendingText="Signing In..."
+        <div className="relative mb-6 flex items-center">
+          <input
+            className="w-full rounded-md border bg-inherit px-4 py-2"
+            type={shouldShowPassword ? 'text' : 'password'}
+            placeholder="••••••••"
+            required
+            {...register('password')}
+          />
+          <button
+            className="absolute right-2 rounded-md border bg-secondary p-1"
+            type="button"
+            onClick={() => setShouldShowPassword((prev) => !prev)}
+          >
+            <EyeOff
+              size={20}
+              className={`absolute transition-all ${shouldShowPassword ? 'transition-y-1 scale-100' : 'scale-0'}`}
+            />
+            <Eye
+              size={20}
+              className={`transition-all ${shouldShowPassword ? 'transition-y-1 scale-0' : 'scale-100'}`}
+            />
+          </button>
+        </div>
+        <button
+          type="submit"
+          className="mb-2 flex items-center justify-center gap-2 rounded-md border border-foreground/20 bg-primary px-4 py-2 text-secondary"
+          disabled={isPending}
         >
-          Sign In
-        </SubmitButton>
+          {isPending ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Entrando...</span>
+            </>
+          ) : (
+            <span>Entrar</span>
+          )}
+        </button>
         {searchParams?.message && (
           <p className="mt-4 bg-foreground/10 p-4 text-center text-foreground">
             {searchParams.message}
