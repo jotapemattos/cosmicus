@@ -32,9 +32,9 @@ const emailSchema = z
 type EmailSchema = z.infer<typeof emailSchema>
 
 export default function Page({
-  searchParams: { message, error },
+  searchParams: { message },
 }: {
-  searchParams: { message: string | null; error: string | null }
+  searchParams: { message: string | null }
 }) {
   const [passwordStrength, setPasswordStrength] = useState(0)
   const [shouldShowPasswordInfo, setShouldShowPasswordInfo] = useState(false)
@@ -70,7 +70,13 @@ export default function Page({
   const handleSignUp = ({ email, password }: EmailSchema) => {
     if (!errors.confirmPassword && !errors.email && !errors.password) {
       startTransition(async () => {
-        await signUp({ email, password })
+        try {
+          await signUp({ email, password })
+        } catch (error) {
+          if (error instanceof Error) {
+            toast.error(error.message)
+          }
+        }
       })
     }
   }
@@ -79,13 +85,7 @@ export default function Page({
     if (message) {
       toast.info(message)
     }
-
-    if (error) {
-      toast.error(error)
-    }
-  }, [message, error])
-
-  // TODO: get isPending state (maybe with React Quuery) to disable button and add loading spinner
+  }, [message])
 
   return (
     <div className="flex w-full flex-1 flex-col justify-center gap-2 overflow-y-hidden px-8 sm:max-w-md">
