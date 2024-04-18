@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import { Coins, Star } from 'lucide-react'
+import { formatDate } from 'date-fns'
 
 const Page = async ({ params: { id } }: { params: { id: string } }) => {
   const profile = await getProfileByUserId({ userId: id })
@@ -33,6 +34,9 @@ const Page = async ({ params: { id } }: { params: { id: string } }) => {
             </div>
           </div>
         </div>
+        <span>
+          Conta criada em {formatDate(profile.created_at, 'dd/MM/yyyy')}
+        </span>
       </section>
     </main>
   )
