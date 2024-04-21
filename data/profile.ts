@@ -9,6 +9,10 @@ interface UpdateProfileUsernameRequest {
   userId: string
 }
 
+interface DeleteProfileRequest {
+  profileId: string
+}
+
 export async function getProfileByUserId({
   userId,
 }: GetProfileByUserIdRequest) {
@@ -40,4 +44,15 @@ export async function updateProfileUsernameByUserId({
   }
 
   return profile
+}
+
+export async function deleteProfile({ profileId }: DeleteProfileRequest) {
+  const { error } = await supabase
+    .from('profile')
+    .delete()
+    .match({ id: profileId })
+
+  if (error) {
+    throw new Error('Não foi possível excluir a conta.')
+  }
 }

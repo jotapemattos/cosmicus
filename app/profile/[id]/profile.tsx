@@ -8,6 +8,7 @@ import { Coins, Star } from 'lucide-react'
 import { formatDate } from 'date-fns'
 import { useQuery } from '@tanstack/react-query'
 import EditProfileDialog from './edit-profile-dialog'
+import DeleteProfileDialog from './delete-profile-dialog'
 
 interface ProfileProps {
   profileId: string
@@ -55,8 +56,9 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
         )}
       </section>
       {userOwnsProfile && (
-        <section className="relative mx-auto flex w-full max-w-screen-xl items-center justify-end space-y-2">
+        <section className="relative mx-auto flex w-full max-w-screen-xl items-center justify-end gap-4">
           <EditProfileDialog id={profileId} />
+          <DeleteProfileDialog profileId={profileId} />
         </section>
       )}
     </main>
