@@ -11,26 +11,35 @@ export type Database = {
     Tables: {
       profile: {
         Row: {
+          bio: string | null
           coins_amount: number
           created_at: string
           experience_points: number
+          github_url: string | null
           id: string
+          linkedin_url: string | null
           picture: string | null
           username: string | null
         }
         Insert: {
+          bio?: string | null
           coins_amount?: number
           created_at?: string
           experience_points?: number
+          github_url?: string | null
           id?: string
+          linkedin_url?: string | null
           picture?: string | null
           username?: string | null
         }
         Update: {
+          bio?: string | null
           coins_amount?: number
           created_at?: string
           experience_points?: number
+          github_url?: string | null
           id?: string
+          linkedin_url?: string | null
           picture?: string | null
           username?: string | null
         }

@@ -44,7 +44,7 @@ const DeleteProfileDialog = ({ profileId }: DeleteProfileDialogProps) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button>Excluir Conta</Button>
+        <Button variant={'destructive'}>Excluir Conta</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

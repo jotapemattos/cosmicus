@@ -4,9 +4,12 @@ interface GetProfileByUserIdRequest {
   userId: string
 }
 
-interface UpdateProfileUsernameRequest {
+interface UpdateProfileRequest {
   username: string
   userId: string
+  githubUrl: string | null
+  linkedinUrl: string | null
+  bio: string | null
 }
 
 interface DeleteProfileRequest {
@@ -26,13 +29,16 @@ export async function getProfileByUserId({
   return profile
 }
 
-export async function updateProfileUsernameByUserId({
+export async function updateProfile({
   username,
   userId,
-}: UpdateProfileUsernameRequest) {
+  githubUrl,
+  linkedinUrl,
+  bio,
+}: UpdateProfileRequest) {
   const { data: profile, error } = await supabase
     .from('profile')
-    .update({ username })
+    .update({ username, github_url: githubUrl, linkedin_url: linkedinUrl, bio })
     .eq('id', userId)
 
   if (error?.message.includes('unique constraint')) {

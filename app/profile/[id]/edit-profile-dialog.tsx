@@ -9,10 +9,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
-import {
-  getProfileByUserId,
-  updateProfileUsernameByUserId,
-} from '@/data/profile'
+import { getProfileByUserId, updateProfile } from '@/data/profile'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Label } from '../../../components/ui/label'
 import { z } from 'zod'
@@ -23,11 +20,33 @@ import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
+import { Textarea } from '@/components/ui/textarea'
 
 const usernameSchema = z.object({
   username: z
     .string()
     .max(30, 'O nome do usuário não pode passar de 30 caracteres.'),
+  githubUrl: z
+    .string()
+    .url({ message: 'URL inválida.' })
+    .includes('github.com', {
+      message: 'Este link para o github está inválido.',
+    })
+    .nullable()
+    .or(z.literal('')),
+  linkedinUrl: z
+    .string()
+    .url({ message: 'URL inválida.' })
+    .includes('linkedin.com', {
+      message: 'Este link para o linkedin está inválido.',
+    })
+    .nullable()
+    .or(z.literal('')),
+  bio: z
+    .string()
+    .max(256, { message: 'O texto não pode passar de 256 caracteres.' })
+    .nullable()
+    .or(z.literal('')),
 })
 
 type UsernameSchema = z.infer<typeof usernameSchema>
@@ -47,37 +66,53 @@ const EditProfileDialog = ({ id }: { id: string }) => {
     handleSubmit,
     formState: { errors },
     watch,
-    reset,
   } = useForm<UsernameSchema>({
     resolver: zodResolver(usernameSchema),
   })
 
   const username = watch('username')
+  const bio = watch('bio')
+  const githubUrl = watch('githubUrl')
+  const linkedinUrl = watch('linkedinUrl')
 
-  const { mutateAsync: updateProfileUsernameByUserIdFn, isPending } =
-    useMutation({
-      mutationFn: updateProfileUsernameByUserId,
-      onSuccess: () => {
-        queryClient.setQueryData(['profile', id], (data: Profile) => {
-          return { ...data, username }
-        })
+  const { mutateAsync: updateProfileFn, isPending } = useMutation({
+    mutationFn: updateProfile,
+    onSuccess: () => {
+      queryClient.setQueryData(['profile', id], (data: Profile) => {
+        return {
+          ...data,
+          username,
+          bio,
+          github_url: githubUrl,
+          linkedin_url: linkedinUrl,
+        }
+      })
 
-        toast.success('Nome alterado com sucesso')
+      toast.success('Perfil alterado com sucesso')
 
-        setOpen(false)
-      },
-    })
+      setOpen(false)
+    },
+  })
 
-  const handleUpdateUsername = async ({ username }: UsernameSchema) => {
-    if (!errors.username) {
+  const handleUpdateUsername = async ({
+    username,
+    githubUrl,
+    linkedinUrl,
+    bio,
+  }: UsernameSchema) => {
+    if (!errors.root) {
       try {
-        await updateProfileUsernameByUserIdFn({ username, userId: id })
+        await updateProfileFn({
+          username,
+          userId: id,
+          githubUrl,
+          linkedinUrl,
+          bio,
+        })
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message)
         }
-
-        reset({ username: profile?.username ?? '' })
       }
     }
   }
@@ -90,10 +125,12 @@ const EditProfileDialog = ({ id }: { id: string }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Editar perfil</DialogTitle>
-          <form
-            onSubmit={handleSubmit(handleUpdateUsername)}
-            className="my-4 space-y-3"
-          >
+        </DialogHeader>
+        <form
+          onSubmit={handleSubmit(handleUpdateUsername)}
+          className="my-4 space-y-5"
+        >
+          <div className="space-y-2">
             <Label htmlFor="username">Nome do usuário</Label>
             <Input
               id="username"
@@ -107,6 +144,59 @@ const EditProfileDialog = ({ id }: { id: string }) => {
             {errors.username && (
               <p className="my-2 text-red-500">{errors.username?.message}</p>
             )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="bio">Sobre mim</Label>
+            <Textarea
+              id="bio"
+              defaultValue={profile?.bio ?? ''}
+              {...register('bio')}
+              className={cn({
+                'ring-2 ring-red-500 focus-visible:ring-red-500': errors.bio,
+              })}
+            />
+            {errors.bio && (
+              <p className="my-2 text-red-500">{errors.bio?.message}</p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="github-url">Link para o github</Label>
+            <Input
+              id="github-url"
+              defaultValue={profile?.github_url ?? ''}
+              {...register('githubUrl')}
+              className={cn({
+                'ring-2 ring-red-500 focus-visible:ring-red-500':
+                  errors.githubUrl,
+              })}
+            />
+            {errors.githubUrl && (
+              <p className="my-2 text-red-500">{errors.githubUrl?.message}</p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="linkedin-url">Link para o linkedin</Label>
+            <Input
+              id="linkedin-url"
+              defaultValue={profile?.linkedin_url ?? ''}
+              {...register('linkedinUrl')}
+              className={cn({
+                'ring-2 ring-red-500 focus-visible:ring-red-500':
+                  errors.linkedinUrl,
+              })}
+            />
+            {errors.linkedinUrl && (
+              <p className="my-2 text-red-500">{errors.linkedinUrl?.message}</p>
+            )}
+          </div>
+          <div className="flex w-full justify-end gap-4">
+            <Button
+              type="button"
+              variant={'ghost'}
+              onClick={() => setOpen(false)}
+            >
+              Cancelar
+            </Button>
             <Button type="submit" disabled={isPending}>
               {isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -114,8 +204,8 @@ const EditProfileDialog = ({ id }: { id: string }) => {
                 'Confirmar'
               )}
             </Button>
-          </form>
-        </DialogHeader>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   )
