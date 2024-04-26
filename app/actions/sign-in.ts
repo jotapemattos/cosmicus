@@ -17,12 +17,12 @@ export const signIn = async ({ email, password }: SignInProps) => {
   })
 
   if (error?.message.includes('Invalid login credentials')) {
-    throw Error('E-mail ou senha incorretos. Por favor, tente novamente.')
+    throw new Error('E-mail ou senha incorretos. Por favor, tente novamente.')
   }
 
   if (error) {
-    throw Error(
-      '/sign-in?message=Ops! Ocorreu um erro. Por favor, tente novamente mais tarde.',
+    throw new Error(
+      '?message=Ops! Ocorreu um erro. Por favor, tente novamente mais tarde.',
     )
   }
 
