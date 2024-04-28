@@ -16,6 +16,11 @@ interface DeleteProfileRequest {
   profileId: string
 }
 
+interface UpdateProfilePictureRequest {
+  userId: string
+  picture: string
+}
+
 export async function getProfileByUserId({
   userId,
 }: GetProfileByUserIdRequest) {
@@ -61,4 +66,20 @@ export async function deleteProfile({ profileId }: DeleteProfileRequest) {
   if (error) {
     throw new Error('Não foi possível excluir a conta.')
   }
+}
+
+export async function updateProfilePicture({
+  userId,
+  picture,
+}: UpdateProfilePictureRequest) {
+  const { data: profile, error } = await supabase
+    .from('profile')
+    .update({ picture })
+    .eq('id', userId)
+
+  if (error) {
+    throw new Error('Não foi possível editar a foto de perfil.')
+  }
+
+  return profile
 }

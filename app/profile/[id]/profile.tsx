@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query'
 import EditProfileDialog from './edit-profile-dialog'
 import DeleteProfileDialog from './delete-profile-dialog'
 import { Button } from '@/components/ui/button'
+import ChangeProfilePicDialog from './change-profile-pic-dialog'
 
 interface ProfileProps {
   profileId: string
@@ -21,18 +22,22 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
     queryKey: ['profile', profileId],
     queryFn: () => getProfileByUserId({ userId: profileId }),
   })
-
   if (!profile && !isLoading) {
     return notFound()
   }
 
   const userOwnsProfile = profileId === currentUserId
-
   return (
     <main className="min-h-screen w-screen overflow-x-hidden">
       <section className="relative mx-auto my-24 w-full max-w-screen-xl space-y-8">
-        <Avatar className="size-16">
+        <Avatar className="group size-24">
           <AvatarImage src={profile?.picture ?? undefined} />
+          <span className="absolute hidden h-full w-full items-center justify-center bg-zinc-900/50 p-1 text-center text-sm font-bold text-zinc-100 transition-all duration-300 group-hover:flex group-hover:cursor-pointer">
+            <ChangeProfilePicDialog
+              id={profileId}
+              profilePicture={profile?.picture ?? null}
+            />
+          </span>
           <AvatarFallback>
             {profile?.username?.substring(0, 2).toUpperCase()}
           </AvatarFallback>

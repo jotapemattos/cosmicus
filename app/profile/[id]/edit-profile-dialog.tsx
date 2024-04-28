@@ -151,7 +151,7 @@ const EditProfileDialog = ({ id }: { id: string }) => {
               id="bio"
               defaultValue={profile?.bio ?? ''}
               {...register('bio')}
-              className={cn({
+              className={cn('resize-none', {
                 'ring-2 ring-red-500 focus-visible:ring-red-500': errors.bio,
               })}
             />

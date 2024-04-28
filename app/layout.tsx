@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
+    <html lang="pt-BR" className={GeistSans.className}>
       <ReactQueryClientProvider>
         <body className="max-w-screen bg-background text-foreground">
           <Header />
