@@ -19,6 +19,7 @@ export type Database = {
           id: string
           linkedin_url: string | null
           picture: string | null
+          picture_filename: string | null
           username: string | null
         }
         Insert: {
@@ -30,6 +31,7 @@ export type Database = {
           id?: string
           linkedin_url?: string | null
           picture?: string | null
+          picture_filename?: string | null
           username?: string | null
         }
         Update: {
@@ -41,6 +43,7 @@ export type Database = {
           id?: string
           linkedin_url?: string | null
           picture?: string | null
+          picture_filename?: string | null
           username?: string | null
         }
         Relationships: []

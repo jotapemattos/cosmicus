@@ -19,6 +19,7 @@ interface DeleteProfileRequest {
 interface UpdateProfilePictureRequest {
   userId: string
   picture: string
+  pictureFileName: string
 }
 
 export async function getProfileByUserId({
@@ -71,10 +72,11 @@ export async function deleteProfile({ profileId }: DeleteProfileRequest) {
 export async function updateProfilePicture({
   userId,
   picture,
+  pictureFileName,
 }: UpdateProfilePictureRequest) {
   const { data: profile, error } = await supabase
     .from('profile')
-    .update({ picture })
+    .update({ picture, picture_filename: pictureFileName })
     .eq('id', userId)
 
   if (error) {

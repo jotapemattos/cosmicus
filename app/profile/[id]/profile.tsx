@@ -28,7 +28,7 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
 
   const userOwnsProfile = profileId === currentUserId
   return (
-    <main className="min-h-screen w-screen overflow-x-hidden">
+    <main className="min-h-screen w-screen overflow-x-hidden p-4">
       <section className="relative mx-auto my-24 w-full max-w-screen-xl space-y-8">
         <Avatar className="group size-24">
           <AvatarImage src={profile?.picture ?? undefined} />
@@ -36,6 +36,7 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
             <ChangeProfilePicDialog
               id={profileId}
               profilePicture={profile?.picture ?? null}
+              profilePictureFileName={profile?.picture_filename ?? null}
             />
           </span>
           <AvatarFallback>

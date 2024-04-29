@@ -12,7 +12,7 @@ import { Input } from '../../../components/ui/input'
 import { getProfileByUserId, updateProfilePicture } from '@/data/profile'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Label } from '../../../components/ui/label'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { createClient } from '@/utils/supabase/client'
 import { Loader2 } from 'lucide-react'
@@ -22,16 +22,18 @@ import { toast } from 'sonner'
 interface ChangeProfilePicDialogProps {
   id: string
   profilePicture: string | null
+  profilePictureFileName: string | null
 }
 
 const ChangeProfilePicDialog = ({
   id,
   profilePicture,
+  profilePictureFileName,
 }: ChangeProfilePicDialogProps) => {
   const [open, setOpen] = useState(false)
   const supabase = createClient()
   const [avatarUrl, setAvatarUrl] = useState<string>('')
-  const [uploading, setUploading] = useState(false)
+  const [isPending, startTransition] = useTransition()
 
   const queryClient = useQueryClient()
 
@@ -54,60 +56,53 @@ const ChangeProfilePicDialog = ({
     },
   })
 
-  const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (
-    event,
-  ) => {
-    try {
-      setUploading(true)
-
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('Você deve selecionar uma imagem para prosseguir')
-      }
-
-      const file = event.target.files[0]
-      const fileExt = file.name.split('.').pop()
-      const filePath = `${id}-${Math.random()}.${fileExt}`
-      // TODO: resolve update issues
-      if (profilePicture) {
-        const { data, error } = await supabase.storage
-          .from('avatars')
-          .update(filePath, file)
-        if (error) {
-          console.log(error)
-          throw new Error('Não foi possível editar a foto de perfil.')
+  const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    startTransition(async () => {
+      try {
+        if (!event.target.files || event.target.files.length === 0) {
+          throw new Error('Você deve selecionar uma imagem para prosseguir')
         }
-        if (data) {
-          const {
-            data: { publicUrl },
-          } = supabase.storage.from('avatars').getPublicUrl(data.path)
 
-          setAvatarUrl(publicUrl)
-          await updateProfilePictureFn({ userId: id, picture: publicUrl })
+        const file = event.target.files[0]
+        const fileExt = file.name.split('.').pop()
+        const filePath = `${id}-${Math.random()}.${fileExt}`
+
+        // if there  is a profile picture, delete it before creating a new one (update did not work as it should)
+        if (profilePicture && profilePictureFileName) {
+          const { error: deleteError } = await supabase.storage
+            .from('avatars')
+            .remove([profilePictureFileName])
+
+          if (deleteError) {
+            throw new Error('Não foi possível editar a foto de perfil.')
+          }
         }
-      } else {
         const { data, error: uploadError } = await supabase.storage
           .from('avatars')
           .upload(filePath, file)
 
         if (uploadError) {
-          throw uploadError
+          throw new Error('Não foi possível editar a foto de perfil.')
         }
+
         const {
           data: { publicUrl },
         } = supabase.storage.from('avatars').getPublicUrl(data.path)
 
         setAvatarUrl(publicUrl)
-        await updateProfilePictureFn({ userId: id, picture: publicUrl })
+        await updateProfilePictureFn({
+          userId: id,
+          picture: publicUrl,
+          pictureFileName: data.path,
+        })
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(
+            error.message ?? 'Não foi possível editar a foto de perfil.',
+          )
+        }
       }
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(
-          error.message ?? 'Não foi possível editar a foto de perfil.',
-        )
-      }
-    } finally {
-      setUploading(false)
-    }
+    })
   }
   const { data: profile } = useQuery({
     queryKey: ['profile', id],
@@ -133,7 +128,7 @@ const ChangeProfilePicDialog = ({
         </Avatar>
         <form className="my-4 space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="username">Imagem de perfil</Label>
+            <Label htmlFor="profilePic">Imagem de perfil</Label>
             <Input
               id="profilePic"
               accept="image/*"
@@ -149,8 +144,8 @@ const ChangeProfilePicDialog = ({
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={uploading}>
-              {uploading ? (
+            <Button type="submit" disabled={isPending}>
+              {isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 'Confirmar'
