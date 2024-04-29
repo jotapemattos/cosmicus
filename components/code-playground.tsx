@@ -2,7 +2,9 @@
 
 import { Editor } from '@monaco-editor/react'
 import { Button } from './ui/button'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
+import { toast } from 'sonner'
+import { Loader2 } from 'lucide-react'
 
 interface EditorProps {
   value?: string // Optional initial value for the editor
@@ -11,41 +13,42 @@ interface EditorProps {
 
 const CodePlayground: React.FC<EditorProps> = ({
   value = '// some comment',
-  onChange,
 }) => {
   const [code, setCode] = useState(value)
+  const [output, setOutput] = useState(null)
+  const [isPending, startTransition] = useTransition()
 
   const handleOnChange = (value?: string) => {
     setCode(value || '')
   }
 
-  const handleClick = async () => {
-    // Make a POST request to the Piston API with the code
-    const response = await fetch('https://emkc.org/api/v2/piston/execute', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        language: 'javascript',
-        version: '15.10.0',
-        files: [
-          {
-            name: 'test.js',
-            content: code,
+  const handleClick = () => {
+    startTransition(async () => {
+      try {
+        const response = await fetch('https://emkc.org/api/v2/piston/execute', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        ],
-      }),
+          body: JSON.stringify({
+            language: 'javascript',
+            version: '18.15.0',
+            files: [
+              {
+                content: code,
+              },
+            ],
+          }),
+        })
+        const { run: result } = await response.json()
+        if (result.stderr) {
+          throw new Error('Não foi possivel executar o código')
+        }
+        setOutput(result.stdout.split('\n'))
+      } catch (error) {
+        if (error instanceof Error) toast.error(error.message)
+      }
     })
-
-    // Handle the response
-    if (response.ok) {
-      const data = await response.json()
-      console.log('Piston API response:', data)
-      // You can further process the data here, like displaying the output
-    } else {
-      console.error('Error making request to Piston API:', response.statusText)
-    }
   }
 
   return (
@@ -58,7 +61,10 @@ const CodePlayground: React.FC<EditorProps> = ({
         onChange={handleOnChange}
         theme="vs-dark"
       />
-      <Button onClick={handleClick}>Enviar</Button>
+      <Button disabled={isPending} onClick={handleClick}>
+        {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Enviar'}
+      </Button>
+      <p>{output}</p>
     </section>
   )
 }
