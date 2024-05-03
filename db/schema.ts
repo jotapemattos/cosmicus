@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      inventories: {
+        Row: {
+          id: number
+          is_activated: boolean | null
+          profile_id: string | null
+          skin_in: number | null
+        }
+        Insert: {
+          id?: number
+          is_activated?: boolean | null
+          profile_id?: string | null
+          skin_in?: number | null
+        }
+        Update: {
+          id?: number
+          is_activated?: boolean | null
+          profile_id?: string | null
+          skin_in?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'inventories_profile_id_fkey'
+            columns: ['profile_id']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'inventories_skin_in_fkey'
+            columns: ['skin_in']
+            isOneToOne: false
+            referencedRelation: 'skins'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       profile: {
         Row: {
           bio: string | null
@@ -45,6 +81,30 @@ export type Database = {
           picture?: string | null
           picture_filename?: string | null
           username?: string | null
+        }
+        Relationships: []
+      }
+      skins: {
+        Row: {
+          description: string | null
+          id: number
+          name: string | null
+          picture: string | null
+          price: number | null
+        }
+        Insert: {
+          description?: string | null
+          id?: number
+          name?: string | null
+          picture?: string | null
+          price?: number | null
+        }
+        Update: {
+          description?: string | null
+          id?: number
+          name?: string | null
+          picture?: string | null
+          price?: number | null
         }
         Relationships: []
       }
@@ -145,5 +205,3 @@ export type Enums<
   : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
     ? PublicSchema['Enums'][PublicEnumNameOrOptions]
     : never
-
-export type Profile = Database['public']['Tables']['profile']['Row']
