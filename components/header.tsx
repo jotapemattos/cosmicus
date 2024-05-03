@@ -20,6 +20,14 @@ export default async function Header() {
             <span>Ranking</span>
           </Link>
         </Button>
+        <Button asChild variant={'ghost'}>
+          <Link
+            href="/shop"
+            className="bg-btn-background hover:bg-btn-background-hover flex rounded-md px-3 py-2 no-underline"
+          >
+            <span>Loja</span>
+          </Link>
+        </Button>
         {user ? (
           <UserNav user={user} />
         ) : (

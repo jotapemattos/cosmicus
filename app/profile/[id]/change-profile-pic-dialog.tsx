@@ -16,8 +16,8 @@ import { useState, useTransition } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { createClient } from '@/utils/supabase/client'
 import { Loader2 } from 'lucide-react'
-import { Profile } from '@/db/schema'
 import { toast } from 'sonner'
+import { Profile } from '@/db/custom-types'
 
 interface ChangeProfilePicDialogProps {
   id: string

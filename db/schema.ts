@@ -14,19 +14,19 @@ export type Database = {
           id: number
           is_activated: boolean | null
           profile_id: string | null
-          skin_in: number | null
+          skin_id: number | null
         }
         Insert: {
           id?: number
           is_activated?: boolean | null
           profile_id?: string | null
-          skin_in?: number | null
+          skin_id?: number | null
         }
         Update: {
           id?: number
           is_activated?: boolean | null
           profile_id?: string | null
-          skin_in?: number | null
+          skin_id?: number | null
         }
         Relationships: [
           {
