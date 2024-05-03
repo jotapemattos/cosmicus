@@ -22,6 +22,10 @@ interface UpdateProfilePictureRequest {
   pictureFileName: string
 }
 
+interface GetProfilesRequest {
+  ascending: boolean
+}
+
 export async function getProfileByUserId({
   userId,
 }: GetProfileByUserIdRequest) {
@@ -84,4 +88,17 @@ export async function updateProfilePicture({
   }
 
   return profile
+}
+
+export async function getProfiles({ ascending }: GetProfilesRequest) {
+  const { data: profiles, error } = await supabase
+    .from('profile')
+    .select()
+    .order('experience_points', { ascending })
+
+  if (error) {
+    throw new Error('Não foi possível carregar os perfis.')
+  }
+
+  return profiles
 }

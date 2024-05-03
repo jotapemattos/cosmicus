@@ -22,7 +22,11 @@ const CodePlayground: React.FC<EditorProps> = ({
     setCode(value || '')
   }
 
+  const execution =
+    'console.log(isEven(2))\n console.log(isEven(3))\n console.log(isEven(4))\n console.log(isEven(5))'
+
   const handleClick = () => {
+    console.log(code)
     startTransition(async () => {
       try {
         const response = await fetch('https://emkc.org/api/v2/piston/execute', {
@@ -35,7 +39,7 @@ const CodePlayground: React.FC<EditorProps> = ({
             version: '18.15.0',
             files: [
               {
-                content: code,
+                content: `${code} ${execution}`,
               },
             ],
           }),
@@ -44,6 +48,7 @@ const CodePlayground: React.FC<EditorProps> = ({
         if (result.stderr) {
           throw new Error('Não foi possivel executar o código')
         }
+        console.log()
         setOutput(result.stdout.split('\n'))
       } catch (error) {
         if (error instanceof Error) toast.error(error.message)
