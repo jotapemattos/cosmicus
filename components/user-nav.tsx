@@ -37,7 +37,10 @@ export default function UserNav({ user }: UserNavProps) {
         <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href={`/profile/${user.id}`}> Meu Perfil</Link>
+          <Link href={`/profile/${user.id}`}>Meu Perfil</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href="/inventory">Inventário</Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer">
           <form action={signOut} className="w-full">

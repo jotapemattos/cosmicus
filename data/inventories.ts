@@ -9,6 +9,10 @@ interface GetInventoriesByUserIdRequest {
   profileId: string
 }
 
+interface GetInventoriesAndSkinsByUserIdRequest {
+  profileId: string
+}
+
 export default async function addInventoryItem({
   skinId,
   userId,
@@ -28,6 +32,21 @@ export async function getInventoriesByUserId({
   const { data, error } = await supabase
     .from('inventories')
     .select()
+    .match({ profile_id: profileId })
+
+  if (error) {
+    throw new Error('Não foi possível carregar o inventário')
+  }
+
+  return data
+}
+
+export async function getInventoriesAndSkinsByUserId({
+  profileId,
+}: GetInventoriesAndSkinsByUserIdRequest) {
+  const { data, error } = await supabase
+    .from('inventories')
+    .select('*, skins (*)')
     .match({ profile_id: profileId })
 
   if (error) {
