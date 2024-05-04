@@ -5,6 +5,10 @@ interface AddInventoryItemProps {
   userId: string
 }
 
+interface GetInventoriesByUserIdRequest {
+  profileId: string
+}
+
 export default async function addInventoryItem({
   skinId,
   userId,
@@ -13,8 +17,22 @@ export default async function addInventoryItem({
     .from('inventories')
     .insert({ skin_id: skinId, profile_id: userId, is_activated: false })
   if (error) {
-    console.log(error)
-    //    throw new Error('Não foi possível comprar o item')
+    throw new Error('Não foi possível comprar o item')
   }
+  return data
+}
+
+export async function getInventoriesByUserId({
+  profileId,
+}: GetInventoriesByUserIdRequest) {
+  const { data, error } = await supabase
+    .from('inventories')
+    .select()
+    .match({ profile_id: profileId })
+
+  if (error) {
+    throw new Error('Não foi possível carregar o inventário')
+  }
+
   return data
 }
