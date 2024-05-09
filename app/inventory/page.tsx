@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import Inventory from './Inventory'
+import Inventory from './inventory'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 

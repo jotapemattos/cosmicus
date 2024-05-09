@@ -13,6 +13,11 @@ interface GetInventoriesAndSkinsByUserIdRequest {
   profileId: string
 }
 
+interface ActivateInventoryItemRequest {
+  inventoryId: number
+  isActivated: boolean
+}
+
 export default async function addInventoryItem({
   skinId,
   userId,
@@ -20,10 +25,13 @@ export default async function addInventoryItem({
   const { data, error } = await supabase
     .from('inventories')
     .insert({ skin_id: skinId, profile_id: userId, is_activated: false })
-  if (error) {
+    .select()
+
+  if (error || !data) {
     throw new Error('Não foi possível comprar o item')
   }
-  return data
+
+  return data[0]
 }
 
 export async function getInventoriesByUserId({
@@ -51,6 +59,22 @@ export async function getInventoriesAndSkinsByUserId({
 
   if (error) {
     throw new Error('Não foi possível carregar o inventário')
+  }
+
+  return data
+}
+
+export async function activateInventoryItem({
+  inventoryId,
+  isActivated,
+}: ActivateInventoryItemRequest) {
+  const { data, error } = await supabase
+    .from('inventories')
+    .update({ is_activated: isActivated })
+    .match({ id: inventoryId })
+
+  if (error) {
+    throw new Error('Não foi possível equipar o item.')
   }
 
   return data

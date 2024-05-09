@@ -41,9 +41,9 @@ const Inventory = ({ user }: InventoryProps) => {
             </CardTitle>
             <Badge
               className={cn('w-fit', {
-                'bg-red-500/10 text-red-500 hover:bg-red-500/20':
+                'bg-red-500/10 text-red-500 hover:bg-red-500/10':
                   !inventory.is_activated,
-                'bg-green-500/10 text-green-500 hover:bg-green-500/20':
+                'bg-green-500/10 text-green-500 hover:bg-green-500/10':
                   inventory.is_activated,
               })}
             >

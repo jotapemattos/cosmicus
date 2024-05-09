@@ -23,17 +23,23 @@ import {
 import addInventoryItem, { getInventoriesByUserId } from '@/data/inventories'
 import { getProfileByUserId } from '@/data/profile'
 import { getSkins } from '@/data/skins'
+import { Inventory } from '@/db/custom-types'
 import { cn } from '@/lib/utils'
 import { User } from '@supabase/supabase-js'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { CircleDollarSign, Coins, Loader2 } from 'lucide-react'
 import Image from 'next/image'
+import { useState } from 'react'
+import SuccessBuyDialog from '../inventory/success-buy-dialog'
 
 interface ShopProps {
   user: User
 }
 
 const Shop = ({ user }: ShopProps) => {
+  const [inventoryItem, setInventoryItem] = useState<Inventory | null>()
+  const [openBuyDialog, setOpenBuyDialog] = useState<boolean>(false)
+
   const { data: skins } = useQuery({
     queryKey: ['skins'],
     queryFn: () => getSkins(),
@@ -55,7 +61,11 @@ const Shop = ({ user }: ShopProps) => {
   })
 
   const queryClient = useQueryClient()
-  const { mutateAsync: addInventoryItemFn, isPending } = useMutation({
+  const {
+    mutateAsync: addInventoryItemFn,
+    isPending,
+    isError,
+  } = useMutation({
     mutationFn: addInventoryItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile', user.id] })
@@ -68,7 +78,12 @@ const Shop = ({ user }: ShopProps) => {
   }
 
   const handleBuy = async (skinId: number) => {
-    await addInventoryItemFn({ userId: user.id, skinId })
+    const data = await addInventoryItemFn({ userId: user.id, skinId })
+
+    if (!isError) {
+      setInventoryItem(data)
+      setOpenBuyDialog(true)
+    }
   }
 
   const hasSkin = (skinId: number) => {
@@ -157,6 +172,13 @@ const Shop = ({ user }: ShopProps) => {
           </Card>
         ))}
       </section>
+      {inventoryItem && (
+        <SuccessBuyDialog
+          inventory={inventoryItem}
+          open={openBuyDialog}
+          setOpen={setOpenBuyDialog}
+        />
+      )}
     </>
   )
 }
