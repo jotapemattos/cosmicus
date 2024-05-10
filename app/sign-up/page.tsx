@@ -6,7 +6,7 @@ import { signUp } from '../actions/sign-up'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { Progress } from '@/components/ui/progress'
-import { useEffect, useState, useTransition } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
@@ -40,13 +40,11 @@ export default function Page({
   const [shouldShowPasswordInfo, setShouldShowPasswordInfo] = useState(false)
   const [shouldShowPassword, setShouldShowPassword] = useState(false)
 
-  const [isPending, startTransition] = useTransition()
-
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<EmailSchema>({
     resolver: zodResolver(emailSchema),
   })
@@ -67,17 +65,15 @@ export default function Page({
     setPasswordStrength(strength)
   }, [password])
 
-  const handleSignUp = ({ email, password }: EmailSchema) => {
+  const handleSignUp = async ({ email, password }: EmailSchema) => {
     if (!errors.confirmPassword && !errors.email && !errors.password) {
-      startTransition(async () => {
-        try {
-          await signUp({ email, password })
-        } catch (error) {
-          if (error instanceof Error) {
-            toast.error(error.message)
-          }
+      try {
+        await signUp({ email, password })
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message)
         }
-      })
+      }
     }
   }
 
@@ -167,9 +163,9 @@ export default function Page({
         <button
           className="mb-2 flex items-center justify-center gap-2 rounded-md border border-foreground/20 bg-primary px-4 py-2 text-secondary"
           type="submit"
-          disabled={isPending}
+          disabled={isSubmitting}
         >
-          {isPending ? (
+          {isSubmitting ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
               <span>Criando...</span>

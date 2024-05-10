@@ -30,7 +30,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { CircleDollarSign, Coins, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
-import SuccessBuyDialog from '../inventory/success-buy-dialog'
+import SuccessBuyDialog from './success-buy-dialog'
 
 interface ShopProps {
   user: User

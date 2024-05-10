@@ -7,7 +7,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { signIn } from '../actions/sign-in'
-import { useState, useTransition } from 'react'
+import { useState } from 'react'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -30,24 +30,20 @@ export default function Page({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignInSchema>({
     resolver: zodResolver(signInSchema),
   })
 
-  const [isPending, startTransition] = useTransition()
-
-  const handleSignIn = ({ email, password }: SignInSchema) => {
+  const handleSignIn = async ({ email, password }: SignInSchema) => {
     if (!errors.root) {
-      startTransition(async () => {
-        try {
-          await signIn({ email, password })
-        } catch (error) {
-          if (error instanceof Error) {
-            toast.error(error.message)
-          }
+      try {
+        await signIn({ email, password })
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message)
         }
-      })
+      }
     }
   }
 
@@ -95,9 +91,9 @@ export default function Page({
         <button
           type="submit"
           className="mb-2 flex items-center justify-center gap-2 rounded-md border border-foreground/20 bg-primary px-4 py-2 text-secondary"
-          disabled={isPending}
+          disabled={isSubmitting}
         >
-          {isPending ? (
+          {isSubmitting ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
               <span>Entrando...</span>
