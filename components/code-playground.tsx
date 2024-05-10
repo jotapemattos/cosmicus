@@ -25,13 +25,13 @@ interface Problem {
 const CodePlayground: React.FC<EditorProps> = ({ value }) => {
   const problem: Problem = {
     name: 'Problema de soma',
-    initialValue: 'function soma(a, b) {\n',
+    initialValue: 'function soma(array) {\n',
     testCases: [
       {
-        execution: 'console.log(soma(1, 3))',
-        expectedOutput: '4',
+        execution: 'console.log(soma([1,2,3]))',
+        expectedOutput: '[1,2,3]',
       },
-      {
+      /*  {
         execution: 'console.log(soma(10, 10))',
         expectedOutput: '20',
       },
@@ -42,7 +42,7 @@ const CodePlayground: React.FC<EditorProps> = ({ value }) => {
       {
         execution: 'console.log(soma(-1, -1))',
         expectedOutput: '-2',
-      },
+      }, */
     ],
   }
   const [code, setCode] = useState(problem.initialValue)
@@ -122,7 +122,7 @@ const CodePlayground: React.FC<EditorProps> = ({ value }) => {
         height="80vh"
         width={'50vw'}
         defaultLanguage="javascript"
-        defaultValue={code}
+        defaultValue={code + '\n}'}
         onChange={handleOnChange}
         theme="vs-dark"
       />
