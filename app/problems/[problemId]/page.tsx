@@ -3,7 +3,11 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import React from 'react'
 
-const Page = async () => {
+interface PageProps {
+  params: { problemId: number }
+}
+
+const Page = async ({ params: { problemId } }: PageProps) => {
   const supabase = createClient()
   const {
     data: { user },
@@ -12,9 +16,10 @@ const Page = async () => {
   if (!user) {
     return redirect('/sign-in')
   }
+
   return (
     <div className="flex h-screen w-screen items-center justify-center">
-      <CodePlayground />
+      <CodePlayground problemId={problemId} />
     </div>
   )
 }

@@ -5,59 +5,60 @@ import { Button } from './ui/button'
 import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { getProblemById } from '@/data/problems'
+import { getTestCasesByProblemId } from '@/data/test-cases'
 
 interface EditorProps {
-  value?: string // Optional initial value for the editor
-  onChange?: (newValue: string) => void // Callback for value changes
+  problemId: number
 }
 
-interface TestCases {
-  execution: string
-  expectedOutput: string
-}
+const CodePlayground: React.FC<EditorProps> = ({ problemId }: EditorProps) => {
+  const { data: problem } = useQuery({
+    queryKey: ['problem', problemId],
+    queryFn: () => getProblemById({ problemId }),
+  })
 
-interface Problem {
-  name: string
-  initialValue: string
-  testCases: TestCases[]
-}
-
-const CodePlayground: React.FC<EditorProps> = ({ value }) => {
-  const problem: Problem = {
-    name: 'Problema de soma',
-    initialValue: 'function soma(array) {\n',
-    testCases: [
-      {
-        execution: 'console.log(soma([1,2,3]))',
-        expectedOutput: '[1,2,3]',
-      },
-      /*  {
-        execution: 'console.log(soma(10, 10))',
-        expectedOutput: '20',
-      },
-      {
-        execution: 'console.log(soma(0, 0))',
-        expectedOutput: '0',
-      },
-      {
-        execution: 'console.log(soma(-1, -1))',
-        expectedOutput: '-2',
-      }, */
-    ],
-  }
-  const [code, setCode] = useState(problem.initialValue)
+  const { data: testCases } = useQuery({
+    queryKey: ['testCases', problemId],
+    queryFn: () => getTestCasesByProblemId({ problemId }),
+  })
+  const [code, setCode] = useState(problem?.initial_value ?? '')
   const [output, setOutput] = useState(null)
   const [isPending, startTransition] = useTransition()
-  const [testCases, setTestCases] = useState<string[]>([])
+  const [codeResults, setCodeResults] = useState<string[]>([])
 
   const handleOnChange = (value?: string) => {
     setCode(value || '')
   }
+  useEffect(() => {
+    let isValidCode = true
+    // TODO - resolve testCases is possibly undefined
+    if (testCases) {
+      for (let i = 0; i < testCases.length; i++) {
+        if (testCases[i].expected_output !== codeResults[i]) {
+          console.log({
+            expected: testCases![i].expected_output,
+            actual: codeResults[i],
+          })
+          isValidCode = false
+        }
+      }
+    }
+    if (isValidCode) {
+      toast.success('Coisa linda')
+      return
+    }
 
-  const execution = problem.testCases.map((test) => test.execution).join('\n')
+    toast.error('Codigo errado')
+
+    // eslint-disable-next-line
+  }, [codeResults])
+  if (testCases === undefined || problem === undefined) return
+  const execution = testCases.map((test) => test.execution).join('\n')
 
   const handleClick = () => {
-    if (code.includes(problem.initialValue.trim())) {
+    if (code?.includes(problem.initial_value.trim())) {
       startTransition(async () => {
         try {
           const response = await fetch(
@@ -68,8 +69,8 @@ const CodePlayground: React.FC<EditorProps> = ({ value }) => {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                language: 'javascript',
-                version: '18.15.0',
+                language: 'python',
+                version: '3.10.0',
                 files: [
                   {
                     content: `${code} ${execution}`,
@@ -84,7 +85,7 @@ const CodePlayground: React.FC<EditorProps> = ({ value }) => {
           }
           const newTestCases = result.stdout.split('\n') as string[]
 
-          setTestCases(newTestCases)
+          setCodeResults(newTestCases)
           setOutput(result.stdout.split('\n'))
         } catch (error) {
           if (error instanceof Error) toast.error(error.message)
@@ -92,29 +93,6 @@ const CodePlayground: React.FC<EditorProps> = ({ value }) => {
       })
     }
   }
-
-  useEffect(() => {
-    let isValidCode = true
-
-    for (let i = 0; i < problem.testCases.length; i++) {
-      if (problem.testCases[i].expectedOutput !== testCases[i]) {
-        console.log({
-          expected: problem.testCases[i].expectedOutput,
-          actual: testCases[i],
-        })
-        isValidCode = false
-      }
-    }
-
-    if (isValidCode) {
-      toast.success('Coisa linda')
-      return
-    }
-
-    toast.error('Codigo errado')
-
-    // eslint-disable-next-line
-  }, [testCases])
 
   return (
     <section className="flex w-screen gap-8">

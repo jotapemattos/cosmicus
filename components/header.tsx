@@ -14,6 +14,14 @@ export default async function Header() {
       <nav className="mx-auto flex w-full max-w-screen-2xl items-center justify-end gap-4">
         <Button asChild variant={'ghost'}>
           <Link
+            href="/problems"
+            className="bg-btn-background hover:bg-btn-background-hover flex rounded-md px-3 py-2 no-underline"
+          >
+            <span>Desafios</span>
+          </Link>
+        </Button>
+        <Button asChild variant={'ghost'}>
+          <Link
             href="/leaderboard"
             className="bg-btn-background hover:bg-btn-background-hover flex rounded-md px-3 py-2 no-underline"
           >
