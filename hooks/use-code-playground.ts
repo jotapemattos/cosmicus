@@ -1,44 +1,69 @@
+import { CreateSubmissionRequest } from '@/data/submissions'
 import { Problem, TestCase } from '@/db/custom-types'
+import { UseMutateAsyncFunction } from '@tanstack/react-query'
 import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 
 interface UseCodePlaygroundProps {
   testCases: TestCase[] | undefined
   problem: Problem | undefined
+  createSubmissionFn: UseMutateAsyncFunction<
+    void,
+    Error,
+    CreateSubmissionRequest,
+    unknown
+  >
+  userId: string
 }
 
 export default function useCodePlayground({
   testCases,
   problem,
+  createSubmissionFn,
+  userId,
 }: UseCodePlaygroundProps) {
   const [code, setCode] = useState('')
   const [output, setOutput] = useState(null)
   const [isPending, startTransition] = useTransition()
-  const [codeResults, setCodeResults] = useState<string[]>([])
+  const [codeResults, setCodeResults] = useState<string[] | null>(null)
 
   const handleOnChange = (value?: string) => {
     setCode(value || '')
   }
+
+  const handleSubmission = async () => {
+    if (problem !== undefined) {
+      await createSubmissionFn({
+        problemId: problem.id,
+        code,
+        profileId: userId,
+      })
+    }
+  }
+
   useEffect(() => {
-    let isValidCode = true
-    // TODO - resolve testCases is possibly undefined
-    if (testCases) {
-      for (let i = 0; i < testCases.length; i++) {
-        if (testCases[i].expected_output !== codeResults[i]) {
-          console.log({
-            expected: testCases![i].expected_output,
-            actual: codeResults[i],
-          })
-          isValidCode = false
+    if (codeResults) {
+      let isValidCode = true
+      // TODO - resolve testCases is possibly undefined
+      if (testCases) {
+        for (let i = 0; i < testCases.length; i++) {
+          if (testCases[i].expected_output !== codeResults[i]) {
+            console.log({
+              expected: testCases![i].expected_output,
+              actual: codeResults[i],
+            })
+            isValidCode = false
+          }
         }
       }
-    }
-    if (isValidCode) {
-      toast.success('Coisa linda')
-      return
-    }
+      if (isValidCode) {
+        handleSubmission()
+        toast.success('Coisa linda')
+        return
+      }
 
-    toast.error('Codigo errado')
+      toast.error('Codigo errado')
+    }
 
     // eslint-disable-next-line
   }, [codeResults])

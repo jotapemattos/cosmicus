@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
-import Problems from './problems/problems'
+import Problems from '../components/problems'
 
 export default async function Page() {
   const supabase = createClient()

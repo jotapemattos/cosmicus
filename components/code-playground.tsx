@@ -3,16 +3,21 @@
 import { Editor } from '@monaco-editor/react'
 import { Button } from './ui/button'
 import { Loader2 } from 'lucide-react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { getProblemById } from '@/data/problems'
 import { getTestCasesByProblemId } from '@/data/test-cases'
 import useCodePlayground from '@/hooks/use-code-playground'
+import { createSubmission } from '@/data/submissions'
 
 interface EditorProps {
   problemId: number
+  userId: string
 }
 
-const CodePlayground: React.FC<EditorProps> = ({ problemId }: EditorProps) => {
+const CodePlayground: React.FC<EditorProps> = ({
+  problemId,
+  userId,
+}: EditorProps) => {
   const { data: problem } = useQuery({
     queryKey: ['problem', problemId],
     queryFn: () => getProblemById({ problemId }),
@@ -23,9 +28,18 @@ const CodePlayground: React.FC<EditorProps> = ({ problemId }: EditorProps) => {
     queryFn: () => getTestCasesByProblemId({ problemId }),
   })
 
+  const { mutateAsync: createSubmissionFn } = useMutation({
+    mutationFn: createSubmission,
+    onSuccess: () => {
+      console.log('god gau')
+    },
+  })
+
   const prop = useCodePlayground({
     testCases,
     problem,
+    createSubmissionFn,
+    userId,
   })
 
   if (testCases === undefined || problem === undefined) return

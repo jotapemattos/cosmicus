@@ -9,7 +9,6 @@ const Problems = () => {
     queryFn: () => getProblems(),
   })
 
-  console.log(problems)
   return (
     <div className="flex items-center justify-center">
       {problems?.map((problem) => (
