@@ -48,8 +48,8 @@ export type Database = {
       problems: {
         Row: {
           coins_reward: number | null
-          description: 'easy' | 'medium' | 'hard'
-          difficulty: string
+          description: string
+          difficulty: 'easy' | 'medium' | 'hard'
           experience_reward: number | null
           hint: string | null
           id: number

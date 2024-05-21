@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
+import CompletedProblems from './completed-problems'
 
 export default async function Page() {
   const supabase = createClient()
@@ -18,6 +19,7 @@ export default async function Page() {
         <h1 className="text-4xl font-extrabold">Desafios realizados</h1>
         <p>Veja por quais desafios ja passou e refaca-os se quiser</p>
       </section>
+      <CompletedProblems userId={user.id} />
     </main>
   )
 }

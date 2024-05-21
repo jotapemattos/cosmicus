@@ -6,6 +6,10 @@ export interface CreateSubmissionRequest {
   profileId: string
 }
 
+interface GetSubmissionsByProfileIdRequest {
+  profileId: string
+}
+
 export async function createSubmission({
   problemId,
   code,
@@ -18,4 +22,19 @@ export async function createSubmission({
   if (error) {
     throw new Error('Não foi possivel enviar o código.')
   }
+}
+
+export async function getSubmissionsByProfileId({
+  profileId,
+}: GetSubmissionsByProfileIdRequest) {
+  const { data, error } = await supabase
+    .from('submissions')
+    .select('*, problems (*)')
+    .match({ profile_id: profileId })
+
+  if (error) {
+    throw new Error('Não foi possivel encontrar os problemas resolvidos.')
+  }
+
+  return data
 }
