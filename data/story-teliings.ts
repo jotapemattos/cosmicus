@@ -11,6 +11,7 @@ export async function getStoryTellingsByProblemId({
     .from('story_telling')
     .select('*, characters (*)')
     .match({ problem_id: problemId })
+    .order('id')
 
   if (error) {
     throw new Error('Não foi possível carregar a história')
