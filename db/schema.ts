@@ -245,18 +245,21 @@ export type Database = {
           execution: string | null
           expected_output: string | null
           id: number
+          input: string | null
           problem_id: number
         }
         Insert: {
           execution?: string | null
           expected_output?: string | null
           id?: number
+          input?: string | null
           problem_id: number
         }
         Update: {
           execution?: string | null
           expected_output?: string | null
           id?: number
+          input?: string | null
           problem_id?: number
         }
         Relationships: [

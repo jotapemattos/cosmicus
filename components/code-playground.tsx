@@ -60,7 +60,7 @@ const CodePlayground: React.FC<EditorProps> = ({
         </Button>
       </div>
 
-      {/* <p>{prop?.output}</p> */}
+      <p>{prop?.codeResults}</p>
       <div className="flex w-full justify-between">
         <aside className="space-y-4">
           <h1 className="text-3xl font-bold">{problem.name}</h1>
@@ -73,8 +73,14 @@ const CodePlayground: React.FC<EditorProps> = ({
           </div>
           {testCases.map((testCase) => (
             <div key={testCase.id}>
-              <p>{testCase.execution}</p>
-              <p>{testCase.expected_output}</p>
+              <div className="flex items-center gap-4">
+                <h3 className="text-md font-medium">Entrada:</h3>
+                <p>{testCase.input}</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <h3 className="text-md font-medium">Saída Esperada:</h3>
+                <p>{testCase.expected_output}</p>
+              </div>
             </div>
           ))}
         </aside>

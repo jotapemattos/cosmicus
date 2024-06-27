@@ -23,7 +23,6 @@ export default function useCodePlayground({
   userId,
 }: UseCodePlaygroundProps) {
   const [code, setCode] = useState('')
-  const [output, setOutput] = useState(null)
   const [isPending, startTransition] = useTransition()
   const [codeResults, setCodeResults] = useState<string[] | null>(null)
 
@@ -72,7 +71,7 @@ export default function useCodePlayground({
   const execution = testCases.map((test) => test.execution).join('\n')
 
   const handleClick = () => {
-    if (code?.includes(problem.initial_value.trim())) {
+    if (code?.includes(problem.initial_value!.trim())) {
       startTransition(async () => {
         try {
           const response = await fetch(
@@ -101,7 +100,6 @@ export default function useCodePlayground({
           const newCodeResults = result.stdout.split('\n') as string[]
 
           setCodeResults(newCodeResults)
-          setOutput(result.stdout.split('\n'))
         } catch (error) {
           if (error instanceof Error) toast.error(error.message)
         }
@@ -113,7 +111,7 @@ export default function useCodePlayground({
     handleClick,
     handleOnChange,
     code,
-    output,
+    codeResults,
     isPending,
   }
 }
