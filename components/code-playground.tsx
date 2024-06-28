@@ -84,14 +84,23 @@ const CodePlayground: React.FC<EditorProps> = ({
             </div>
           ))}
         </aside>
-        <Editor
-          height="80vh"
-          width={'50vw'}
-          defaultLanguage="python"
-          defaultValue={problem?.initial_value + '\n'}
-          onChange={prop?.handleOnChange}
-          theme="vs-dark"
-        />
+        <div className="flex flex-col gap-2">
+          <Editor
+            height="60vh"
+            width={'50vw'}
+            defaultLanguage="python"
+            defaultValue={problem?.initial_value + '\n'}
+            onChange={prop?.handleOnChange}
+            theme="vs-dark"
+          />
+          {prop?.returnedTestCases.map((item, i) => (
+            <div key={i}>
+              <p>input: {item.input}</p>
+              <p>expected: {item.expected_output}</p>
+              <p>receba: {item.received_output}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )

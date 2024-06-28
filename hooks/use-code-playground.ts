@@ -16,6 +16,12 @@ interface UseCodePlaygroundProps {
   userId: string
 }
 
+interface ReturnedTestCases {
+  expected_output: string
+  received_output: string
+  input: string
+}
+
 export default function useCodePlayground({
   testCases,
   problem,
@@ -25,6 +31,9 @@ export default function useCodePlayground({
   const [code, setCode] = useState('')
   const [isPending, startTransition] = useTransition()
   const [codeResults, setCodeResults] = useState<string[] | null>(null)
+  const [returnedTestCases, setReturnedTestCases] = useState<
+    ReturnedTestCases[]
+  >([])
 
   const handleOnChange = (value?: string) => {
     setCode(value || '')
@@ -47,10 +56,15 @@ export default function useCodePlayground({
       if (testCases) {
         for (let i = 0; i < testCases.length; i++) {
           if (testCases[i].expected_output !== codeResults[i]) {
-            console.log({
-              expected: testCases![i].expected_output,
-              actual: codeResults[i],
-            })
+            setReturnedTestCases((prev) => [
+              ...prev,
+              {
+                expected_output: testCases![i].expected_output as string,
+                received_output: codeResults[i],
+                input: testCases![i].input as string,
+              },
+            ])
+
             isValidCode = false
           }
         }
@@ -108,6 +122,7 @@ export default function useCodePlayground({
   }
 
   return {
+    returnedTestCases,
     handleClick,
     handleOnChange,
     code,
