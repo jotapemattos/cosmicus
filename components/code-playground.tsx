@@ -21,7 +21,7 @@ const CodePlayground: React.FC<EditorProps> = ({
 }: EditorProps) => {
   const { data: problem } = useQuery({
     queryKey: ['problem', problemId],
-    queryFn: () => getProblemById({ problemId }),
+    queryFn: () => getProblemById({ problemId, userId }),
   })
 
   const { data: testCases } = useQuery({
