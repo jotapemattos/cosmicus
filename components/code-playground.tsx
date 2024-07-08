@@ -8,6 +8,7 @@ import { getProblemById } from '@/data/problems'
 import { getTestCasesByProblemId } from '@/data/test-cases'
 import useCodePlayground from '@/hooks/use-code-playground'
 import { createSubmission } from '@/data/submissions'
+import TestCases from './test-cases'
 
 interface EditorProps {
   problemId: number
@@ -45,7 +46,7 @@ const CodePlayground: React.FC<EditorProps> = ({
   if (testCases === undefined || problem === undefined) return
 
   return (
-    <section className="mt-24 w-full max-w-screen-2xl space-y-12">
+    <main className="mt-44 w-full max-w-screen-2xl space-y-12">
       <div className="flex w-full justify-end">
         <Button
           disabled={prop?.isPending}
@@ -102,7 +103,15 @@ const CodePlayground: React.FC<EditorProps> = ({
           ))}
         </div>
       </div>
-    </section>
+      {prop?.codeResults && (
+        <TestCases
+          expectedOutputs={testCases.map(
+            (item) => item.expected_output as string,
+          )}
+          receivedOutputs={prop?.codeResults as string[]}
+        />
+      )}
+    </main>
   )
 }
 
