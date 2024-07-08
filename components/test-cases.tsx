@@ -10,6 +10,12 @@ interface TestCasesProps {
 }
 
 const TestCases = ({ expectedOutputs, receivedOutputs }: TestCasesProps) => {
+  // scroll to bottom to show the test-cases overview
+  window.scrollTo({
+    top: document.documentElement.scrollHeight,
+    behavior: 'smooth',
+  })
+
   const [activeIndex, setActiveIndex] = useState(0)
 
   const isActiveTestCorrect = () => {
@@ -40,6 +46,7 @@ const TestCases = ({ expectedOutputs, receivedOutputs }: TestCasesProps) => {
           'bg-red-500/10': !isActiveTestCorrect(),
           'bg-green-500/10': isActiveTestCorrect(),
         })}
+        id="test-cases"
       >
         <p>
           <strong>Esperado:</strong>
