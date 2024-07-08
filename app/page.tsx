@@ -17,7 +17,7 @@ export default async function Page() {
     <main className="min-h-screen w-screen space-y-10">
       <section className="mx-auto mt-36 max-w-screen-2xl space-y-4">
         <h1 className="text-4xl font-extrabold">Desafios</h1>
-        <Problems />
+        <Problems userId={user.id} />
       </section>
     </main>
   )
