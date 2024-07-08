@@ -1,10 +1,4 @@
 import { supabase } from '@/utils/supabase/supabase'
-import { Problem } from '@/db/custom-types'
-
-interface GetProblemByIdRequest {
-  userId: string
-  problemId: number
-}
 
 export async function getProblems() {
   const { data, error } = await supabase.from('problems').select().order('id')
@@ -14,7 +8,7 @@ export async function getProblems() {
   return data
 }
 
-/* export async function getProblemById({ problemId }: { problemId: number }) {
+export async function getProblemById({ problemId }: { problemId: number }) {
   const { data, error } = await supabase
     .from('problems')
     .select()
@@ -24,7 +18,7 @@ export async function getProblems() {
     throw new Error('Não foi possivel encontrar os desafios')
   }
   return data
-} */
+}
 
 export async function getCurrentProblemId({ userId }: { userId: string }) {
   const { error, count } = await supabase
@@ -40,29 +34,29 @@ export async function getCurrentProblemId({ userId }: { userId: string }) {
   return count + 1
 }
 
-export async function getProblemById({
-  userId,
-  problemId,
-}: GetProblemByIdRequest): Promise<Problem> {
-  const { data, count } = await supabase
-    .from('submissions')
-    .select('*', { count: 'exact' })
-    .match({ problem_id: problemId, profile_id: userId })
-    .single()
+// export async function getProblemById({
+//   userId,
+//   problemId,
+// }: GetProblemByIdRequest): Promise<Problem> {
+//   const { data, count } = await supabase
+//     .from('submissions')
+//     .select('*', { count: 'exact' })
+//     .match({ problem_id: problemId, profile_id: userId })
+//     .single()
 
-  const { data: problem, error: problemError } = await supabase
-    .from('problems')
-    .select()
-    .match({ id: problemId })
-    .single()
+//   const { data: problem, error: problemError } = await supabase
+//     .from('problems')
+//     .select()
+//     .match({ id: problemId })
+//     .single()
 
-  if (problemError) {
-    throw new Error('problem error')
-  }
-  if (count) {
-    problem.initial_value = data.code
+//   if (problemError) {
+//     throw new Error('problem error')
+//   }
+//   if (count) {
+//     problem.initial_value = data.code
 
-    return problem
-  }
-  return problem
-}
+//     return problem
+//   }
+//   return problem
+// }

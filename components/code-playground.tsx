@@ -7,7 +7,11 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { getProblemById } from '@/data/problems'
 import { getTestCasesByProblemId } from '@/data/test-cases'
 import useCodePlayground from '@/hooks/use-code-playground'
-import { createSubmission } from '@/data/submissions'
+import {
+  createSubmission,
+  getSubmissionByProblemIdAndProfileId,
+  updateSubmission,
+} from '@/data/submissions'
 import TestCases from './test-cases'
 
 interface EditorProps {
@@ -21,7 +25,7 @@ const CodePlayground: React.FC<EditorProps> = ({
 }: EditorProps) => {
   const { data: problem } = useQuery({
     queryKey: ['problem', problemId],
-    queryFn: () => getProblemById({ problemId, userId }),
+    queryFn: () => getProblemById({ problemId }),
   })
 
   const { data: testCases } = useQuery({
@@ -29,8 +33,21 @@ const CodePlayground: React.FC<EditorProps> = ({
     queryFn: () => getTestCasesByProblemId({ problemId }),
   })
 
+  const { data: submission } = useQuery({
+    queryKey: ['submissions', problemId, userId],
+    queryFn: () =>
+      getSubmissionByProblemIdAndProfileId({ problemId, profileId: userId }),
+  })
+
   const { mutateAsync: createSubmissionFn } = useMutation({
     mutationFn: createSubmission,
+    onSuccess: () => {
+      console.log('god gau')
+    },
+  })
+
+  const { mutateAsync: updateSubmissionFn } = useMutation({
+    mutationFn: updateSubmission,
     onSuccess: () => {
       console.log('god gau')
     },
@@ -41,7 +58,7 @@ const CodePlayground: React.FC<EditorProps> = ({
     problem,
     createSubmissionFn,
     userId,
-    initialValue: problem?.initial_value as string,
+    updateSubmissionFn,
   })
 
   if (testCases === undefined || problem === undefined) return
@@ -91,7 +108,11 @@ const CodePlayground: React.FC<EditorProps> = ({
             height="60vh"
             width={'50vw'}
             defaultLanguage="python"
-            defaultValue={prop?.code}
+            defaultValue={
+              submission
+                ? (submission.code as string)
+                : (problem.initial_value as string)
+            }
             onChange={prop?.handleOnChange}
             theme="vs-dark"
           />
