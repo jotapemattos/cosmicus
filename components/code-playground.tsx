@@ -41,6 +41,7 @@ const CodePlayground: React.FC<EditorProps> = ({
     problem,
     createSubmissionFn,
     userId,
+    initialValue: problem?.initial_value as string,
   })
 
   if (testCases === undefined || problem === undefined) return
@@ -90,7 +91,7 @@ const CodePlayground: React.FC<EditorProps> = ({
             height="60vh"
             width={'50vw'}
             defaultLanguage="python"
-            defaultValue={problem?.initial_value + '\n'}
+            defaultValue={prop?.code}
             onChange={prop?.handleOnChange}
             theme="vs-dark"
           />

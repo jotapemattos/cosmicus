@@ -14,6 +14,7 @@ interface UseCodePlaygroundProps {
     unknown
   >
   userId: string
+  initialValue: string
 }
 
 interface ReturnedTestCases {
@@ -27,6 +28,7 @@ export default function useCodePlayground({
   problem,
   createSubmissionFn,
   userId,
+  initialValue,
 }: UseCodePlaygroundProps) {
   const [code, setCode] = useState('')
   const [isPending, startTransition] = useTransition()
@@ -35,10 +37,13 @@ export default function useCodePlayground({
     ReturnedTestCases[]
   >([])
 
+  useEffect(() => {
+    setCode(initialValue + '\n')
+  }, [initialValue])
+
   const handleOnChange = (value?: string) => {
     setCode(value || '')
   }
-
   const handleSubmission = async () => {
     if (problem !== undefined) {
       await createSubmissionFn({
@@ -85,6 +90,7 @@ export default function useCodePlayground({
   const execution = testCases.map((test) => test.execution).join('\n')
 
   const handleClick = () => {
+    console.log(code)
     if (code?.includes(problem.initial_value!.trim())) {
       startTransition(async () => {
         try {

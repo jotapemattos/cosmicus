@@ -17,7 +17,7 @@ export async function createSubmission({
 }: CreateSubmissionRequest) {
   const { error } = await supabase
     .from('submissions')
-    .insert({ problem_id: problemId, code, profile_id: profileId })
+    .upsert({ problem_id: problemId, code, profile_id: profileId })
 
   if (error) {
     throw new Error('Não foi possivel enviar o código.')
