@@ -41,6 +41,8 @@ export async function createSubmission({
     console.log(error)
   }
 
+  console.log(data)
+
   return data
 }
 

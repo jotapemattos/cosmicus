@@ -77,8 +77,8 @@ const ProblemCompletedDialog = ({
             <Coins />
             <h2 className="text-3xl font-bold">
               <NumberTicker
-                defaultValue={profile?.coins_amount as number}
-                value={problem.coins_reward as number}
+                defaultValue={0}
+                value={profile?.coins_amount as number}
               />
             </h2>
           </div>
@@ -86,8 +86,8 @@ const ProblemCompletedDialog = ({
             <Star />
             <h2 className="text-3xl font-bold">
               <NumberTicker
-                defaultValue={profile?.experience_points as number}
-                value={problem.experience_reward as number}
+                defaultValue={0}
+                value={profile?.experience_points as number}
               />
             </h2>
           </div>
