@@ -31,13 +31,17 @@ export async function createSubmission({
   code,
   profileId,
 }: CreateSubmissionRequest) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('submissions')
     .insert({ problem_id: problemId, code, profile_id: profileId })
+    .select()
+    .single()
 
   if (error) {
     console.log(error)
   }
+
+  return data
 }
 
 export async function updateSubmission({

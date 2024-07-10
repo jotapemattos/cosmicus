@@ -12,7 +12,15 @@ interface UseCodePlaygroundProps {
   testCases: TestCase[] | undefined
   problem: Problem | undefined
   createSubmissionFn: UseMutateAsyncFunction<
-    void,
+    {
+      code: string | null
+      created_at: string
+      has_concluded: boolean | null
+      id: number
+      problem_id: number | null
+      profile_id: string
+      time_in_seconds: number | null
+    } | null,
     Error,
     CreateSubmissionRequest,
     unknown
@@ -45,6 +53,7 @@ export default function useCodePlayground({
   const [returnedTestCases, setReturnedTestCases] = useState<
     ReturnedTestCases[]
   >([])
+  const [hasCompleted, setHasCompleted] = useState(false)
 
   const handleOnChange = (value?: string) => {
     setCode(value || '')
@@ -64,11 +73,15 @@ export default function useCodePlayground({
         })
       }
 
-      await createSubmissionFn({
+      const createdSubmisstion = await createSubmissionFn({
         problemId: problem.id,
         code,
         profileId: userId,
       })
+
+      if (createdSubmisstion) {
+        setHasCompleted(true)
+      }
     }
   }
 
@@ -94,7 +107,6 @@ export default function useCodePlayground({
       }
       if (isValidCode) {
         handleSubmission()
-        toast.success('Coisa linda')
         return
       }
 
@@ -152,5 +164,6 @@ export default function useCodePlayground({
     code,
     codeResults,
     isPending,
+    hasCompleted,
   }
 }

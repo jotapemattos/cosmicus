@@ -13,6 +13,7 @@ import {
   updateSubmission,
 } from '@/data/submissions'
 import TestCases from './test-cases'
+import ProblemCompletedDialog from '@/app/problems/[problemId]/components/problem-completed-dialog'
 
 interface EditorProps {
   problemId: number
@@ -132,6 +133,9 @@ const CodePlayground: React.FC<EditorProps> = ({
           )}
           receivedOutputs={prop?.codeResults as string[]}
         />
+      )}
+      {prop?.hasCompleted && (
+        <ProblemCompletedDialog userId={userId} problem={problem} />
       )}
     </main>
   )
