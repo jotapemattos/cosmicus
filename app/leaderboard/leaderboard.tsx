@@ -39,6 +39,8 @@ import { cn } from '@/lib/utils'
 import { User } from '@supabase/supabase-js'
 import { Input } from '@/components/ui/input'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { getUserLevel } from '@/lib/get-user-level'
+import LevelBadge from '@/components/level-badge'
 
 interface LeaderboardProps {
   user: User
@@ -176,6 +178,7 @@ const Leaderboard = ({ user }: LeaderboardProps) => {
             <TableHead className="w-[100px]">Posição</TableHead>
             <TableHead>Nome</TableHead>
             <TableHead>Pontos de Experiência</TableHead>
+            <TableHead>Level</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -184,28 +187,36 @@ const Leaderboard = ({ user }: LeaderboardProps) => {
               profile.username?.toLowerCase().includes(search?.toLowerCase()),
             )
             .slice((currentPage - 1) * pageRange, currentPage * pageRange)
-            .map((profile) => (
-              <TableRow key={profile.id}>
-                <TableCell className="font-medium">
-                  {positions[profile.id]}
-                </TableCell>
-                <TableCell className="flex w-1/2 items-center gap-4">
-                  <Avatar className="group size-8">
-                    <AvatarImage src={profile?.picture ?? undefined} />
-                    <AvatarFallback>
-                      {profile?.username?.substring(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  {profile.username}
-                </TableCell>
-                <TableCell>{profile.experience_points}</TableCell>
-                <TableCell className="text-right">
-                  <Button asChild variant={'link'}>
-                    <Link href={`/profile/${profile.id}`}>Ver perfil</Link>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            .map((profile) => {
+              const { level } = getUserLevel({
+                experiencePoints: profile.experience_points as number,
+              })
+              return (
+                <TableRow key={profile.id}>
+                  <TableCell className="font-medium">
+                    {positions[profile.id]}
+                  </TableCell>
+                  <TableCell className="flex w-1/2 items-center gap-4">
+                    <Avatar className="group size-8">
+                      <AvatarImage src={profile?.picture ?? undefined} />
+                      <AvatarFallback>
+                        {profile?.username?.substring(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    {profile.username}
+                  </TableCell>
+                  <TableCell>{profile.experience_points}</TableCell>
+                  <TableCell>
+                    <LevelBadge userLevel={level} />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button asChild variant={'link'}>
+                      <Link href={`/profile/${profile.id}`}>Ver perfil</Link>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
         </TableBody>
       </Table>
       <Pagination>

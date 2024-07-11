@@ -4,13 +4,15 @@ import { getProfileByUserId } from '@/data/profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { notFound } from 'next/navigation'
 import React from 'react'
-import { CalendarDays, Coins, Linkedin, Star } from 'lucide-react'
+import { CalendarDays, Coins, Linkedin } from 'lucide-react'
 import { formatDate } from 'date-fns'
 import { useQuery } from '@tanstack/react-query'
 import EditProfileDialog from './edit-profile-dialog'
 import DeleteProfileDialog from './delete-profile-dialog'
 import { Button } from '@/components/ui/button'
 import ChangeProfilePicDialog from './change-profile-pic-dialog'
+import { getUserLevel } from '@/lib/get-user-level'
+import LevelBadge from '@/components/level-badge'
 
 interface ProfileProps {
   profileId: string
@@ -26,10 +28,14 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
     return notFound()
   }
 
+  const { level } = getUserLevel({
+    experiencePoints: profile?.experience_points as number,
+  })
+
   const userOwnsProfile = profileId === currentUserId
   return (
     <main className="min-h-screen w-screen overflow-x-hidden p-4">
-      <section className="relative mx-auto my-24 w-full max-w-screen-xl space-y-8">
+      <section className="relative mx-auto my-24 w-full max-w-screen-2xl space-y-8">
         <Avatar className="group size-24">
           <AvatarImage src={profile?.picture ?? undefined} />
           <span className="absolute hidden h-full w-full items-center justify-center bg-zinc-900/50 p-1 text-center text-sm font-bold text-zinc-100 transition-all duration-300 group-hover:flex group-hover:cursor-pointer">
@@ -51,8 +57,7 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
               <span>{profile?.coins_amount}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Star color="orange" />
-              <span>{profile?.experience_points}</span>
+              <LevelBadge userLevel={level} />
             </div>
           </div>
         </div>
@@ -110,7 +115,7 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
         </div>
       </section>
       {userOwnsProfile && (
-        <section className="relative mx-auto flex w-full max-w-screen-xl items-center justify-end gap-4">
+        <section className="relative mx-auto flex w-full max-w-screen-2xl items-center justify-end gap-4">
           <EditProfileDialog id={profileId} />
           <DeleteProfileDialog profileId={profileId} />
         </section>
