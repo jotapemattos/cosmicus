@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import StoryTeliings from './components/story-teliings'
+import { getLastProblemIdCompletedByUser } from '@/data/submissions'
 
 interface PageProps {
   params: { problemId: number }
@@ -16,6 +17,16 @@ const Page = async ({ params: { problemId } }: PageProps) => {
 
   if (!user) {
     return redirect('/sign-in')
+  }
+
+  const lastProblemIdCompletedByUser = await getLastProblemIdCompletedByUser({
+    profileId: user.id,
+  })
+
+  const isUserAllowed = problemId <= lastProblemIdCompletedByUser + 1
+
+  if (!isUserAllowed) {
+    return redirect('/')
   }
 
   return (

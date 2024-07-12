@@ -21,6 +21,10 @@ interface HasCompletedProblemRequest {
   problemId: number
 }
 
+interface GetLastProblemIdCompletedByUserRequest {
+  profileId: string
+}
+
 interface GetSubmissionByProblemIdAndProfileIdRequest {
   profileId: string
   problemId: number
@@ -101,4 +105,20 @@ export async function hasCompletedProblem({
   if (!data || data.length === 0) return false
 
   return true
+}
+
+export async function getLastProblemIdCompletedByUser({
+  profileId,
+}: GetLastProblemIdCompletedByUserRequest) {
+  const { data } = await supabase
+    .from('submissions')
+    .select()
+    .order('id', { ascending: false })
+    .match({ profile_id: profileId })
+    .limit(1)
+    .single()
+
+  if (!data) return 0
+
+  return data.problem_id as number
 }
