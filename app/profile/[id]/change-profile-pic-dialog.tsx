@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
-import { getProfileByUserId, updateProfilePicture } from '@/data/profile'
+import { getProfileByUserId, updateProfilePicture } from '@/app/actions/profile'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Label } from '../../../components/ui/label'
 import { useState, useTransition } from 'react'
@@ -91,7 +91,6 @@ const ChangeProfilePicDialog = ({
 
         setAvatarUrl(publicUrl)
         await updateProfilePictureFn({
-          userId: id,
           picture: publicUrl,
           pictureFileName: data.path,
         })
@@ -106,7 +105,7 @@ const ChangeProfilePicDialog = ({
   }
   const { data: profile } = useQuery({
     queryKey: ['profile', id],
-    queryFn: () => getProfileByUserId({ userId: id }),
+    queryFn: () => getProfileByUserId({ profileId: id }),
   })
 
   return (

@@ -1,9 +1,9 @@
 import CodePlayground from '@/components/code-playground'
-import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import StoryTeliings from './components/story-teliings'
-import { getLastProblemIdCompletedByUser } from '@/data/submissions'
+import { createClient } from '@/utils/supabase/server'
+import { supabase as supabaseClient } from '@/utils/supabase/supabase'
 
 interface PageProps {
   params: { problemId: number }
@@ -19,10 +19,21 @@ const Page = async ({ params: { problemId } }: PageProps) => {
     return redirect('/sign-in')
   }
 
-  const lastProblemIdCompletedByUser = await getLastProblemIdCompletedByUser({
-    profileId: user.id,
-  })
+  const getLastProblemIdCompletedByUser = async () => {
+    const { data } = await supabaseClient
+      .from('submissions')
+      .select()
+      .order('id', { ascending: false })
+      .match({ profile_id: user?.id })
+      .limit(1)
+      .single()
 
+    if (!data) return 0
+
+    return data.problem_id as number
+  }
+
+  const lastProblemIdCompletedByUser = await getLastProblemIdCompletedByUser()
   const isUserAllowed = problemId <= lastProblemIdCompletedByUser + 1
 
   if (!isUserAllowed) {

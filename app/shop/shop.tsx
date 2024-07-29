@@ -20,9 +20,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import addInventoryItem, { getInventoriesByUserId } from '@/data/inventories'
-import { getProfileByUserId } from '@/data/profile'
-import { getSkins } from '@/data/skins'
+import {
+  addInventoryItem,
+  getInventoriesByUserId,
+} from '@/app/actions/inventories'
+import { getProfileByUserId } from '@/app/actions/profile'
+import { getSkins } from '@/app/actions/skins'
 import { Inventory } from '@/db/custom-types'
 import { cn } from '@/lib/utils'
 import { User } from '@supabase/supabase-js'
@@ -46,18 +49,12 @@ const Shop = ({ user }: ShopProps) => {
   })
   const { data: profile } = useQuery({
     queryKey: ['profile', user.id],
-    queryFn: () =>
-      getProfileByUserId({
-        userId: user.id,
-      }),
+    queryFn: () => getProfileByUserId({ profileId: user.id }),
   })
 
   const { data: inventory } = useQuery({
     queryKey: ['inventory', user.id],
-    queryFn: () =>
-      getInventoriesByUserId({
-        profileId: user.id,
-      }),
+    queryFn: () => getInventoriesByUserId(),
   })
 
   const queryClient = useQueryClient()
@@ -78,7 +75,7 @@ const Shop = ({ user }: ShopProps) => {
   }
 
   const handleBuy = async (skinId: number) => {
-    const data = await addInventoryItemFn({ userId: user.id, skinId })
+    const data = await addInventoryItemFn({ skinId })
 
     if (!isError) {
       setInventoryItem(data)

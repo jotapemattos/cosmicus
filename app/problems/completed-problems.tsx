@@ -1,7 +1,7 @@
 'use client'
 
 import { Badge } from '@/components/ui/badge'
-import { getSubmissionsByProfileId } from '@/data/submissions'
+import { getSubmissionsByProfileId } from '@/app/actions/submissions'
 import { getDifficultyInPortuguese } from '@/lib/get-difficulty-in-portuguese'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
@@ -13,7 +13,7 @@ interface CompletedProblemsProps {
 const CompletedProblems = ({ userId }: CompletedProblemsProps) => {
   const { data: submissions } = useQuery({
     queryKey: ['completed-problems', userId],
-    queryFn: () => getSubmissionsByProfileId({ profileId: userId }),
+    queryFn: () => getSubmissionsByProfileId(),
   })
 
   if (submissions === undefined) return

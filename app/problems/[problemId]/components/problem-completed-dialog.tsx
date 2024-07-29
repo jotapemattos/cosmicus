@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { getProfileByUserId } from '@/data/profile'
+import { getProfileByUserId } from '@/app/actions/profile'
 import { Problem } from '@/db/custom-types'
 import { useQuery } from '@tanstack/react-query'
 import { Coins, Star } from 'lucide-react'
@@ -30,7 +30,7 @@ const ProblemCompletedDialog = ({
 
   const { data: profile } = useQuery({
     queryKey: ['profile', userId],
-    queryFn: () => getProfileByUserId({ userId }),
+    queryFn: () => getProfileByUserId({ profileId: userId }),
   })
 
   useEffect(() => {

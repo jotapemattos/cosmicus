@@ -1,16 +1,9 @@
-import { supabase } from '@/utils/supabase/supabase'
+'use server'
+
+import { createClient } from '@/utils/supabase/server'
 
 interface AddInventoryItemProps {
   skinId: number
-  userId: string
-}
-
-interface GetInventoriesByUserIdRequest {
-  profileId: string
-}
-
-interface GetInventoriesAndSkinsByUserIdRequest {
-  profileId: string
 }
 
 interface ActivateInventoryItemRequest {
@@ -18,13 +11,18 @@ interface ActivateInventoryItemRequest {
   isActivated: boolean
 }
 
-export default async function addInventoryItem({
-  skinId,
-  userId,
-}: AddInventoryItemProps) {
+const supabase = createClient()
+
+export async function addInventoryItem({ skinId }: AddInventoryItemProps) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('O usuário não pode executar esta ação.')
+
   const { data, error } = await supabase
     .from('inventories')
-    .insert({ skin_id: skinId, profile_id: userId, is_activated: false })
+    .insert({ skin_id: skinId, profile_id: user.id, is_activated: false })
     .select()
 
   if (error || !data) {
@@ -34,13 +32,17 @@ export default async function addInventoryItem({
   return data[0]
 }
 
-export async function getInventoriesByUserId({
-  profileId,
-}: GetInventoriesByUserIdRequest) {
+export async function getInventoriesByUserId() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('O usuário não pode executar esta ação.')
+
   const { data, error } = await supabase
     .from('inventories')
     .select()
-    .match({ profile_id: profileId })
+    .match({ profile_id: user.id })
 
   if (error) {
     throw new Error('Não foi possível carregar o inventário')
@@ -49,13 +51,16 @@ export async function getInventoriesByUserId({
   return data
 }
 
-export async function getInventoriesAndSkinsByUserId({
-  profileId,
-}: GetInventoriesAndSkinsByUserIdRequest) {
+export async function getInventoriesAndSkinsByUserId() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('O usuário não pode executar esta ação.')
   const { data, error } = await supabase
     .from('inventories')
     .select('*, skins (*)')
-    .match({ profile_id: profileId })
+    .match({ profile_id: user.id })
 
   if (error) {
     throw new Error('Não foi possível carregar o inventário')

@@ -1,6 +1,6 @@
 'use client'
 
-import { getInventoriesAndSkinsByUserId } from '@/data/inventories'
+import { getInventoriesAndSkinsByUserId } from '@/app/actions/inventories'
 import { useQuery } from '@tanstack/react-query'
 import {
   Card,
@@ -24,7 +24,7 @@ interface InventoryProps {
 const Inventory = ({ user }: InventoryProps) => {
   const { data: inventories } = useQuery({
     queryKey: ['user-inventory', user.id],
-    queryFn: () => getInventoriesAndSkinsByUserId({ profileId: user.id }),
+    queryFn: () => getInventoriesAndSkinsByUserId(),
   })
 
   if (inventories === undefined) {

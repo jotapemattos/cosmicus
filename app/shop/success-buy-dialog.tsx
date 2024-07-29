@@ -8,8 +8,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { activateInventoryItem } from '@/data/inventories'
-import { getSkinById } from '@/data/skins'
+import { activateInventoryItem } from '@/app/actions/inventories'
+import { getSkinById } from '@/app/actions/skins'
 import { Inventory } from '@/db/custom-types'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '../../../components/ui/button'
 import { Input } from '../../../components/ui/input'
-import { getProfileByUserId, updateProfile } from '@/data/profile'
+import { getProfileByUserId, updateProfile } from '@/app/actions/profile'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Label } from '../../../components/ui/label'
 import { z } from 'zod'
@@ -56,7 +56,7 @@ const EditProfileDialog = ({ id }: { id: string }) => {
 
   const { data: profile } = useQuery({
     queryKey: ['profile', id],
-    queryFn: () => getProfileByUserId({ userId: id }),
+    queryFn: () => getProfileByUserId({ profileId: id }),
   })
 
   const queryClient = useQueryClient()
@@ -104,7 +104,6 @@ const EditProfileDialog = ({ id }: { id: string }) => {
       try {
         await updateProfileFn({
           username,
-          userId: id,
           githubUrl,
           linkedinUrl,
           bio,

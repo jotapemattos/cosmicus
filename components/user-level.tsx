@@ -4,7 +4,7 @@ import { Progress } from './ui/progress'
 import { getUserLevel } from '@/lib/get-user-level'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
-import { getProfileByUserId } from '@/data/profile'
+import { getProfileByUserId } from '@/app/actions/profile'
 import LevelBadge from './level-badge'
 
 interface UserLevelProps {
@@ -14,7 +14,7 @@ interface UserLevelProps {
 export default function UserLevel({ user }: UserLevelProps) {
   const { data: profile } = useQuery({
     queryKey: ['profile', user.id],
-    queryFn: () => getProfileByUserId({ userId: user.id }),
+    queryFn: () => getProfileByUserId({ profileId: user.id }),
   })
 
   const { level, progressPercentage } = getUserLevel({

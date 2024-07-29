@@ -1,23 +1,14 @@
-import { supabase } from '@/utils/supabase/supabase'
-
-interface GetProfileByUserIdRequest {
-  userId: string
-}
+'use server'
+import { createClient } from '@/utils/supabase/server'
 
 interface UpdateProfileRequest {
   username: string
-  userId: string
   githubUrl: string | null
   linkedinUrl: string | null
   bio: string | null
 }
 
-interface DeleteProfileRequest {
-  profileId: string
-}
-
 interface UpdateProfilePictureRequest {
-  userId: string
   picture: string
   pictureFileName: string
 }
@@ -26,13 +17,13 @@ interface GetProfilesRequest {
   ascending: boolean
 }
 
-export async function getProfileByUserId({
-  userId,
-}: GetProfileByUserIdRequest) {
+const supabase = createClient()
+
+export async function getProfileByUserId({ profileId }: { profileId: string }) {
   const { data: profile } = await supabase
     .from('profile')
     .select()
-    .match({ id: userId })
+    .match({ id: profileId })
     .limit(1)
     .single()
 
@@ -41,15 +32,20 @@ export async function getProfileByUserId({
 
 export async function updateProfile({
   username,
-  userId,
   githubUrl,
   linkedinUrl,
   bio,
 }: UpdateProfileRequest) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('O usuário não pode executar esta ação.')
+
   const { data: profile, error } = await supabase
     .from('profile')
     .update({ username, github_url: githubUrl, linkedin_url: linkedinUrl, bio })
-    .eq('id', userId)
+    .eq('id', user.id)
 
   if (error?.message.includes('unique constraint')) {
     throw new Error(`O usuário ${username} já existe no sistema.`)
@@ -62,11 +58,17 @@ export async function updateProfile({
   return profile
 }
 
-export async function deleteProfile({ profileId }: DeleteProfileRequest) {
+export async function deleteProfile() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('O usuário não pode executar esta ação.')
+
   const { error } = await supabase
     .from('profile')
     .delete()
-    .match({ id: profileId })
+    .match({ id: user.id })
 
   if (error) {
     throw new Error('Não foi possível excluir a conta.')
@@ -74,14 +76,19 @@ export async function deleteProfile({ profileId }: DeleteProfileRequest) {
 }
 
 export async function updateProfilePicture({
-  userId,
   picture,
   pictureFileName,
 }: UpdateProfilePictureRequest) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('O usuário não pode executar esta ação.')
+
   const { data: profile, error } = await supabase
     .from('profile')
     .update({ picture, picture_filename: pictureFileName })
-    .eq('id', userId)
+    .eq('id', user.id)
 
   if (error) {
     throw new Error('Não foi possível editar a foto de perfil.')

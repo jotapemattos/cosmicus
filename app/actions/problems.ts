@@ -1,4 +1,7 @@
-import { supabase } from '@/utils/supabase/supabase'
+'use server'
+import { createClient } from '@/utils/supabase/server'
+
+const supabase = createClient()
 
 export async function getProblems() {
   const { data, error } = await supabase.from('problems').select().order('id')
@@ -20,11 +23,17 @@ export async function getProblemById({ problemId }: { problemId: number }) {
   return data
 }
 
-export async function getCurrentProblemId({ userId }: { userId: string }) {
+export async function getCurrentProblemId() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('O usuário não pode executar esta ação.')
+
   const { error, count } = await supabase
     .from('submissions')
     .select('*', { count: 'exact' })
-    .eq('profile_id', userId)
+    .eq('profile_id', user.id)
   if (error) {
     throw new Error('Não foi possivel encontrar os desafios')
   }

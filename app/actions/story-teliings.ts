@@ -1,8 +1,12 @@
-import { supabase } from '@/utils/supabase/supabase'
+'use server'
+
+import { createClient } from '@/utils/supabase/server'
 
 interface GetStoryTellingsByProblemIdRequest {
   problemId: number
 }
+
+const supabase = createClient()
 
 export async function getStoryTellingsByProblemId({
   problemId,

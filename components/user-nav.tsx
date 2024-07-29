@@ -12,7 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { User } from '@supabase/supabase-js'
 import { useQuery } from '@tanstack/react-query'
-import { getProfileByUserId } from '@/data/profile'
+import { getProfileByUserId } from '@/app/actions/profile'
 import { signOut } from '@/app/actions/sign-out'
 
 interface UserNavProps {
@@ -21,7 +21,7 @@ interface UserNavProps {
 export default function UserNav({ user }: UserNavProps) {
   const { data: profile } = useQuery({
     queryKey: ['profile', user.id],
-    queryFn: () => getProfileByUserId({ userId: user.id }),
+    queryFn: () => getProfileByUserId({ profileId: user.id }),
   })
   return (
     <DropdownMenu>

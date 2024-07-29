@@ -12,12 +12,11 @@ export default async function Page() {
   if (!user) {
     return redirect('/sign-in')
   }
-
   return (
     <main className="min-h-screen w-screen space-y-10">
       <section className="mx-auto mt-36 max-w-screen-2xl space-y-4">
         <h1 className="text-4xl font-extrabold">Desafios</h1>
-        <Problems userId={user.id} />
+        <Problems />
       </section>
     </main>
   )

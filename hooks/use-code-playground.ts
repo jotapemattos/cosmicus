@@ -2,7 +2,7 @@ import {
   CreateSubmissionRequest,
   UpdateSubmissionRequest,
   hasCompletedProblem,
-} from '@/data/submissions'
+} from '@/app/actions/submissions'
 import { Problem, TestCase } from '@/db/custom-types'
 import { UseMutateAsyncFunction } from '@tanstack/react-query'
 import { useEffect, useState, useTransition } from 'react'
@@ -44,7 +44,6 @@ export default function useCodePlayground({
   testCases,
   problem,
   createSubmissionFn,
-  userId,
   updateSubmissionFn,
 }: UseCodePlaygroundProps) {
   const [code, setCode] = useState('')
@@ -62,21 +61,18 @@ export default function useCodePlayground({
     if (problem !== undefined) {
       const hasCompleted = await hasCompletedProblem({
         problemId: problem.id,
-        profileId: userId,
       })
 
       if (hasCompleted) {
         return await updateSubmissionFn({
           problemId: problem.id,
           code,
-          profileId: userId,
         })
       }
 
       const createdSubmisstion = await createSubmissionFn({
         problemId: problem.id,
         code,
-        profileId: userId,
       })
 
       if (createdSubmisstion) {

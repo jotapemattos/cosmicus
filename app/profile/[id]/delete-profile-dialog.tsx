@@ -10,17 +10,13 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { deleteProfile } from '@/data/profile'
+import { deleteProfile } from '@/app/actions/profile'
 import { useMutation } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
-interface DeleteProfileDialogProps {
-  profileId: string
-}
-
-const DeleteProfileDialog = ({ profileId }: DeleteProfileDialogProps) => {
+const DeleteProfileDialog = () => {
   const { push, refresh } = useRouter()
 
   const { mutateAsync: deleteProfileFn, isPending } = useMutation({
@@ -38,7 +34,7 @@ const DeleteProfileDialog = ({ profileId }: DeleteProfileDialogProps) => {
   })
 
   const handleDelete = async () => {
-    await deleteProfileFn({ profileId })
+    await deleteProfileFn()
   }
 
   return (

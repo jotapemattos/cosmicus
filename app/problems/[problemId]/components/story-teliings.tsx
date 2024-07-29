@@ -1,7 +1,7 @@
 'use client'
 
 import StoryTellingDialog from '@/components/story-telling-dialog'
-import { getStoryTellingsByProblemId } from '@/data/story-teliings'
+import { getStoryTellingsByProblemId } from '@/app/actions/story-teliings'
 import { useQuery } from '@tanstack/react-query'
 
 import { parseAsInteger, useQueryState } from 'nuqs'

@@ -1,8 +1,11 @@
-import { supabase } from '@/utils/supabase/supabase'
+'use server'
+import { createClient } from '@/utils/supabase/server'
 
 interface GetSkinByIdRequest {
   skinId: number
 }
+
+const supabase = createClient()
 
 export async function getSkins() {
   const { data: skins, error } = await supabase.from('skins').select()

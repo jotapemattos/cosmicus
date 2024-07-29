@@ -1,6 +1,6 @@
 'use client'
 
-import { getProfileByUserId } from '@/data/profile'
+import { getProfileByUserId } from '@/app/actions/profile'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { notFound } from 'next/navigation'
 import React from 'react'
@@ -22,7 +22,7 @@ interface ProfileProps {
 const Profile = ({ profileId, currentUserId }: ProfileProps) => {
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile', profileId],
-    queryFn: () => getProfileByUserId({ userId: profileId }),
+    queryFn: () => getProfileByUserId({ profileId }),
   })
   if (!profile && !isLoading) {
     return notFound()
@@ -117,7 +117,7 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
       {userOwnsProfile && (
         <section className="relative mx-auto flex w-full max-w-screen-2xl items-center justify-end gap-4">
           <EditProfileDialog id={profileId} />
-          <DeleteProfileDialog profileId={profileId} />
+          <DeleteProfileDialog />
         </section>
       )}
     </main>

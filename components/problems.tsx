@@ -1,15 +1,11 @@
 'use client'
-import { getCurrentProblemId, getProblems } from '@/data/problems'
-import { getLastProblemIdCompletedByUser } from '@/data/submissions'
+import { getCurrentProblemId, getProblems } from '@/app/actions/problems'
+import { getLastProblemIdCompletedByUser } from '@/app/actions/submissions'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 
-interface PageProps {
-  userId: string
-}
-
-const Problems = ({ userId }: PageProps) => {
+const Problems = () => {
   const { data: problems } = useQuery({
     queryKey: ['problems'],
     queryFn: () => getProblems(),
@@ -17,12 +13,12 @@ const Problems = ({ userId }: PageProps) => {
 
   const { data: currentProblemId } = useQuery({
     queryKey: ['currentProblemId'],
-    queryFn: () => getCurrentProblemId({ userId }),
+    queryFn: () => getCurrentProblemId(),
   })
 
   const { data: lastProblemIdCompletedByUser } = useQuery({
     queryKey: ['lastProblemIdCompletedByUser'],
-    queryFn: () => getLastProblemIdCompletedByUser({ profileId: userId }),
+    queryFn: () => getLastProblemIdCompletedByUser(),
   })
 
   return (

@@ -4,14 +4,14 @@ import { Editor } from '@monaco-editor/react'
 import { Button } from './ui/button'
 import { Coins, Loader2 } from 'lucide-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { getProblemById } from '@/data/problems'
-import { getTestCasesByProblemId } from '@/data/test-cases'
+import { getProblemById } from '@/app/actions/problems'
+import { getTestCasesByProblemId } from '@/app/actions/test-cases'
 import useCodePlayground from '@/hooks/use-code-playground'
 import {
   createSubmission,
   getSubmissionByProblemIdAndProfileId,
   updateSubmission,
-} from '@/data/submissions'
+} from '@/app/actions/submissions'
 import TestCases from './test-cases'
 import ProblemCompletedDialog from '@/app/problems/[problemId]/components/problem-completed-dialog'
 
@@ -36,8 +36,7 @@ const CodePlayground: React.FC<EditorProps> = ({
 
   const { data: submission } = useQuery({
     queryKey: ['submissions', problemId, userId],
-    queryFn: () =>
-      getSubmissionByProblemIdAndProfileId({ problemId, profileId: userId }),
+    queryFn: () => getSubmissionByProblemIdAndProfileId({ problemId }),
   })
 
   const { mutateAsync: createSubmissionFn } = useMutation({
