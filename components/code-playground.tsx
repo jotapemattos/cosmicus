@@ -134,7 +134,7 @@ const CodePlayground: React.FC<EditorProps> = ({
         />
       )}
       {prop?.hasCompleted && (
-        <ProblemCompletedDialog userId={userId} problem={problem} />
+        <ProblemCompletedDialog userId={userId} problemId={problem.id} />
       )}
     </main>
   )

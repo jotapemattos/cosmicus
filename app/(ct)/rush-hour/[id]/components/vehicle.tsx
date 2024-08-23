@@ -1,5 +1,5 @@
 import React from 'react'
-import { Vehicle as VehicleType } from './vehicle-type'
+import { Vehicle as VehicleType } from '../types/vehicle-type'
 
 interface VehicleProps {
   isSelected: boolean

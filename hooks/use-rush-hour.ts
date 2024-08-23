@@ -1,33 +1,36 @@
-import React, { useState, useEffect } from 'react'
-import { Vehicle as VehicleType } from './vehicle-type'
-import Vehicle from './vehicle'
-import { Button } from '@/components/ui/button'
+import { Vehicle as VehicleType } from '@/app/(ct)/rush-hour/[id]/types/vehicle-type'
+import { createCtSubmission } from '@/app/actions/ct-fundamentals-submission'
+import { useMutation } from '@tanstack/react-query'
+import { useState, useEffect } from 'react'
+import { toast } from 'sonner'
 
-interface BoardProps {
+interface UseRushHourProps {
+  initialVehicles: VehicleType[]
   size: number
+  ctProblemId: number
 }
 
-const Board: React.FC<BoardProps> = ({ size }) => {
-  const initialVehicles: VehicleType[] = [
-    // Target vehicle (red car)
-    { id: 1, x: 1, y: 2, length: 2, isHorizontal: true, isTarget: true },
-
-    // Vertical vehicles
-    { id: 2, x: 0, y: 0, length: 3, isHorizontal: false },
-    // { id: 3, x: 3, y: 0, length: 3, isHorizontal: false },
-    { id: 4, x: 5, y: 1, length: 3, isHorizontal: false },
-    { id: 5, x: 2, y: 3, length: 3, isHorizontal: false },
-    // { id: 6, x: 4, y: 3, length: 2, isHorizontal: false },
-
-    // Horizontal vehicles
-    { id: 7, x: 3, y: 3, length: 2, isHorizontal: true },
-    { id: 8, x: 0, y: 4, length: 2, isHorizontal: true },
-    { id: 9, x: 4, y: 5, length: 2, isHorizontal: true },
-  ]
-
+export function useRushHour({
+  initialVehicles,
+  size,
+  ctProblemId,
+}: UseRushHourProps) {
   const [vehicles, setVehicles] = useState<VehicleType[]>(initialVehicles)
   const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null)
   const [gameWon, setGameWon] = useState(false)
+  const [seconds, setSeconds] = useState(0)
+
+  const { mutateAsync: createCtSubmissionFn } = useMutation({
+    mutationFn: createCtSubmission,
+    onSuccess: () => {
+      toast.success('God gau')
+
+      //   setOpen(false)
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 
   const resetGame = () => {
     setVehicles(initialVehicles)
@@ -35,13 +38,29 @@ const Board: React.FC<BoardProps> = ({ size }) => {
 
   useEffect(() => {
     checkWinCondition()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vehicles])
 
-  const checkWinCondition = () => {
-    const targetVehicle = vehicles.find((v) => v.isTarget)
+  useEffect(() => {
+    let interval: number | undefined
+    if (selectedVehicle) {
+      interval = window.setInterval(() => {
+        setSeconds((prevSeconds) => prevSeconds + 1)
+      }, 1000)
+    }
+    return () => {
+      if (interval !== undefined) {
+        clearInterval(interval)
+      }
+    }
+  }, [selectedVehicle])
+
+  const checkWinCondition = async () => {
+    const targetVehicle = vehicles?.find((v) => v.isTarget)
     if (targetVehicle && targetVehicle.x + targetVehicle.length === size) {
       setGameWon(true)
+      await createCtSubmissionFn({ ctProblemId, timeInSeconds: seconds })
     }
   }
 
@@ -58,7 +77,7 @@ const Board: React.FC<BoardProps> = ({ size }) => {
 
     // Create a set of occupied cells for faster lookup
     const occupiedCells = new Set(
-      vehicles.flatMap((v) =>
+      vehicles?.flatMap((v) =>
         Array.from(
           { length: v.length },
           (_, i) =>
@@ -89,7 +108,7 @@ const Board: React.FC<BoardProps> = ({ size }) => {
   const moveVehicle = (direction: 'up' | 'down' | 'left' | 'right') => {
     if (selectedVehicle === null) return
 
-    const vehicle = vehicles.find((v) => v.id === selectedVehicle)
+    const vehicle = vehicles?.find((v) => v.id === selectedVehicle)
     if (!vehicle) return
 
     let newX = vehicle.x
@@ -105,7 +124,7 @@ const Board: React.FC<BoardProps> = ({ size }) => {
 
     if (isValidMove(vehicle, newX, newY)) {
       setVehicles(
-        vehicles.map((v) =>
+        vehicles!.map((v) =>
           v.id === selectedVehicle ? { ...v, x: newX, y: newY } : v,
         ),
       )
@@ -131,45 +150,12 @@ const Board: React.FC<BoardProps> = ({ size }) => {
     }
   }
 
-  return (
-    <>
-      <div className="relative" tabIndex={0} onKeyDown={handleKeyDown}>
-        <div
-          className="grid gap-1"
-          style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}
-        >
-          {Array.from({ length: size * size }).map((_, index) => (
-            <div
-              key={index}
-              className="h-12 w-12 border border-gray-400 bg-gray-200"
-            />
-          ))}
-        </div>
-        <div className="absolute left-0 top-0 h-full w-full">
-          {vehicles.map((vehicle) => (
-            <Vehicle
-              isSelected={selectedVehicle === vehicle.id}
-              key={vehicle.id}
-              vehicle={vehicle}
-              onClick={() => setSelectedVehicle(vehicle.id)}
-              size={size} // Pass the size prop here
-            />
-          ))}
-        </div>
-        {gameWon && (
-          <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50">
-            <div className="rounded bg-white p-4">
-              <h2 className="text-2xl font-bold">Muito bem!</h2>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="mt-4">
-        <Button onClick={() => resetGame()}>Reiniciar</Button>
-      </div>
-    </>
-  )
+  return {
+    vehicles,
+    selectedVehicle,
+    handleKeyDown,
+    resetGame,
+    gameWon,
+    setSelectedVehicle,
+  }
 }
-
-export default Board

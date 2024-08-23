@@ -9,7 +9,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { getProfileByUserId } from '@/app/actions/profile'
-import { Problem } from '@/db/custom-types'
 import { useQuery } from '@tanstack/react-query'
 import { Coins, Star } from 'lucide-react'
 import { useState, useEffect } from 'react'
@@ -19,12 +18,12 @@ import Link from 'next/link'
 
 interface ProblemCompletedDialogProps {
   userId: string
-  problem: Problem
+  problemId: number
 }
 
 const ProblemCompletedDialog = ({
   userId,
-  problem,
+  problemId,
 }: ProblemCompletedDialogProps) => {
   const [open, setOpen] = useState(true)
 
@@ -97,7 +96,7 @@ const ProblemCompletedDialog = ({
             <Link href="/">Voltar para o mapa</Link>
           </Button>
           <Button asChild>
-            <Link href={`${problem.id + 1}`}>Continuar</Link>
+            <Link href={`${Number(problemId) + 1}`}>Continuar</Link>
           </Button>
         </div>
       </DialogContent>
