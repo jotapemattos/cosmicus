@@ -28,7 +28,7 @@ const Problems = () => {
           href={
             // unable user to access a problem that it's not allowed
             problem.id <= (lastProblemIdCompletedByUser as number) + 1
-              ? `problems/${problem.id}`
+              ? `code-problems/${problem.id}`
               : '/'
           }
           className={cn('rounded-md bg-sky-400 p-4', {

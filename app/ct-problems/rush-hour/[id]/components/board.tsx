@@ -1,6 +1,6 @@
 'use client'
 
-import ProblemCompletedDialog from '@/app/problems/[problemId]/components/problem-completed-dialog'
+import ProblemCompletedDialog from '@/app/code-problems/[problemId]/components/problem-completed-dialog'
 import { Vehicle as VehicleType } from '../types/vehicle-type'
 import Vehicle from './vehicle'
 import { Button } from '@/components/ui/button'

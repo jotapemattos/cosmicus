@@ -17,7 +17,7 @@ export default async function Header() {
           <Link href={'/'}>Home</Link>
           <Button asChild variant={'ghost'}>
             <Link
-              href="/problems"
+              href="/completed-problems"
               className="bg-btn-background hover:bg-btn-background-hover flex rounded-md px-3 py-2 no-underline"
             >
               <span>Desafios</span>

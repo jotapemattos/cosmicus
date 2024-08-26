@@ -5,6 +5,7 @@ import { getSubmissionsByProfileId } from '@/app/actions/submissions'
 import { getDifficultyInPortuguese } from '@/lib/get-difficulty-in-portuguese'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
+import Link from 'next/link'
 
 interface CompletedProblemsProps {
   userId: string
@@ -22,7 +23,10 @@ const CompletedProblems = ({ userId }: CompletedProblemsProps) => {
     <section className="mx-auto mt-36 max-w-screen-2xl space-y-4">
       {submissions.map((submission) => (
         <div key={submission.id} className="rounded-md bg-secondary p-4">
-          <div className="flex items-center gap-4">
+          <Link
+            href={`code-problems/${submission.problem_id}`}
+            className="flex items-center gap-4"
+          >
             <h3 className="text-xl font-bold">{submission.problems?.name}</h3>
             {submission.problems?.difficulty && (
               <Badge
@@ -40,7 +44,7 @@ const CompletedProblems = ({ userId }: CompletedProblemsProps) => {
                 })}
               </Badge>
             )}
-          </div>
+          </Link>
           <p className="text-sm">{submission.problems?.description}</p>
         </div>
       ))}

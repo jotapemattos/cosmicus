@@ -13,7 +13,7 @@ import {
   updateSubmission,
 } from '@/app/actions/submissions'
 import TestCases from './test-cases'
-import ProblemCompletedDialog from '@/app/problems/[problemId]/components/problem-completed-dialog'
+import ProblemCompletedDialog from '@/app/code-problems/[problemId]/components/problem-completed-dialog'
 
 interface EditorProps {
   problemId: number
