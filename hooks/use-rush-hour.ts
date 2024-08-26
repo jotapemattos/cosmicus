@@ -1,4 +1,4 @@
-import { Vehicle as VehicleType } from '@/app/(ct)/rush-hour/[id]/types/vehicle-type'
+import { Vehicle as VehicleType } from '@/app/ct-problems/rush-hour/[id]/types/vehicle-type'
 import { createCtSubmission } from '@/app/actions/ct-fundamentals-submission'
 import { useMutation } from '@tanstack/react-query'
 import { useState, useEffect } from 'react'

@@ -31,7 +31,7 @@ export type Database = {
         Row: {
           coins_reward: number | null
           ct_pillar: string | null
-          difficulty: string | null
+          difficulty: Database['public']['Enums']['problems-difficulty']
           experience_reward: number | null
           id: number
           name: string | null
@@ -39,7 +39,7 @@ export type Database = {
         Insert: {
           coins_reward?: number | null
           ct_pillar?: string | null
-          difficulty?: string | null
+          difficulty: Database['public']['Enums']['problems-difficulty']
           experience_reward?: number | null
           id?: number
           name?: string | null
@@ -47,7 +47,7 @@ export type Database = {
         Update: {
           coins_reward?: number | null
           ct_pillar?: string | null
-          difficulty?: string | null
+          difficulty?: Database['public']['Enums']['problems-difficulty']
           experience_reward?: number | null
           id?: number
           name?: string | null
@@ -133,7 +133,7 @@ export type Database = {
         Row: {
           coins_reward: number | null
           description: string | null
-          difficulty: string
+          difficulty: Database['public']['Enums']['problems-difficulty']
           experience_reward: number | null
           hint: string | null
           id: number
@@ -143,7 +143,7 @@ export type Database = {
         Insert: {
           coins_reward?: number | null
           description?: string | null
-          difficulty: string
+          difficulty: Database['public']['Enums']['problems-difficulty']
           experience_reward?: number | null
           hint?: string | null
           id?: number
@@ -153,7 +153,7 @@ export type Database = {
         Update: {
           coins_reward?: number | null
           description?: string | null
-          difficulty?: string
+          difficulty?: Database['public']['Enums']['problems-difficulty']
           experience_reward?: number | null
           hint?: string | null
           id?: number
@@ -346,7 +346,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      'problems-difficulty': 'hard' | 'medium' | 'easy'
     }
     CompositeTypes: {
       [_ in never]: never
