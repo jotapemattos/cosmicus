@@ -1,4 +1,4 @@
-import Problems from '@/components/problems'
+import Problems from '@/app/code-problems/components/problems'
 
 export default function Page() {
   return (

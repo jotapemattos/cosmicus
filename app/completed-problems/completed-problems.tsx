@@ -1,11 +1,9 @@
 'use client'
 
-import { Badge } from '@/components/ui/badge'
 import { getSubmissionsByProfileId } from '@/app/actions/submissions'
-import { getDifficultyInPortuguese } from '@/lib/get-difficulty-in-portuguese'
-import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+import DifficultyBadge from '@/components/ui/difficulty-badge'
 
 interface CompletedProblemsProps {
   userId: string
@@ -29,20 +27,7 @@ const CompletedProblems = ({ userId }: CompletedProblemsProps) => {
           >
             <h3 className="text-xl font-bold">{submission.problems?.name}</h3>
             {submission.problems?.difficulty && (
-              <Badge
-                className={cn('w-fit', {
-                  'bg-red-500/10 text-red-500 hover:bg-red-500/10':
-                    submission.problems?.difficulty === 'hard',
-                  'bg-green-500/10 text-green-500 hover:bg-green-500/10':
-                    submission.problems?.difficulty === 'easy',
-                  'bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/10':
-                    submission.problems?.difficulty === 'medium',
-                })}
-              >
-                {getDifficultyInPortuguese({
-                  difficulty: submission.problems?.difficulty,
-                })}
-              </Badge>
+              <DifficultyBadge difficulty={submission.problems.difficulty} />
             )}
           </Link>
           <p className="text-sm">{submission.problems?.description}</p>
