@@ -1,7 +1,10 @@
 'use client'
 
-import { getInventoriesAndSkinsByUserId } from '@/app/actions/inventories'
-import { useQuery } from '@tanstack/react-query'
+import {
+  activateInventoryItem,
+  getInventoriesAndSkinsByUserId,
+} from '@/app/actions/inventories'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   Card,
   CardContent,
@@ -16,15 +19,41 @@ import { User } from '@supabase/supabase-js'
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Inventory as InventoryType } from '@/db/custom-types'
+import { toast } from 'sonner'
 
 interface InventoryProps {
   user: User
 }
 
 const Inventory = ({ user }: InventoryProps) => {
+  const queryClient = useQueryClient()
+
   const { data: inventories } = useQuery({
     queryKey: ['user-inventory', user.id],
     queryFn: () => getInventoriesAndSkinsByUserId(),
+  })
+
+  const { mutateAsync: activateInventoryItemFn } = useMutation({
+    mutationFn: activateInventoryItem,
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(
+        ['user-inventory', user.id],
+        (oldData: InventoryType[] | undefined) => {
+          if (!oldData) return oldData
+          return oldData.map((item) => ({
+            ...item,
+            is_activated: item.id === variables.inventoryId,
+          }))
+        },
+      )
+
+      toast.success('Item equipado com sucesso.')
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
   })
 
   if (inventories === undefined) {
@@ -32,7 +61,7 @@ const Inventory = ({ user }: InventoryProps) => {
   }
 
   return (
-    <section className="mx-auto flex w-full max-w-screen-2xl gap-8">
+    <section className="mx-auto flex w-full max-w-screen-2xl flex-wrap gap-8">
       {inventories?.map((inventory) => (
         <Card key={inventory.id} className="w-72">
           <CardHeader className="space-y-4">
@@ -60,7 +89,17 @@ const Inventory = ({ user }: InventoryProps) => {
               className="aspect-square w-full object-cover"
             />
           </CardContent>
-          <CardFooter></CardFooter>
+          <CardFooter>
+            <Button
+              className="w-full"
+              disabled={inventory.is_activated as boolean}
+              onClick={() =>
+                activateInventoryItemFn({ inventoryId: inventory.id })
+              }
+            >
+              {inventory.is_activated ? 'Equipado' : 'Equipar'}
+            </Button>
+          </CardFooter>
         </Card>
       ))}
     </section>

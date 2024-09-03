@@ -51,7 +51,6 @@ const SuccessBuyDialog = ({
   const handleActivate = async () => {
     await activateInventoryItemFn({
       inventoryId: inventory.id,
-      isActivated: true ?? false,
     })
 
     setOpen(false)

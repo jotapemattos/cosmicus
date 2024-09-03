@@ -8,7 +8,6 @@ interface AddInventoryItemProps {
 
 interface ActivateInventoryItemRequest {
   inventoryId: number
-  isActivated: boolean
 }
 
 const supabase = createClient()
@@ -71,11 +70,21 @@ export async function getInventoriesAndSkinsByUserId() {
 
 export async function activateInventoryItem({
   inventoryId,
-  isActivated,
 }: ActivateInventoryItemRequest) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('O usuário não pode executar esta ação.')
+
+  await supabase
+    .from('inventories')
+    .update({ is_activated: false })
+    .match({ profile_id: user.id, is_activated: true })
+
   const { data, error } = await supabase
     .from('inventories')
-    .update({ is_activated: isActivated })
+    .update({ is_activated: true })
     .match({ id: inventoryId })
 
   if (error) {

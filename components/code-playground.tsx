@@ -106,7 +106,7 @@ const CodePlayground: React.FC<EditorProps> = ({
             <h3 className="text-md font-medium">Dica</h3>
             <div
               dangerouslySetInnerHTML={{ __html: problem.hint as string }}
-              className="prose max-w-2/3 prose-code:text-violet-500 prose-code:bg-secondary prose-code:p-2 prose-code:rounded-md prose-code:text-sm"
+              className="prose max-w-2/3 prose-code:rounded-md prose-code:bg-secondary prose-code:p-2 prose-code:text-sm prose-code:text-violet-500"
             />
           </div>
         </aside>
