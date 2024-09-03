@@ -102,6 +102,13 @@ const CodePlayground: React.FC<EditorProps> = ({
               </div>
             </div>
           ))}
+          <div>
+            <h3 className="text-md font-medium">Dica</h3>
+            <div
+              dangerouslySetInnerHTML={{ __html: problem.hint as string }}
+              className="prose max-w-2/3 prose-code:text-violet-500 prose-code:bg-secondary prose-code:p-2 prose-code:rounded-md prose-code:text-sm"
+            />
+          </div>
         </aside>
         <div className="flex flex-col gap-2">
           <Editor

@@ -10,6 +10,21 @@ const config = {
   ],
   prefix: '',
   theme: {
+    typography: {
+      default: {
+        css: {
+          code: {
+            '&::before': {
+              content: '""',
+            },
+            '&::after': {
+              content: '""',
+            },
+          },
+          // ...
+        },
+      },
+    },
     container: {
       center: true,
       padding: '2rem',
@@ -83,7 +98,7 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 } satisfies Config
 
 export default config
