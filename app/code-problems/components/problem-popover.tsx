@@ -78,9 +78,9 @@ const ProblemPopover = ({
                 : '/'
             }
           >
-            {isCurrentProblem && 'Comecar'}
+            {isCurrentProblem && 'Começar'}
             {isProblemCompleted && 'Fazer novamente'}
-            {!isProblemAvailable && 'Bloquado'}
+            {!isProblemAvailable && 'Bloqueado'}
           </Link>
         </Button>
       </PopoverContent>
