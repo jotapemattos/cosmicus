@@ -5,11 +5,17 @@ import { groupProblemsByDifficulty } from '@/utils/group-problems-by-difficulty'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import ProblemPopover from './problem-popover'
+import { getUserSkin } from '@/app/actions/skins'
 
 const Problems = () => {
   const { data: problems } = useQuery({
     queryKey: ['problems'],
     queryFn: () => getProblems(),
+  })
+
+  const { data: skin } = useQuery({
+    queryKey: ['skin'],
+    queryFn: () => getUserSkin(),
   })
 
   const { data: currentProblemId } = useQuery({
@@ -38,6 +44,7 @@ const Problems = () => {
                 lastProblemIdCompletedByUser as number
               }
               currentProblemId={currentProblemId as number}
+              skinPicture={skin?.picture as string}
             />
           ))}
         </div>

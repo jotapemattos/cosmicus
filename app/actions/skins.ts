@@ -28,3 +28,24 @@ export async function getSkinById({ skinId }: GetSkinByIdRequest) {
 
   return data
 }
+
+export async function getUserSkin() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('O usuário não pode executar esta ação.')
+
+  const { data, error } = await supabase
+    .from('inventories')
+    .select('*, skins (*)')
+    .match({ profile_id: user.id, is_activated: true })
+    .single()
+
+  if (error) {
+    throw new Error('Não foi possivel encontrar o item')
+  }
+
+  console.log('returning', data.skins)
+  return data.skins
+}
