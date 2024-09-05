@@ -35,11 +35,11 @@ import Image from 'next/image'
 import { useState } from 'react'
 import SuccessBuyDialog from './success-buy-dialog'
 
-interface ShopProps {
+interface SkinsShopProps {
   user: User
 }
 
-const Shop = ({ user }: ShopProps) => {
+const SkinsShop = ({ user }: SkinsShopProps) => {
   const [inventoryItem, setInventoryItem] = useState<Inventory | null>()
   const [openBuyDialog, setOpenBuyDialog] = useState<boolean>(false)
 
@@ -179,4 +179,4 @@ const Shop = ({ user }: ShopProps) => {
     </>
   )
 }
-export default Shop
+export default SkinsShop

@@ -12,3 +12,6 @@ export type CtProblem =
   Database['public']['Tables']['ct_fundamentals_problems']['Row']
 export type CtSubmission =
   Database['public']['Tables']['ct_fundamentals_submissions']['Row']
+export type Perk = Database['public']['Tables']['perks']['Row']
+export type PerkInventory =
+  Database['public']['Tables']['perks_inventories']['Row']

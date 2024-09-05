@@ -46,6 +46,5 @@ export async function getUserSkin() {
     throw new Error('Não foi possivel encontrar o item')
   }
 
-  console.log('returning', data.skins)
   return data.skins
 }

@@ -129,8 +129,69 @@ export type Database = {
           },
         ]
       }
+      perks: {
+        Row: {
+          description: string
+          id: number
+          name: string
+          picture: string
+          price: number
+        }
+        Insert: {
+          description?: string
+          id?: number
+          name?: string
+          picture?: string
+          price?: number
+        }
+        Update: {
+          description?: string
+          id?: number
+          name?: string
+          picture?: string
+          price?: number
+        }
+        Relationships: []
+      }
+      perks_inventories: {
+        Row: {
+          id: number
+          perk_id: number
+          profile_id: string
+          quantity: number
+        }
+        Insert: {
+          id?: number
+          perk_id: number
+          profile_id?: string
+          quantity?: number
+        }
+        Update: {
+          id?: number
+          perk_id?: number
+          profile_id?: string
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'perks_inventories_perk_id_fkey'
+            columns: ['perk_id']
+            isOneToOne: false
+            referencedRelation: 'perks'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'perks_inventories_profile_id_fkey'
+            columns: ['profile_id']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       problems: {
         Row: {
+          category: string
           coins_reward: number | null
           description: string | null
           difficulty: Database['public']['Enums']['problems-difficulty']
@@ -141,6 +202,7 @@ export type Database = {
           name: string | null
         }
         Insert: {
+          category?: string
           coins_reward?: number | null
           description?: string | null
           difficulty: Database['public']['Enums']['problems-difficulty']
@@ -151,6 +213,7 @@ export type Database = {
           name?: string | null
         }
         Update: {
+          category?: string
           coins_reward?: number | null
           description?: string | null
           difficulty?: Database['public']['Enums']['problems-difficulty']
