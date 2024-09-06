@@ -1,7 +1,7 @@
 'use client'
 
 import { Editor } from '@monaco-editor/react'
-import { Button } from './ui/button'
+import { Button } from '../../../../components/ui/button'
 import { Coins, Loader2 } from 'lucide-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getProblemById } from '@/app/actions/problems'
@@ -12,8 +12,10 @@ import {
   getSubmissionByProblemIdAndProfileId,
   updateSubmission,
 } from '@/app/actions/submissions'
-import TestCases from './test-cases'
+import TestCases from '../../../../components/test-cases'
 import ProblemCompletedDialog from '@/app/code-problems/[problemId]/components/problem-completed-dialog'
+import SpecialHint from './special-hint'
+import { useEffect, useState } from 'react'
 
 interface EditorProps {
   problemId: number
@@ -24,6 +26,27 @@ const CodePlayground: React.FC<EditorProps> = ({
   problemId,
   userId,
 }: EditorProps) => {
+  const [hasUsedSpecialHint, setHasUsedSpecialHint] = useState(false)
+
+  useEffect(() => {
+    // Load the state from localStorage when the component mounts
+    const storedHasUsedSpecialHint = localStorage.getItem(
+      `specialHint_${problemId}_${userId}`,
+    )
+    if (storedHasUsedSpecialHint !== null) {
+      setHasUsedSpecialHint(JSON.parse(storedHasUsedSpecialHint))
+    }
+  }, [problemId, userId])
+
+  const updateHasUsedSpecialHint = (value: boolean) => {
+    setHasUsedSpecialHint(value)
+    // Save the state to localStorage whenever it changes
+    localStorage.setItem(
+      `specialHint_${problemId}_${userId}`,
+      JSON.stringify(value),
+    )
+  }
+
   const { data: problem } = useQuery({
     queryKey: ['problem', problemId],
     queryFn: () => getProblemById({ problemId }),
@@ -65,7 +88,12 @@ const CodePlayground: React.FC<EditorProps> = ({
 
   return (
     <main className="mt-44 w-full max-w-screen-2xl space-y-12">
-      <div className="flex w-full justify-end">
+      <div className="flex w-full items-center justify-end gap-4">
+        <SpecialHint
+          userId={userId}
+          setHasUsedSpecialHint={updateHasUsedSpecialHint}
+          hasUsedSpecialHint={hasUsedSpecialHint}
+        />
         <Button
           disabled={prop?.isPending}
           onClick={prop?.handleClick}
@@ -103,12 +131,23 @@ const CodePlayground: React.FC<EditorProps> = ({
             </div>
           ))}
           <div>
-            <h3 className="text-md font-medium">Dica</h3>
+            <h3 className="text-md font-bold">Dica</h3>
             <div
               dangerouslySetInnerHTML={{ __html: problem.hint as string }}
               className="prose max-w-2/3 prose-code:rounded-md prose-code:bg-secondary prose-code:p-2 prose-code:text-sm prose-code:text-violet-500"
             />
           </div>
+          {hasUsedSpecialHint && (
+            <div>
+              <h3 className="text-md font-bold">Dica Especial</h3>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: problem.special_hint as string,
+                }}
+                className="prose max-w-2/3 prose-code:rounded-md prose-code:bg-secondary prose-code:p-2 prose-code:text-sm prose-code:text-violet-500"
+              />
+            </div>
+          )}
         </aside>
         <div className="flex flex-col gap-2">
           <Editor

@@ -200,6 +200,7 @@ export type Database = {
           id: number
           initial_value: string | null
           name: string | null
+          special_hint: string
         }
         Insert: {
           category?: string
@@ -211,6 +212,7 @@ export type Database = {
           id?: number
           initial_value?: string | null
           name?: string | null
+          special_hint?: string
         }
         Update: {
           category?: string
@@ -222,6 +224,7 @@ export type Database = {
           id?: number
           initial_value?: string | null
           name?: string | null
+          special_hint?: string
         }
         Relationships: []
       }

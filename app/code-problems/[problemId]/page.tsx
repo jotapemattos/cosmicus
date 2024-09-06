@@ -1,4 +1,4 @@
-import CodePlayground from '@/components/code-playground'
+import CodePlayground from './components/code-playground'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import StoryTeliings from './components/story-teliings'
