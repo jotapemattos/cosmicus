@@ -16,7 +16,7 @@ const Page = async () => {
     return redirect('/sign-in')
   }
   return (
-    <main className="min-h-screen w-screen space-y-24 py-32">
+    <main className="min-h-screen w-full space-y-24 py-32">
       <section className="mx-auto mt-12 max-w-screen-2xl space-y-4">
         <h1 className="text-4xl font-extrabold">Inventário</h1>
         <div className="flex w-full items-center justify-between">
