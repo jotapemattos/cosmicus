@@ -1,8 +1,9 @@
 'use client'
 
-import { Editor } from '@monaco-editor/react'
+import TokyoNightStorm from '@/utils/editor-themes/tokyo-night-storm.json'
+import { Editor, type Monaco } from '@monaco-editor/react'
 import { Button } from '../../../../components/ui/button'
-import { Coins, Loader2 } from 'lucide-react'
+import { Coins, Loader2, Sparkles } from 'lucide-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getProblemById } from '@/app/actions/problems'
 import { getTestCasesByProblemId } from '@/app/actions/test-cases'
@@ -47,6 +48,15 @@ const CodePlayground: React.FC<EditorProps> = ({
     )
   }
 
+  const handleEditorDidMount = (monaco: Monaco) => {
+    monaco.editor.defineTheme('TokyoNightStorm', {
+      base: 'vs-dark',
+      inherit: true,
+      ...TokyoNightStorm,
+      rules: [],
+    })
+  }
+
   const { data: problem } = useQuery({
     queryKey: ['problem', problemId],
     queryFn: () => getProblemById({ problemId }),
@@ -87,37 +97,29 @@ const CodePlayground: React.FC<EditorProps> = ({
   if (testCases === undefined || problem === undefined) return
 
   return (
-    <main className="mt-44 w-full max-w-screen-2xl space-y-12">
-      <div className="flex w-full items-center justify-end gap-4">
+    <main className="mx-auto mb-20 mt-32 flex w-full max-w-screen-2xl flex-col items-center gap-8">
+      <header className="flex w-full items-center justify-center gap-4">
+        <h1 className="text-2xl font-bold">{problem.name}</h1>
+        <span className="text-xl">Categoria - {problem.category}</span>
+        <hr className="h-6 w-px bg-white" />
+        <div className="flex items-center gap-2">
+          <Coins className="size-4" />
+          <span>{problem.coins_reward}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Sparkles className="size-4" />
+          <span>{problem.experience_reward}</span>
+        </div>
+        <hr className="h-6 w-px bg-white" />
         <SpecialHint
           userId={userId}
           setHasUsedSpecialHint={updateHasUsedSpecialHint}
           hasUsedSpecialHint={hasUsedSpecialHint}
         />
-        <Button
-          disabled={prop?.isPending}
-          onClick={prop?.handleClick}
-          className="bg-green-500/10 text-green-500 hover:bg-green-500/15"
-        >
-          {prop?.isPending ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            'Enviar'
-          )}
-        </Button>
-      </div>
-
-      <p>{prop?.codeResults}</p>
-      <div className="flex w-full justify-between">
+      </header>
+      <div className="flex w-full justify-between gap-4">
         <aside className="space-y-4">
-          <h1 className="text-3xl font-bold">{problem.name}</h1>
           <p>{problem.description}</p>
-          <div className="flex items-center gap-4">
-            <div>
-              <Coins />
-              <p>{problem.coins_reward}</p>
-            </div>
-          </div>
           {testCases.map((testCase) => (
             <div key={testCase.id}>
               <div className="flex items-center gap-4">
@@ -151,8 +153,8 @@ const CodePlayground: React.FC<EditorProps> = ({
         </aside>
         <div className="flex flex-col gap-2">
           <Editor
-            height="60vh"
-            width={'50vw'}
+            height={'60vh'}
+            width={'40vw'}
             defaultLanguage="python"
             defaultValue={
               submission
@@ -160,19 +162,27 @@ const CodePlayground: React.FC<EditorProps> = ({
                 : (problem.initial_value as string)
             }
             onChange={prop?.handleOnChange}
-            theme="vs-dark"
+            theme="TokyoNightStorm"
+            beforeMount={handleEditorDidMount}
           />
-          {prop?.returnedTestCases.map((item, i) => (
-            <div key={i}>
-              <p>input: {item.input}</p>
-              <p>expected: {item.expected_output}</p>
-              <p>receba: {item.received_output}</p>
-            </div>
-          ))}
         </div>
+      </div>
+      <div className="flex w-full items-center justify-end gap-4">
+        <Button
+          disabled={prop?.isPending}
+          onClick={prop?.handleClick}
+          className="bg-green-500/10 text-green-500 hover:bg-green-500/15"
+        >
+          {prop?.isPending ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            'Enviar'
+          )}
+        </Button>
       </div>
       {prop?.codeResults && (
         <TestCases
+          input={testCases.map((item) => item.input as string)}
           expectedOutputs={testCases.map(
             (item) => item.expected_output as string,
           )}
