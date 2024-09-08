@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Loader2 } from 'lucide-react'
 import {
@@ -16,22 +18,16 @@ import { UseSpecialHint } from '@/hooks/use-special-hint'
 
 interface SpecialHintProps {
   userId: string
-  setHasUsedSpecialHint: (value: boolean) => void
-  hasUsedSpecialHint: boolean
 }
 
-const SpecialHint = ({
-  userId,
-  setHasUsedSpecialHint,
-  hasUsedSpecialHint,
-}: SpecialHintProps) => {
+const SpecialHint = ({ userId }: SpecialHintProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const { specialHints, applySpecialHint, isLoading } = UseSpecialHint({
-    setHasUsedSpecialHint,
-    userId,
-  })
+  const { data, applySpecialHint, isLoading, hasUsedSpecialHint } =
+    UseSpecialHint({
+      userId,
+    })
 
-  if (specialHints === undefined || specialHints.quantity === 0) return null
+  if (data === undefined || data[0].quantity === 0) return null
 
   const openDialog = () => {
     if (!hasUsedSpecialHint) {
@@ -40,38 +36,45 @@ const SpecialHint = ({
   }
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialogTrigger onClick={openDialog} disabled={hasUsedSpecialHint}>
-        <Image
-          src={specialHints.perks?.picture as string}
-          alt="Imagem de Cometa"
-          width={32}
-          height={32}
-        />
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
-          <AlertDialogDescription>
-            Ao utilizar o item <strong>{specialHints.perks?.name}</strong>, você
-            terá <strong>{specialHints.quantity - 1}</strong> restantes.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={() => applySpecialHint()}
-            disabled={isLoading}
+    <>
+      {data.map((perk) => (
+        <AlertDialog open={isOpen} onOpenChange={setIsOpen} key={perk.id}>
+          <AlertDialogTrigger
+            onClick={openDialog}
+            disabled={hasUsedSpecialHint}
           >
-            {isLoading ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              'Confirmar'
-            )}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+            <Image
+              src={perk.perks?.picture as string}
+              alt="Imagem de Cometa"
+              width={32}
+              height={32}
+            />
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Ao utilizar o item <strong>{perk.perks?.name}</strong>, você
+                terá <strong>{perk.quantity - 1}</strong> restantes.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => applySpecialHint()}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  'Confirmar'
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      ))}
+    </>
   )
 }
 

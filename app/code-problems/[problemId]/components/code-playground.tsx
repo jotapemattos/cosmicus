@@ -16,37 +16,15 @@ import {
 import TestCases from '../../../../components/test-cases'
 import ProblemCompletedDialog from '@/app/code-problems/[problemId]/components/problem-completed-dialog'
 import SpecialHint from './special-hint'
-import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 
 interface EditorProps {
-  problemId: number
   userId: string
 }
 
-const CodePlayground: React.FC<EditorProps> = ({
-  problemId,
-  userId,
-}: EditorProps) => {
-  const [hasUsedSpecialHint, setHasUsedSpecialHint] = useState(false)
-
-  useEffect(() => {
-    // Load the state from localStorage when the component mounts
-    const storedHasUsedSpecialHint = localStorage.getItem(
-      `specialHint_${problemId}_${userId}`,
-    )
-    if (storedHasUsedSpecialHint !== null) {
-      setHasUsedSpecialHint(JSON.parse(storedHasUsedSpecialHint))
-    }
-  }, [problemId, userId])
-
-  const updateHasUsedSpecialHint = (value: boolean) => {
-    setHasUsedSpecialHint(value)
-    // Save the state to localStorage whenever it changes
-    localStorage.setItem(
-      `specialHint_${problemId}_${userId}`,
-      JSON.stringify(value),
-    )
-  }
+const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
+  const params = useParams<{ problemId: string }>()
+  const problemId = Number(params.problemId)
 
   const handleEditorDidMount = (monaco: Monaco) => {
     monaco.editor.defineTheme('TokyoNightStorm', {
@@ -111,11 +89,7 @@ const CodePlayground: React.FC<EditorProps> = ({
           <span>{problem.experience_reward}</span>
         </div>
         <hr className="h-6 w-px bg-white" />
-        <SpecialHint
-          userId={userId}
-          setHasUsedSpecialHint={updateHasUsedSpecialHint}
-          hasUsedSpecialHint={hasUsedSpecialHint}
-        />
+        <SpecialHint userId={userId} />
       </header>
       <div className="flex w-full justify-between gap-4">
         <aside className="space-y-4">

@@ -61,26 +61,6 @@ export async function getUserPerks() {
   return data
 }
 
-export async function getUserSpecialHints() {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) throw new Error('O usuário não pode executar esta ação.')
-
-  const { data, error } = await supabase
-    .from('perks_inventories')
-    .select('*, perks (*)')
-    .eq('profile_id', user.id)
-    .eq('perk_id', 1)
-    .single()
-
-  if (error) {
-    throw new Error('O usuário não possui essa habilidade.')
-  }
-
-  return data
-}
-
 export async function decreaseUserSpecialHints() {
   const {
     data: { user },

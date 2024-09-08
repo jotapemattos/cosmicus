@@ -42,7 +42,7 @@ const Page = async ({ params: { problemId } }: PageProps) => {
 
   return (
     <div className="flex h-full min-h-screen w-full items-center justify-center">
-      <CodePlayground problemId={problemId} userId={user.id} />
+      <CodePlayground userId={user.id} />
       <StoryTeliings problemId={problemId} />
     </div>
   )
