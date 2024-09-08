@@ -6,6 +6,10 @@ interface AddInventoryItemProps {
   perkId: number
 }
 
+interface DecreaseUserPerksQuantityProps {
+  perkId: number
+}
+
 const supabase = createClient()
 export async function addPerksInventoryItem({ perkId }: AddInventoryItemProps) {
   const {
@@ -61,7 +65,9 @@ export async function getUserPerks() {
   return data
 }
 
-export async function decreaseUserSpecialHints() {
+export async function decreaseUserPerksQuantity({
+  perkId,
+}: DecreaseUserPerksQuantityProps) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -71,16 +77,20 @@ export async function decreaseUserSpecialHints() {
     .from('perks_inventories')
     .select('quantity')
     .eq('profile_id', user.id)
-    .eq('perk_id', 1)
+    .eq('perk_id', perkId)
     .single()
 
   if (!quantity) {
     return
   }
 
-  await supabase
+  const { data } = await supabase
     .from('perks_inventories')
     .update({ quantity: quantity.quantity - 1 })
     .eq('profile_id', user.id)
-    .eq('perk_id', 1)
+    .eq('perk_id', perkId)
+    .select()
+    .single()
+
+  return data
 }

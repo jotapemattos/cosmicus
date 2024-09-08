@@ -15,8 +15,9 @@ import {
 } from '@/app/actions/submissions'
 import TestCases from '../../../../components/test-cases'
 import ProblemCompletedDialog from '@/app/code-problems/[problemId]/components/problem-completed-dialog'
-import SpecialHint from './special-hint'
+import Perks from './perks'
 import { useParams } from 'next/navigation'
+import { UsePerks } from '@/hooks/use-special-hint'
 
 interface EditorProps {
   userId: string
@@ -25,6 +26,10 @@ interface EditorProps {
 const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
   const params = useParams<{ problemId: string }>()
   const problemId = Number(params.problemId)
+  const { usedPerks } = UsePerks({ userId })
+
+  const hasUsedSpecialHint = usedPerks[1] || false
+  // const hasUsedDoubleCoints = usedPerks[2] || false
 
   const handleEditorDidMount = (monaco: Monaco) => {
     monaco.editor.defineTheme('TokyoNightStorm', {
@@ -89,7 +94,7 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
           <span>{problem.experience_reward}</span>
         </div>
         <hr className="h-6 w-px bg-white" />
-        <SpecialHint userId={userId} />
+        <Perks userId={userId} />
       </header>
       <div className="flex w-full justify-between gap-4">
         <aside className="space-y-4">
