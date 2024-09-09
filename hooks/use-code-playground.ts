@@ -32,6 +32,7 @@ interface UseCodePlaygroundProps {
     UpdateSubmissionRequest,
     unknown
   >
+  usedPerks: Record<number, boolean>
 }
 
 interface ReturnedTestCases {
@@ -45,6 +46,7 @@ export default function useCodePlayground({
   problem,
   createSubmissionFn,
   updateSubmissionFn,
+  usedPerks,
 }: UseCodePlaygroundProps) {
   const [code, setCode] = useState('')
   const [isPending, startTransition] = useTransition()
@@ -57,22 +59,28 @@ export default function useCodePlayground({
   const handleOnChange = (value?: string) => {
     setCode(value || '')
   }
+
   const handleSubmission = async () => {
     if (problem !== undefined) {
-      const hasCompleted = await hasCompletedProblem({
+      const isProblemCompleted = await hasCompletedProblem({
         problemId: problem.id,
       })
 
-      if (hasCompleted) {
+      if (isProblemCompleted) {
         return await updateSubmissionFn({
           problemId: problem.id,
           code,
         })
       }
 
+      const hasUsedDoubleCoins = usedPerks[2] || false
+      const hasUsedDoubleExperience = usedPerks[3] || false
+
       const createdSubmisstion = await createSubmissionFn({
         problemId: problem.id,
         code,
+        hasDoubleCoins: hasUsedDoubleCoins,
+        hasDoubleExperience: hasUsedDoubleExperience,
       })
 
       if (createdSubmisstion) {

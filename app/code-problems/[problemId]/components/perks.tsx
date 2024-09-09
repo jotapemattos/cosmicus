@@ -13,7 +13,8 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@/components/ui/alert-dialog'
-import { UsePerks } from '@/hooks/use-special-hint'
+import { UsePerks } from '@/hooks/use-perks'
+import { useParams } from 'next/navigation'
 
 interface PerksProps {
   userId: string
@@ -21,8 +22,12 @@ interface PerksProps {
 
 const Perks = ({ userId }: PerksProps) => {
   const [openDialogId, setOpenDialogId] = useState<number | null>(null)
+
+  const params = useParams<{ problemId: string }>()
+  const problemId = Number(params.problemId)
   const { perksInventory, applyPerk, isLoading, usedPerks } = UsePerks({
     userId,
+    problemId,
   })
 
   // if (!perksInventory || perksInventory.length === 0) return null

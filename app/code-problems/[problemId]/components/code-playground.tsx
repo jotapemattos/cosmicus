@@ -17,7 +17,7 @@ import TestCases from '../../../../components/test-cases'
 import ProblemCompletedDialog from '@/app/code-problems/[problemId]/components/problem-completed-dialog'
 import Perks from './perks'
 import { useParams } from 'next/navigation'
-import { UsePerks } from '@/hooks/use-special-hint'
+import { UsePerks } from '@/hooks/use-perks'
 
 interface EditorProps {
   userId: string
@@ -26,7 +26,7 @@ interface EditorProps {
 const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
   const params = useParams<{ problemId: string }>()
   const problemId = Number(params.problemId)
-  const { usedPerks } = UsePerks({ userId })
+  const { usedPerks } = UsePerks({ userId, problemId })
 
   const hasUsedSpecialHint = usedPerks[1] || false
   // const hasUsedDoubleCoints = usedPerks[2] || false
@@ -75,6 +75,7 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
     createSubmissionFn,
     userId,
     updateSubmissionFn,
+    usedPerks,
   })
 
   if (testCases === undefined || problem === undefined) return

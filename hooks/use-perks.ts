@@ -3,16 +3,14 @@ import {
   getUserPerks,
 } from '@/app/actions/perks-inventories'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 interface UsePerksProps {
   userId: string
+  problemId: number
 }
 
-export function UsePerks({ userId }: UsePerksProps) {
-  const params = useParams<{ problemId: string }>()
-  const problemId = Number(params.problemId)
+export function UsePerks({ userId, problemId }: UsePerksProps) {
   const [usedPerks, setUsedPerks] = useState<Record<number, boolean>>({})
 
   const queryClient = useQueryClient()
