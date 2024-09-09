@@ -52,9 +52,9 @@ export function UsePerks({ userId, problemId }: UsePerksProps) {
       const initialUsedPerks: Record<number, boolean> = {}
       perksInventory.forEach((perkInventory) => {
         const storedValue = localStorage.getItem(
-          getLocalStorageKey(perkInventory.id),
+          getLocalStorageKey(perkInventory.perk_id),
         )
-        initialUsedPerks[perkInventory.id] = storedValue
+        initialUsedPerks[perkInventory.perk_id] = storedValue
           ? JSON.parse(storedValue)
           : false
       })

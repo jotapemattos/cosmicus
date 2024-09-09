@@ -15,6 +15,12 @@ import {
 } from '@/components/ui/alert-dialog'
 import { UsePerks } from '@/hooks/use-perks'
 import { useParams } from 'next/navigation'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 interface PerksProps {
   userId: string
@@ -54,7 +60,8 @@ const Perks = ({ userId }: PerksProps) => {
     perkId: number
     quantity: number
   }) => {
-    return usedPerks[perkId] || quantity === 0
+    const hasUsedPerk = usedPerks[perkId] === true
+    return !hasUsedPerk && quantity > 0
   }
 
   return (
@@ -69,17 +76,35 @@ const Perks = ({ userId }: PerksProps) => {
         >
           <AlertDialogTrigger
             onClick={() => openDialog(perk.id)}
-            disabled={isPerkUsable({
-              perkId: perk.id,
-              quantity: perk.quantity,
-            })}
+            disabled={
+              !isPerkUsable({
+                perkId: perk.id,
+                quantity: perk.quantity,
+              })
+            }
           >
-            <Image
-              src={perk.perks?.picture as string}
-              alt={`Image of ${perk.perks?.name}`}
-              width={32}
-              height={32}
-            />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Image
+                    src={perk.perks?.picture as string}
+                    alt={`Image of ${perk.perks?.name}`}
+                    width={32}
+                    height={32}
+                  />
+                </TooltipTrigger>
+                <TooltipContent className="flex max-w-md flex-col items-center gap-4">
+                  <Image
+                    src={perk.perks?.picture as string}
+                    alt={`Image of ${perk.perks?.name}`}
+                    width={64}
+                    height={64}
+                  />
+                  <h3 className="text-lg font-semibold">{perk.perks?.name}</h3>
+                  <p>{perk.perks?.description}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
