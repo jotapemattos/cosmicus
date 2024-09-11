@@ -81,6 +81,8 @@ export default function useCodePlayground({
         code,
         hasDoubleCoins: hasUsedDoubleCoins,
         hasDoubleExperience: hasUsedDoubleExperience,
+        difficulty: problem.difficulty,
+        timeInSeconds: 60,
       })
 
       if (createdSubmisstion) {
