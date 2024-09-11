@@ -62,13 +62,13 @@ export async function createSubmission({
   }
 
   let multiplier = 1.0
-  const minTime = 10 // Minimum time in seconds
+  const minTime = 60 // Minimum time in seconds
   if (difficulty === 'easy') {
-    multiplier = calculateMultiplier(timeInSeconds, minTime, 300) // 10 seconds to 5 minutes
+    multiplier = calculateMultiplier(timeInSeconds, minTime, 300) // 60 seconds to 5 minutes
   } else if (difficulty === 'medium') {
-    multiplier = calculateMultiplier(timeInSeconds, minTime, 420) // 10 seconds to 7 minutes
+    multiplier = calculateMultiplier(timeInSeconds, minTime, 420) // 60 seconds to 7 minutes
   } else if (difficulty === 'hard') {
-    multiplier = calculateMultiplier(timeInSeconds, minTime, 600) // 10 seconds to 10 minutes
+    multiplier = calculateMultiplier(timeInSeconds, minTime, 600) // 60 seconds to 10 minutes
   }
 
   experienceReward *= multiplier
