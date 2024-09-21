@@ -16,7 +16,7 @@ const GithubAuthButton = () => {
 
   return (
     <button
-      className="mb-4 flex w-full items-center justify-center gap-2 rounded-md border border-gray-800 py-2 transition-all duration-300 hover:bg-white/10"
+      className="flex w-auto items-center justify-center gap-2 rounded-md border border-gray-800 px-4 py-2 text-sm transition-all duration-300 hover:bg-white/10"
       onClick={handleLoginWithGithub}
     >
       <Github className="h-4 w-4" />

@@ -10,6 +10,9 @@ import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 
 const emailSchema = z
   .object({
@@ -84,103 +87,118 @@ export default function Page({
   }, [message])
 
   return (
-    <div className="flex w-full flex-1 flex-col justify-center gap-2 overflow-y-hidden px-8 sm:max-w-md">
-      <form
-        onSubmit={handleSubmit(handleSignUp)}
-        className="flex w-full flex-1 flex-col justify-center gap-2 text-foreground animate-in"
-      >
-        <label className="text-md" htmlFor="email">
-          Email
-        </label>
-        <input
-          className="mb-6 rounded-md border bg-inherit px-4 py-2"
-          placeholder="email@examplo.com"
-          required
-          {...register('email')}
-        />
-        {errors.email && (
-          <p className="text-md text-red-500">{errors.email.message}</p>
-        )}
-        <label className="text-md" htmlFor="password">
-          Senha
-        </label>
-        <div className="relative flex items-center">
-          <input
-            className="w-full rounded-md border bg-inherit px-4 py-2"
-            type={shouldShowPassword ? 'text' : 'password'}
-            placeholder="••••••••"
-            required
-            {...register('password')}
-            onFocus={() => setShouldShowPasswordInfo(true)}
+    <div className="flex h-screen w-full items-center justify-center gap-2 px-8">
+      <div className="flex w-[468px] flex-col items-center justify-center gap-8 rounded-lg bg-white/20 p-8">
+        <div className="flex flex-col items-center gap-2">
+          <Image
+            src="/logo.png"
+            alt=""
+            width={1024}
+            height={1024}
+            className="aspect-square size-28 object-contain"
           />
-          <button
-            className="absolute right-2 rounded-md border bg-secondary p-1"
-            type="button"
-            onClick={() => setShouldShowPassword((prev) => !prev)}
-          >
-            <EyeOff
-              size={20}
-              className={`absolute transition-all ${shouldShowPassword ? 'transition-y-1 scale-100' : 'scale-0'}`}
-            />
-            <Eye
-              size={20}
-              className={`transition-all ${shouldShowPassword ? 'transition-y-1 scale-0' : 'scale-100'}`}
-            />
-          </button>
+          <h1 className="text-2xl font-medium">Comece sua jornada!</h1>
         </div>
-        {errors.password && (
-          <p className="text-md text-red-500">{errors.password.message}</p>
-        )}
-        {shouldShowPasswordInfo && (
-          <div className="animate-accordion-down transition-all duration-300">
-            <Progress
-              value={passwordStrength}
-              className={cn({
-                'bg-red-800': passwordStrength === 20,
-                'bg-red-500': passwordStrength === 40,
-                'bg-orange-500': passwordStrength === 60,
-                'bg-yellow-400': passwordStrength === 80,
-                'bg-green-500': passwordStrength === 100,
-              })}
-            />
-          </div>
-        )}
-        <label className="text-md" htmlFor="confirmPassword">
-          Confirme sua senha
-        </label>
-        <input
-          className="mb-6 rounded-md border bg-inherit px-4 py-2"
-          type={shouldShowPassword ? 'text' : 'password'}
-          placeholder="••••••••"
-          required
-          {...register('confirmPassword')}
-        />
-        {errors.confirmPassword && (
-          <p className="text-md text-red-500">
-            {errors.confirmPassword.message}
-          </p>
-        )}
-        <button
-          className="mb-2 flex items-center justify-center gap-2 rounded-md border border-foreground/20 bg-primary px-4 py-2 text-secondary"
-          type="submit"
-          disabled={isSubmitting}
+        <form
+          onSubmit={handleSubmit(handleSignUp)}
+          className="flex w-full flex-col justify-center gap-6 text-foreground animate-in"
         >
-          {isSubmitting ? (
-            <>
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Criando...</span>
-            </>
-          ) : (
-            <span>Criar conta</span>
-          )}
-        </button>
-        <p>
-          Já possui uma conta?{' '}
-          <Link href="/sign-in" className="font-bold">
-            Entrar
-          </Link>
-        </p>
-      </form>
+          <span className="flex flex-col gap-2">
+            <label className="text-sm" htmlFor="email">
+              Email
+            </label>
+            <Input
+              placeholder="email@examplo.com"
+              required
+              {...register('email')}
+            />
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email.message}</p>
+            )}
+          </span>
+          <span className="flex flex-col gap-2">
+            <label className="text-sm" htmlFor="password">
+              Senha
+            </label>
+            <div className="relative flex items-center">
+              <Input
+                type={shouldShowPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                required
+                {...register('password')}
+                onFocus={() => setShouldShowPasswordInfo(true)}
+              />
+              <button
+                className="absolute right-2 rounded-md border bg-secondary p-1"
+                type="button"
+                onClick={() => setShouldShowPassword((prev) => !prev)}
+              >
+                <EyeOff
+                  size={20}
+                  className={`absolute transition-all ${shouldShowPassword ? 'transition-y-1 scale-100' : 'scale-0'}`}
+                />
+                <Eye
+                  size={20}
+                  className={`transition-all ${shouldShowPassword ? 'transition-y-1 scale-0' : 'scale-100'}`}
+                />
+              </button>
+            </div>
+            {errors.password && (
+              <p className="text-sm text-red-500">{errors.password.message}</p>
+            )}
+            {shouldShowPasswordInfo && (
+              <div className="animate-accordion-down transition-all duration-300">
+                <Progress
+                  value={passwordStrength}
+                  className={cn({
+                    'bg-red-800': passwordStrength === 20,
+                    'bg-red-500': passwordStrength === 40,
+                    'bg-orange-500': passwordStrength === 60,
+                    'bg-yellow-400': passwordStrength === 80,
+                    'bg-green-500': passwordStrength === 100,
+                  })}
+                />
+              </div>
+            )}
+          </span>
+          <span className="flex flex-col gap-2">
+            <label className="text-sm" htmlFor="confirmPassword">
+              Confirme sua senha
+            </label>
+            <Input
+              type={shouldShowPassword ? 'text' : 'password'}
+              placeholder="••••••••"
+              required
+              {...register('confirmPassword')}
+            />
+            {errors.confirmPassword && (
+              <p className="text-sm text-red-500">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </span>
+          <Button
+            className="mb-2 flex items-center justify-center gap-2 rounded-md border border-foreground/20 bg-primary px-4 py-2 text-secondary"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Criando...</span>
+              </>
+            ) : (
+              <span>Criar conta</span>
+            )}
+          </Button>
+          <div className="mt-4 text-center text-sm">
+            Já tem uma conta?{' '}
+            <Link href="/sign-in" className="font-medium underline">
+              Entrar agora!
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

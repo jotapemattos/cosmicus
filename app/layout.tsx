@@ -29,7 +29,7 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR" className={GeistSans.className}>
       <ReactQueryClientProvider>
-        <body className="max-w-screen bg-background text-foreground">
+        <body className="max-w-screen bg-background">
           {user && <Header />}
           <main className="flex min-h-screen flex-col items-center">
             {children}

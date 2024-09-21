@@ -2,19 +2,19 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { signIn } from '../actions/sign-in'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
-import landscape from '@/assets/space-landscape.png'
 import GithubAuthButton from '@/components/github-auth-button'
 import GoogleAuthButton from '@/components/google-auth-button'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
+import Image from 'next/image'
 
 const signInSchema = z.object({
   email: z.string().email({
@@ -53,91 +53,97 @@ export default function Page({
   }
 
   return (
-    <div className="h-screen max-h-screen w-full max-w-screen-2xl overflow-hidden lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
-      <div className="hidden rounded-md py-24 lg:block">
-        <Image
-          src={landscape.src}
-          alt="Space landscape"
-          // fill
-          // objectFit="contain"
-          // objectFit="cover"
-          width={1600}
-          height={1200}
-          className="h-[800px] w-fit rounded-lg bg-red-500"
-        />
+    <div className="relative z-0 flex h-screen w-full justify-center bg-white py-20 text-zinc-950">
+      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center overflow-hidden">
+        <div className="mask-radial h-full w-full max-w-[1440px]">
+          <Image
+            src="/login-background.png"
+            width="1440"
+            height="1440"
+            alt="Menthor login background"
+            className="block h-full w-full object-cover object-left-top"
+          />
+          <div className="absolute left-0 top-0 h-full w-full bg-white/50"></div>
+        </div>
       </div>
-      <div className="flex items-center justify-center">
-        <div className="mx-auto grid w-2/3 gap-6">
-          <div className="grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">Login</h1>
-            <p className="text-balance text-muted-foreground">
-              Digite seu email abaixo para entrar em sua conta.
-            </p>
+      <div className="relative z-10 my-auto flex w-full max-w-[480px] flex-col items-center justify-center gap-6 rounded-lg border border-zinc-200 bg-zinc-100 p-10 text-zinc-950 sm:shadow-2xl">
+        <div className="flex w-full flex-col items-center gap-2 text-center">
+          <Image
+            src="/logo.png"
+            alt=""
+            width={1024}
+            height={1024}
+            className="aspect-square size-28 object-contain"
+          />
+          <h1 className="text-2xl font-medium">Continue sua jornada!</h1>
+        </div>
+        <div className="flex w-full items-center justify-between gap-4">
+          <GithubAuthButton />
+          <GoogleAuthButton />
+        </div>
+        <Separator className="border-dashed border-zinc-400" />
+        <form
+          onSubmit={handleSubmit(handleSignIn)}
+          className="grid w-full gap-4"
+        >
+          <div className="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              {...register('email')}
+              required
+            />
           </div>
-          <form onSubmit={handleSubmit(handleSignIn)} className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+          <div className="grid gap-2">
+            <div className="flex items-center">
+              <Label htmlFor="password">Senha</Label>
+            </div>
+            <div className="relative">
               <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                {...register('email')}
+                id="password"
+                type={shouldShowPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                {...register('password')}
                 required
               />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-0 top-0 h-full px-3 py-2"
+                onClick={() => setShouldShowPassword((prev) => !prev)}
+              >
+                {shouldShowPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </Button>
             </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Senha</Label>
-              </div>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={shouldShowPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
-                  {...register('password')}
-                  required
-                />
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-0 top-0 h-full px-3 py-2"
-                  onClick={() => setShouldShowPassword((prev) => !prev)}
-                >
-                  {shouldShowPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-            </div>
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  <span>Entrando...</span>
-                </>
-              ) : (
-                <span>Entrar</span>
-              )}
-            </Button>
-          </form>
-          <div className="grid gap-2">
-            <GithubAuthButton />
-            <GoogleAuthButton />
           </div>
-          {searchParams?.message && (
-            <p className="bg-muted p-4 text-center text-sm">
-              {searchParams.message}
-            </p>
-          )}
-          <div className="mt-4 text-center text-sm">
-            Não possui uma conta?{' '}
-            <Link href="/sign-up" className="font-medium underline">
-              Criar agora
-            </Link>
-          </div>
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <span>Entrando...</span>
+              </>
+            ) : (
+              <span>Entrar</span>
+            )}
+          </Button>
+        </form>
+        {searchParams?.message && (
+          <p className="bg-muted p-4 text-center text-sm">
+            {searchParams.message}
+          </p>
+        )}
+        <div className="mt-4 text-center text-sm">
+          Não possui uma conta?{' '}
+          <Link href="/sign-up" className="font-medium underline">
+            Criar agora!
+          </Link>
         </div>
       </div>
     </div>
