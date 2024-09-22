@@ -53,20 +53,20 @@ export default function Page({
   }
 
   return (
-    <div className="relative z-0 flex h-screen w-full justify-center bg-white py-20 text-zinc-950">
+    <div className="relative z-0 flex h-screen w-full justify-center bg-violet-700/10 py-20 text-zinc-950">
       <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center overflow-hidden">
-        <div className="mask-radial h-full w-full max-w-[1440px]">
+        <div className="h-full w-full">
           <Image
             src="/login-background.png"
-            width="1440"
-            height="1440"
+            width="1920"
+            height="1080"
             alt="Menthor login background"
-            className="block h-full w-full object-cover object-left-top"
+            className="block h-full w-full object-cover object-center"
           />
-          <div className="absolute left-0 top-0 h-full w-full bg-white/50"></div>
+          <div className="absolute left-0 top-0 h-full w-full"></div>
         </div>
       </div>
-      <div className="relative z-10 my-auto flex w-full max-w-[480px] flex-col items-center justify-center gap-6 rounded-lg border border-zinc-200 bg-zinc-100 p-10 text-zinc-950 sm:shadow-2xl">
+      <div className="relative z-10 my-auto flex w-full max-w-[480px] flex-col items-center justify-center gap-6 rounded-2xl bg-zinc-950 p-10 text-white sm:shadow-2xl">
         <div className="flex w-full flex-col items-center gap-2 text-center">
           <Image
             src="/logo.png"
@@ -91,7 +91,7 @@ export default function Page({
             <Input
               id="email"
               type="email"
-              placeholder="you@example.com"
+              placeholder="email@examplo.com"
               {...register('email')}
               required
             />

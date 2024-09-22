@@ -87,8 +87,20 @@ export default function Page({
   }, [message])
 
   return (
-    <div className="flex h-screen w-full items-center justify-center gap-2 px-8">
-      <div className="flex w-[468px] flex-col items-center justify-center gap-8 rounded-lg bg-white/20 p-8">
+    <div className="relative z-0 flex h-screen w-full justify-center bg-violet-700/10 py-20 text-zinc-950">
+      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center overflow-hidden">
+        <div className="h-full w-full">
+          <Image
+            src="/login-background.png"
+            width="1920"
+            height="1080"
+            alt="Menthor login background"
+            className="block h-full w-full object-cover object-center"
+          />
+          <div className="absolute left-0 top-0 h-full w-full"></div>
+        </div>
+      </div>
+      <div className="relative z-10 my-auto flex w-full max-w-[480px] flex-col items-center justify-center gap-6 rounded-2xl bg-zinc-950 p-10 text-white sm:shadow-2xl">
         <div className="flex flex-col items-center gap-2">
           <Image
             src="/logo.png"
@@ -178,7 +190,7 @@ export default function Page({
             )}
           </span>
           <Button
-            className="mb-2 flex items-center justify-center gap-2 rounded-md border border-foreground/20 bg-primary px-4 py-2 text-secondary"
+            className="mb-2 flex items-center justify-center gap-2 rounded-md border border-foreground/20 bg-primary px-4 py-2 text-white"
             type="submit"
             disabled={isSubmitting}
           >
