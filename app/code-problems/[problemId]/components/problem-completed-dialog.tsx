@@ -10,11 +10,12 @@ import {
 } from '@/components/ui/dialog'
 import { getProfileByUserId } from '@/app/actions/profile'
 import { useQuery } from '@tanstack/react-query'
-import { Coins, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import confetti from 'canvas-confetti'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import Coin from '@/components/icons/coin'
 
 interface ProblemCompletedDialogProps {
   userId: string

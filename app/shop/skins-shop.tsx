@@ -30,10 +30,11 @@ import { Inventory } from '@/db/custom-types'
 import { cn } from '@/lib/utils'
 import { User } from '@supabase/supabase-js'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { CircleDollarSign, Coins, Loader2 } from 'lucide-react'
+import { CircleDollarSign, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import SuccessBuyDialog from './success-buy-dialog'
+import Coin from '@/components/icons/coin'
 
 interface SkinsShopProps {
   user: User

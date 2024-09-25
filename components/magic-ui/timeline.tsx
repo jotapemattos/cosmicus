@@ -36,7 +36,7 @@ export const Timeline = ({
 
   return (
     <div className="w-full" ref={containerRef}>
-      <div className="py-20">
+      <div className="pb-40 pt-20">
         <h2 className="mb-4 max-w-4xl text-lg font-bold text-white md:text-4xl">
           Explorando o universo da programação
         </h2>
@@ -62,9 +62,9 @@ export const Timeline = ({
           const planet = getPlanet(item.id)
 
           return (
-            <div key={item.id} className="flex h-[400px] justify-start">
+            <div key={item.id} className="flex h-[400px] justify-between">
               {/* Timeline Circle */}
-              <div className="sticky top-40 z-40 flex max-w-xs flex-col items-center self-start md:w-full md:flex-row lg:max-w-sm">
+              <div className="sticky top-40 z-40 flex max-w-xs flex-col items-center self-start md:w-full md:flex-row lg:max-w-lg">
                 {isCurrentProblem && (
                   <Image
                     src={skin.picture as string}
@@ -75,22 +75,24 @@ export const Timeline = ({
                   />
                 )}
 
-                <Image
-                  src={planet}
-                  alt={`imagem de Planeta`}
-                  width={200}
-                  height={200}
-                  className={cn('relative -left-16', {
-                    grayscale: !isProblemCompleted && !isCurrentProblem,
-                  })}
-                />
-                <h3 className="hidden text-xl font-bold text-neutral-500 dark:text-neutral-500 md:block md:pl-20 md:text-5xl">
-                  {item.name}
-                </h3>
+                <div className="flex items-center gap-2">
+                  <Image
+                    src={planet}
+                    alt={`imagem de Planeta`}
+                    width={200}
+                    height={200}
+                    className={cn('relative -left-16', {
+                      grayscale: !isProblemCompleted && !isCurrentProblem,
+                    })}
+                  />
+                  <h3 className="relative -left-16 hidden text-xl font-bold text-neutral-500 dark:text-neutral-500 md:block md:text-5xl">
+                    {item.name}
+                  </h3>
+                </div>
               </div>
 
               {/* Content */}
-              <div className="flex w-full flex-col items-end justify-start gap-4  pl-20 pr-4 md:pl-4">
+              <div className="mt-10 flex min-w-96 flex-col items-start justify-start gap-4 pl-20 pr-4 md:pl-4">
                 <h3 className="mb-4 block text-left text-2xl font-bold text-neutral-500 dark:text-neutral-500 md:hidden">
                   {item.name}
                 </h3>

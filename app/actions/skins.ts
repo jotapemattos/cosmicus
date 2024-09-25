@@ -43,8 +43,8 @@ export async function getUserSkin() {
     .single()
 
   if (error) {
-    throw new Error('Não foi possivel encontrar o item')
+    console.log('Não foi possivel encontrar o item')
   }
 
-  return data.skins
+  return data ? data.skins : null
 }

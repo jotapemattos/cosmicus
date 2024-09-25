@@ -26,13 +26,14 @@ import {
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
-import { Coins, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { getProfileByUserId } from '../actions/profile'
 import { User } from '@supabase/supabase-js'
 
 import { addPerksInventoryItem } from '../actions/perks-inventories'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import Coin from '@/components/icons/coin'
 
 interface PerksShopProps {
   user: User
