@@ -1,6 +1,6 @@
 import { Problem } from '@/db/custom-types'
 import { cn } from '@/lib/utils'
-import { Coins, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import DifficultyBadge from '@/components/ui/difficulty-badge'
 import Image from 'next/image'
+import Coin from '@/components/icons/coin'
 
 interface ProblemPopoverProps {
   problem: Problem
@@ -67,7 +68,7 @@ const ProblemPopover = ({
             <DifficultyBadge difficulty={problem.difficulty} />
             <div className="flex items-center gap-8">
               <div className="flex items-center gap-2">
-                <Coins />
+                <Coin />
                 {problem.coins_reward}
               </div>
               <div className="flex items-center gap-2">

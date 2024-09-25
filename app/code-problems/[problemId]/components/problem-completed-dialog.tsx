@@ -73,7 +73,7 @@ const ProblemCompletedDialog = ({
         </DialogHeader>
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-2">
-            <Coins />
+            <Coin />
             <h2 className="text-3xl font-bold">
               <NumberTicker
                 defaultValue={0}

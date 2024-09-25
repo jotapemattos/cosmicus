@@ -6,6 +6,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import ProblemPopover from './problem-popover'
 import { getUserSkin } from '@/app/actions/skins'
+import { Timeline } from '@/components/magic-ui/timeline'
+import { Problem, Skin } from '@/db/custom-types'
 
 const Problems = () => {
   const { data: problems } = useQuery({
@@ -32,23 +34,21 @@ const Problems = () => {
     return groupProblemsByDifficulty(problems ?? [])
   }, [problems])
 
+  if (
+    problems === undefined ||
+    lastProblemIdCompletedByUser === undefined ||
+    skin === undefined
+  )
+    return null
+
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      {grouppedProblems.map((item) => (
-        <div key={item.difficulty} className="my-12 flex flex-col gap-8">
-          {item.problems.map((problem) => (
-            <ProblemPopover
-              key={problem.id}
-              problem={problem}
-              lastProblemIdCompletedByUser={
-                lastProblemIdCompletedByUser as number
-              }
-              currentProblemId={currentProblemId as number}
-              skinPicture={skin?.picture as string}
-            />
-          ))}
-        </div>
-      ))}
+    <div className="w-full">
+      <Timeline
+        problems={problems as Problem[]}
+        lastProblemIdCompletedByUser={lastProblemIdCompletedByUser}
+        currentProblemId={currentProblemId as number}
+        skin={skin as Skin}
+      />
     </div>
   )
 }

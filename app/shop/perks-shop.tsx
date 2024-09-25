@@ -98,7 +98,7 @@ const PerksShop = ({ user }: PerksShopProps) => {
                 className="aspect-square w-full object-cover"
               />
               <span className="flex items-center gap-2 self-start">
-                <Coins />
+                <Coin />
                 <p className="sr-only">Preço</p>
                 {perk.price}
               </span>
