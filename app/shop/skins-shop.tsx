@@ -30,7 +30,7 @@ import { Inventory } from '@/db/custom-types'
 import { cn } from '@/lib/utils'
 import { User } from '@supabase/supabase-js'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { CircleDollarSign, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { useState } from 'react'
 import SuccessBuyDialog from './success-buy-dialog'
@@ -93,11 +93,11 @@ const SkinsShop = ({ user }: SkinsShopProps) => {
       <div className="mx-auto max-w-screen-2xl">
         <div className="flex items-center gap-2">
           <span className="sr-only">Seu dinheiro:</span>
-          <CircleDollarSign />
+          <Coin />
           <p>{profile.coins_amount}</p>
         </div>
       </div>
-      <section className="mx-auto flex w-full max-w-screen-2xl justify-between">
+      <section className="mx-auto flex w-full max-w-screen-2xl flex-wrap gap-8">
         {skins.map((skin) => (
           <Card
             key={skin.id}

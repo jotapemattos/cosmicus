@@ -239,6 +239,7 @@ export type Database = {
           linkedin_url: string | null
           picture: string | null
           picture_filename: string | null
+          streak: number
           username: string | null
         }
         Insert: {
@@ -251,6 +252,7 @@ export type Database = {
           linkedin_url?: string | null
           picture?: string | null
           picture_filename?: string | null
+          streak?: number
           username?: string | null
         }
         Update: {
@@ -263,6 +265,7 @@ export type Database = {
           linkedin_url?: string | null
           picture?: string | null
           picture_filename?: string | null
+          streak?: number
           username?: string | null
         }
         Relationships: []

@@ -8,6 +8,7 @@ export interface CreateSubmissionRequest {
   hasDoubleExperience: boolean
   timeInSeconds: number
   difficulty: 'easy' | 'medium' | 'hard'
+  isFirstTry: boolean
 }
 
 export interface UpdateSubmissionRequest {
@@ -32,16 +33,20 @@ export async function createSubmission({
   hasDoubleExperience,
   timeInSeconds,
   difficulty,
+  isFirstTry,
 }: CreateSubmissionRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
   if (!user) throw new Error('O usuário não pode executar esta ação.')
+
   const { data: problem } = await supabase
     .from('problems')
     .select('experience_reward, coins_reward')
     .eq('id', problemId)
     .single()
+
   if (!problem) throw new Error('Problema não encontrado.')
 
   const coinsReward = hasDoubleCoins
@@ -87,18 +92,22 @@ export async function createSubmission({
   }
   const { data: profile } = await supabase
     .from('profile')
-    .select('coins_amount, experience_points')
+    .select('coins_amount, experience_points, streak')
     .eq('id', user.id)
     .single()
+
   if (!profile) throw new Error('Perfil não encontrado.')
+
   await supabase
     .from('profile')
     .update({
       coins_amount: profile.coins_amount + coinsReward,
       experience_points:
         profile.experience_points + Math.ceil(experienceReward),
+      streak: isFirstTry ? profile.streak + 1 : 0,
     })
     .eq('id', user.id)
+
   return data
 }
 

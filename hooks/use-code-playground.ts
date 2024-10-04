@@ -55,6 +55,7 @@ export default function useCodePlayground({
     ReturnedTestCases[]
   >([])
   const [hasCompleted, setHasCompleted] = useState(false)
+  const [isFirstTry, setIsFirstTry] = useState(true)
 
   const handleOnChange = (value?: string) => {
     setCode(value || '')
@@ -83,6 +84,7 @@ export default function useCodePlayground({
         hasDoubleExperience: hasUsedDoubleExperience,
         difficulty: problem.difficulty,
         timeInSeconds: 60,
+        isFirstTry,
       })
 
       if (createdSubmisstion) {
@@ -116,6 +118,7 @@ export default function useCodePlayground({
         return
       }
 
+      setIsFirstTry(false)
       toast.error('Codigo errado')
     }
 

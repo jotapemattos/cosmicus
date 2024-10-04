@@ -63,6 +63,8 @@ const ProblemCompletedDialog = ({
     frame()
   }, [])
 
+  if (profile === undefined) return
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
@@ -94,7 +96,7 @@ const ProblemCompletedDialog = ({
         </div>
         <div className="flex w-full items-center justify-between gap-4">
           <Button asChild variant={'secondary'}>
-            <Link href="/">Voltar para o mapa</Link>
+            <Link href="/code-problems">Voltar para o mapa</Link>
           </Button>
           <Button asChild>
             <Link href={`${Number(problemId) + 1}`}>Continuar</Link>
