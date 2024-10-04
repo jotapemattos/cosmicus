@@ -7,6 +7,7 @@ import { Problem, TestCase } from '@/db/custom-types'
 import { UseMutateAsyncFunction } from '@tanstack/react-query'
 import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
+import { useSoundEffects } from './use-sound-effects'
 
 interface UseCodePlaygroundProps {
   testCases: TestCase[] | undefined
@@ -56,6 +57,7 @@ export default function useCodePlayground({
   >([])
   const [hasCompleted, setHasCompleted] = useState(false)
   const [isFirstTry, setIsFirstTry] = useState(true)
+  const { playSuccess, playError, playClick } = useSoundEffects() // Add this line
 
   const handleOnChange = (value?: string) => {
     setCode(value || '')
@@ -63,32 +65,40 @@ export default function useCodePlayground({
 
   const handleSubmission = async () => {
     if (problem !== undefined) {
-      const isProblemCompleted = await hasCompletedProblem({
-        problemId: problem.id,
-      })
+      try {
+        const isProblemCompleted = await hasCompletedProblem({
+          problemId: problem.id,
+        })
 
-      if (isProblemCompleted) {
-        return await updateSubmissionFn({
+        if (isProblemCompleted) {
+          await updateSubmissionFn({
+            problemId: problem.id,
+            code,
+          })
+          playSuccess() // Add success sound
+          return
+        }
+
+        const hasUsedDoubleCoins = usedPerks[2] || false
+        const hasUsedDoubleExperience = usedPerks[3] || false
+
+        const createdSubmisstion = await createSubmissionFn({
           problemId: problem.id,
           code,
+          hasDoubleCoins: hasUsedDoubleCoins,
+          hasDoubleExperience: hasUsedDoubleExperience,
+          difficulty: problem.difficulty,
+          timeInSeconds: 60,
+          isFirstTry,
         })
-      }
 
-      const hasUsedDoubleCoins = usedPerks[2] || false
-      const hasUsedDoubleExperience = usedPerks[3] || false
-
-      const createdSubmisstion = await createSubmissionFn({
-        problemId: problem.id,
-        code,
-        hasDoubleCoins: hasUsedDoubleCoins,
-        hasDoubleExperience: hasUsedDoubleExperience,
-        difficulty: problem.difficulty,
-        timeInSeconds: 60,
-        isFirstTry,
-      })
-
-      if (createdSubmisstion) {
-        setHasCompleted(true)
+        if (createdSubmisstion) {
+          setHasCompleted(true)
+          playSuccess() // Add success sound
+        }
+      } catch (error) {
+        playError() // Add error sound
+        throw error
       }
     }
   }
@@ -96,7 +106,6 @@ export default function useCodePlayground({
   useEffect(() => {
     if (codeResults) {
       let isValidCode = true
-      // TODO - resolve testCases is possibly undefined
       if (testCases) {
         for (let i = 0; i < testCases.length; i++) {
           if (testCases[i].expected_output !== codeResults[i]) {
@@ -119,6 +128,7 @@ export default function useCodePlayground({
       }
 
       setIsFirstTry(false)
+      playError() // Add error sound
       toast.error('Codigo errado')
     }
 
@@ -129,6 +139,7 @@ export default function useCodePlayground({
   const execution = testCases.map((test) => test.execution).join('\n')
 
   const handleClick = () => {
+    playClick() // Add click sound
     console.log(code)
     if (code?.includes(problem.initial_value!.trim())) {
       startTransition(async () => {
@@ -154,13 +165,17 @@ export default function useCodePlayground({
           const { run: result } = await response.json()
           if (result.stderr) {
             console.log(result.stderr)
+            playError() // Add error sound
             throw new Error('Não foi possivel executar o código')
           }
           const newCodeResults = result.stdout.split('\n') as string[]
 
           setCodeResults(newCodeResults)
         } catch (error) {
-          if (error instanceof Error) toast.error(error.message)
+          if (error instanceof Error) {
+            playError() // Add error sound
+            toast.error(error.message)
+          }
         }
       })
     }

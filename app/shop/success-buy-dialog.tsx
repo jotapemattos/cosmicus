@@ -15,8 +15,9 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 import { toast } from 'sonner'
+import { useSoundEffects } from '@/hooks/use-sound-effects'
 
 interface SuccessBuyDialogProps {
   inventory: Inventory
@@ -29,6 +30,8 @@ const SuccessBuyDialog = ({
   open,
   setOpen,
 }: SuccessBuyDialogProps) => {
+  const { playPurchase } = useSoundEffects()
+
   const { data: skin } = useQuery({
     queryKey: ['skin', inventory.skin_id],
     queryFn: () => getSkinById({ skinId: inventory.skin_id! }),
@@ -43,6 +46,12 @@ const SuccessBuyDialog = ({
       toast.error('Não foi possível equipar o item.')
     },
   })
+
+  useEffect(() => {
+    playPurchase()
+
+    // eslint-disable-next-line
+  }, [])
 
   if (skin === undefined) {
     return

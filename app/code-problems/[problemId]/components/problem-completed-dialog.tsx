@@ -16,6 +16,7 @@ import confetti from 'canvas-confetti'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import Coin from '@/components/icons/coin'
+import { useSoundEffects } from '@/hooks/use-sound-effects'
 
 interface ProblemCompletedDialogProps {
   userId: string
@@ -27,6 +28,8 @@ const ProblemCompletedDialog = ({
   problemId,
 }: ProblemCompletedDialogProps) => {
   const [open, setOpen] = useState(true)
+
+  const { playCelebration } = useSoundEffects()
 
   const { data: profile } = useQuery({
     queryKey: ['profile', userId],
@@ -61,6 +64,9 @@ const ProblemCompletedDialog = ({
     }
 
     frame()
+    playCelebration()
+
+    // eslint-disable-next-line
   }, [])
 
   if (profile === undefined) return
