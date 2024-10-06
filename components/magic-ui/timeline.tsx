@@ -1,4 +1,4 @@
-import { Problem, Skin } from '@/db/custom-types'
+import { Problem, Profile, Skin } from '@/db/custom-types'
 import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
@@ -9,12 +9,15 @@ import Image from 'next/image'
 import { getPlanet } from '@/utils/get-planet'
 import Coin from '../icons/coin'
 import Star from '../icons/star'
+import { BorderBeam } from './border-beam'
+import Flame from '../icons/flame'
 
 interface TimelineProps {
   problems: Problem[]
   lastProblemIdCompletedByUser: number
   currentProblemId: number
   skin: Skin
+  profile: Profile
 }
 
 export const Timeline = ({
@@ -22,6 +25,7 @@ export const Timeline = ({
   lastProblemIdCompletedByUser,
   currentProblemId,
   skin,
+  profile,
 }: TimelineProps) => {
   const ref = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -92,55 +96,112 @@ export const Timeline = ({
               </div>
 
               {/* Content */}
-              <div className="mt-10 flex min-w-96 flex-col items-start justify-start gap-4 pl-20 pr-4 md:pl-4">
-                <h3 className="mb-4 block text-left text-2xl font-bold text-neutral-500 dark:text-neutral-500 md:hidden">
-                  {item.name}
-                </h3>
-                <div>
-                  <h3 className="font-semibold">{item.name}</h3>
+              {isCurrentProblem && profile.streak >= 3 ? (
+                <div className="relative mt-10 flex flex h-fit min-w-96 flex-col items-start justify-start gap-4 overflow-hidden rounded-lg border bg-black/50 p-4 pl-20 pr-4 backdrop-blur-lg md:pl-4 md:shadow-xl">
+                  <div className="flex w-full items-center justify-between">
+                    <h3 className="font-semibold">{item.name}</h3>
+                    <Flame />
+                  </div>
                   <p className="text-sm">{item.description}</p>
-                </div>
-                <div className="space-y-4">
-                  <DifficultyBadge difficulty={item.difficulty} />
-                  <div className="flex items-center gap-8">
-                    <div className="flex items-center gap-2">
-                      <Coin />
-                      {item.coins_reward}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Star />
-                      {item.experience_reward}
+                  <div className="space-y-4">
+                    <DifficultyBadge difficulty={item.difficulty} />
+                    <div className="flex items-center gap-8">
+                      <div className="flex items-center gap-2">
+                        <Coin />
+                        {item.coins_reward}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Star />
+                        {item.experience_reward}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <Button
-                  className={cn('w-fit', {
-                    'cursor-not-allowed': !isProblemAvailable,
-                  })}
-                  asChild
-                  disabled={!isProblemAvailable}
-                  variant={
-                    isProblemCompleted
-                      ? 'accent'
-                      : isCurrentProblem
-                        ? 'green'
-                        : 'red'
-                  }
-                >
-                  <Link
-                    href={
-                      // unable user to access a problem that it's not allowed
-                      item.id <= (lastProblemIdCompletedByUser as number) + 1
-                        ? `code-problems/${item.id}`
-                        : '/'
+                  <Button
+                    className={cn('w-fit', {
+                      'cursor-not-allowed': !isProblemAvailable,
+                    })}
+                    asChild
+                    disabled={!isProblemAvailable}
+                    variant={
+                      isProblemCompleted
+                        ? 'accent'
+                        : isCurrentProblem
+                          ? 'green'
+                          : 'red'
                     }
                   >
-                    {isCurrentProblem && 'Começar'}
-                    {isProblemCompleted && 'Fazer novamente'}
-                    {!isProblemAvailable && 'Bloqueado'}
-                  </Link>
-                </Button>
-              </div>
+                    <Link
+                      href={
+                        // unable user to access a problem that it's not allowed
+                        item.id <= (lastProblemIdCompletedByUser as number) + 1
+                          ? `code-problems/${item.id}`
+                          : '/'
+                      }
+                    >
+                      {isCurrentProblem && 'Começar'}
+                      {isProblemCompleted && 'Fazer novamente'}
+                      {!isProblemAvailable && 'Bloqueado'}
+                    </Link>
+                  </Button>
+                  <BorderBeam
+                    size={250}
+                    duration={12}
+                    delay={9}
+                    colorFrom="#ff5c00"
+                    colorTo="#f00"
+                  />
+                </div>
+              ) : (
+                <div className="mt-10 flex min-w-96 flex-col items-start justify-start gap-4 pl-20 pr-4 md:pl-4">
+                  <h3 className="mb-4 block text-left text-2xl font-bold text-neutral-500 dark:text-neutral-500 md:hidden">
+                    {item.name}
+                  </h3>
+                  <div>
+                    <h3 className="font-semibold">{item.name}</h3>
+                    <p className="text-sm">{item.description}</p>
+                  </div>
+                  <div className="space-y-4">
+                    <DifficultyBadge difficulty={item.difficulty} />
+                    <div className="flex items-center gap-8">
+                      <div className="flex items-center gap-2">
+                        <Coin />
+                        {item.coins_reward}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Star />
+                        {item.experience_reward}
+                      </div>
+                    </div>
+                  </div>
+                  <Button
+                    className={cn('w-fit', {
+                      'cursor-not-allowed': !isProblemAvailable,
+                    })}
+                    asChild
+                    disabled={!isProblemAvailable}
+                    variant={
+                      isProblemCompleted
+                        ? 'accent'
+                        : isCurrentProblem
+                          ? 'green'
+                          : 'red'
+                    }
+                  >
+                    <Link
+                      href={
+                        // unable user to access a problem that it's not allowed
+                        item.id <= (lastProblemIdCompletedByUser as number) + 1
+                          ? `code-problems/${item.id}`
+                          : '/'
+                      }
+                    >
+                      {isCurrentProblem && 'Começar'}
+                      {isProblemCompleted && 'Fazer novamente'}
+                      {!isProblemAvailable && 'Bloqueado'}
+                    </Link>
+                  </Button>
+                </div>
+              )}
             </div>
           )
         })}

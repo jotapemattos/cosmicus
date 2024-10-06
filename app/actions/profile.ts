@@ -30,6 +30,23 @@ export async function getProfileByUserId({ profileId }: { profileId: string }) {
   return profile
 }
 
+export async function getUserProfile() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('O usuário não pode executar esta ação.')
+
+  const { data: profile } = await supabase
+    .from('profile')
+    .select()
+    .match({ id: user.id })
+    .limit(1)
+    .single()
+
+  return profile
+}
+
 export async function updateProfile({
   username,
   githubUrl,
