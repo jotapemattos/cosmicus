@@ -169,9 +169,7 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
           receivedOutputs={prop?.codeResults as string[]}
         />
       )}
-      {prop?.hasCompleted && (
-        <ProblemCompletedDialog userId={userId} problemId={problem.id} />
-      )}
+      {prop?.hasCompleted && <ProblemCompletedDialog problemId={problem.id} />}
     </main>
   )
 }
