@@ -13,6 +13,9 @@ export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'TCC',
   description: 'The fastest way to build apps with Next.js and Supabase',
+  icons: {
+    icon: '/logo.png',
+  },
 }
 
 export default async function RootLayout({
