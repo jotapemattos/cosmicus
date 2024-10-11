@@ -8,6 +8,7 @@ import { Profile } from '@/db/custom-types'
 import { getUserLevel } from '@/lib/get-user-level'
 import { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
+import UserPosition from '@/app/leaderboard/components/user-position'
 
 export default function useGetProfilePosition() {
   const [ascending, setAscending] = useState(false)
@@ -42,7 +43,11 @@ export default function useGetProfilePosition() {
       cell: (info) => {
         const profileId = info.getValue() as string
 
-        return <span className="font-medium">#{positions[profileId]}</span>
+        return (
+          <span className="font-medium">
+            <UserPosition value={positions[profileId]} />
+          </span>
+        )
       },
     },
     {

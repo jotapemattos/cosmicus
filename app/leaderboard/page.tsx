@@ -1,5 +1,5 @@
 import React from 'react'
-import Leaderboard from './leaderboard'
+import Leaderboard from './components/leaderboard'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 
