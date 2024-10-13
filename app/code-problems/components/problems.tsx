@@ -53,7 +53,7 @@ const Problems = () => {
         problems={problems as Problem[]}
         lastProblemIdCompletedByUser={lastProblemIdCompletedByUser}
         currentProblemId={currentProblemId as number}
-        skin={skin as Skin}
+        skin={skin}
         profile={profile as Profile}
       />
     </div>

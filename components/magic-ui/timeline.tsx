@@ -16,7 +16,7 @@ interface TimelineProps {
   problems: Problem[]
   lastProblemIdCompletedByUser: number
   currentProblemId: number
-  skin: Skin
+  skin: Skin | null
   profile: Profile
 }
 
@@ -71,8 +71,8 @@ export const Timeline = ({
               <div className="sticky top-40 z-40 flex max-w-xs flex-col items-center self-start md:w-full md:flex-row lg:max-w-lg">
                 {isCurrentProblem && (
                   <Image
-                    src={skin.picture as string}
-                    alt={`Skin ${skin.name}`}
+                    src={skin ? (skin.picture as string) : '/default-skin.png'}
+                    alt={skin ? (skin.name as string) : 'Imagem de astronauta'}
                     width={120}
                     height={120}
                     className="absolute -left-6 bottom-40 z-50"
@@ -224,8 +224,8 @@ export const Timeline = ({
           >
             <div className="absolute left-full top-1/2 -translate-y-1/2 transform">
               <Image
-                src={skin.picture as string}
-                alt="Skin"
+                src={skin ? (skin.picture as string) : '/default-skin.png'}
+                alt={skin ? (skin.name as string) : 'Imagem de astronauta'}
                 width={50}
                 height={50}
               />
