@@ -6,7 +6,7 @@ import MobileNav from './mobile-nav'
 
 export default async function Header() {
   return (
-    <header className="absolute top-0 flex w-full items-center justify-center border-b bg-background py-4">
+    <header className="absolute top-0 flex w-full items-center justify-center border-b bg-background py-2">
       <nav className="mx-auto flex w-full max-w-screen-2xl items-center justify-between gap-4 px-2 md:px-0">
         <div className="flex items-center justify-between gap-4">
           <Link href={'/'}>
