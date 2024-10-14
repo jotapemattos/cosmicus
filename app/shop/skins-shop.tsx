@@ -142,7 +142,11 @@ const SkinsShop = ({ user }: SkinsShopProps) => {
               </CardContent>
             </Card>
             {hasSkin(skin.id) ? (
-              <Button disabled className="w-full">
+              <Button
+                disabled
+                className="relative bottom-6 w-fit self-center border-primary"
+                variant={'outline'}
+              >
                 Você já possui este item!
               </Button>
             ) : (
