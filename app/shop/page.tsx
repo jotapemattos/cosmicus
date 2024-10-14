@@ -20,8 +20,10 @@ export default async function Page() {
         <Shop />
         <h1 className="text-4xl font-extrabold">Loja</h1>
       </div>
-      <SkinsShop user={user} />
-      <PerksShop user={user} />
+      <div className="space-y-32">
+        <SkinsShop user={user} />
+        <PerksShop user={user} />
+      </div>
     </main>
   )
 }

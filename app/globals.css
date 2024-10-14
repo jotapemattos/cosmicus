@@ -45,3 +45,13 @@
       @apply bg-background text-foreground;
     }
   }
+
+.animate-bg-gradient-to-center-title {
+  animation: bg-to-center 1s 0.95s ease 1 forwards;
+}
+
+@keyframes bg-to-center {
+  to {
+    background-position: center;
+  }
+}

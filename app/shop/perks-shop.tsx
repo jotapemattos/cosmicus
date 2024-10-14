@@ -15,14 +15,8 @@ import {
   AlertDialogAction,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
@@ -34,20 +28,33 @@ import { addPerksInventoryItem } from '../actions/perks-inventories'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import Coin from '@/components/icons/coin'
+import Rocket from '@/components/icons/rocket'
 
 interface PerksShopProps {
   user: User
 }
 
+const SkeletonPerkItem = () => (
+  <div className="flex w-fit flex-col">
+    <Card className="w-72">
+      <CardContent className="relative flex flex-col items-center justify-center gap-4 overflow-hidden rounded-lg">
+        <Skeleton className="size-72" />
+      </CardContent>
+    </Card>
+    <Skeleton className="relative bottom-6 h-10 w-24 self-center" />
+    <Skeleton className="h-6 w-32 self-center" />
+  </div>
+)
+
 const PerksShop = ({ user }: PerksShopProps) => {
   const router = useRouter()
 
-  const { data: perks } = useQuery({
+  const { data: perks, isLoading: isLoadingPerks } = useQuery({
     queryKey: ['perks'],
     queryFn: () => getPerks(),
   })
 
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading: isLoadingProfile } = useQuery({
     queryKey: ['profile', user.id],
     queryFn: () => getProfileByUserId({ profileId: user.id }),
   })
@@ -71,78 +78,93 @@ const PerksShop = ({ user }: PerksShopProps) => {
     await addPerksInventoryItemFn({ perkId })
   }
 
+  const isLoading = isLoadingPerks || isLoadingProfile
+
+  if (isLoading) {
+    return (
+      <section className="mx-auto my-32 w-full max-w-screen-2xl space-y-10">
+        <Skeleton className="mb-10 h-10 w-64" />
+        <div className="lg:grix-cols-3 mx-auto flex grid w-full max-w-screen-2xl grid-cols-1 justify-between gap-12 md:grid-cols-2 2xl:grid-cols-4">
+          {[...Array(4)].map((_, index) => (
+            <SkeletonPerkItem key={index} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
   if (perks === undefined || !profile) {
-    return <p>nao foi</p>
+    return null
   }
 
   return (
     <section className="mx-auto my-32 w-full max-w-screen-2xl space-y-10">
-      <h1 className="text-4xl font-extrabold">Habilidades especiais</h1>
-      <div className="flex w-full flex-wrap gap-10">
+      <div className="flex items-center gap-2">
+        <Rocket />
+        <h1 className="text-4xl font-extrabold">Habilidades especiais</h1>
+      </div>
+      <div className="lg:grix-cols-3 mx-auto flex grid w-full max-w-screen-2xl grid-cols-1 justify-between gap-12 md:grid-cols-2 2xl:grid-cols-4">
         {perks.map((perk) => (
-          <Card
-            key={perk.id}
-            className={cn('w-72', {
-              'opacity-50': perk.price! > profile.coins_amount,
-            })}
-          >
-            <CardHeader>
-              <CardTitle>{perk.name}</CardTitle>
-              <CardDescription>{perk.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex w-full flex-col items-center justify-center gap-4">
-              <Image
-                src={perk.picture ?? ''}
-                alt="imagem da perk"
-                width={500}
-                height={500}
-                className="aspect-square w-full object-cover"
-              />
-              <span className="flex items-center gap-2 self-start">
-                <Coin />
-                <p className="sr-only">Preço</p>
-                {perk.price}
-              </span>
-            </CardContent>
-            <CardFooter>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    className="w-full"
-                    disabled={perk.price! > profile.coins_amount}
-                  >
-                    Comprar
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Confirmar Compra</AlertDialogTitle>
-                  </AlertDialogHeader>
-                  <AlertDialogDescription>
-                    Você tem certeza que deseja comprar este item? Isso deixará
-                    você com{' '}
-                    <strong>{profile.coins_amount - perk.price!}</strong>{' '}
-                    moedas.
-                  </AlertDialogDescription>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction asChild>
-                      <Button
-                        disabled={isPending}
-                        onClick={() => handleBuy(perk.id)}
-                      >
-                        {isPending ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          'Comprar'
-                        )}
-                      </Button>
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </CardFooter>
-          </Card>
+          <div key={perk.id} className="flex w-fit flex-col">
+            <Card
+              className={cn('w-72', {
+                'opacity-50': perk.price! > profile.coins_amount,
+              })}
+            >
+              <CardContent className="relative flex flex-col items-center justify-center gap-4 overflow-hidden rounded-lg p-6">
+                <div className="absolute right-1/2 top-0 h-28 w-28 translate-x-1/2 translate-y-1/2 rounded-3xl bg-primary opacity-50 blur-3xl" />
+                <Image
+                  src={perk.picture ?? ''}
+                  alt="imagem da perk"
+                  width={200}
+                  height={200}
+                  className="z-10 aspect-square w-full object-cover"
+                />
+              </CardContent>
+            </Card>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  className="relative bottom-6 flex w-fit items-center gap-2 self-center border-primary"
+                  disabled={perk.price! > profile.coins_amount}
+                  variant={'outline'}
+                >
+                  <Coin />
+                  <p className="sr-only">Preço</p>
+                  {perk.price}
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirmar Compra</AlertDialogTitle>
+                </AlertDialogHeader>
+                <AlertDialogDescription>
+                  Você tem certeza que deseja comprar este item? Isso deixará
+                  você com <strong>{profile.coins_amount - perk.price!}</strong>{' '}
+                  moedas.
+                </AlertDialogDescription>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction asChild>
+                    <Button
+                      disabled={isPending}
+                      onClick={() => handleBuy(perk.id)}
+                    >
+                      {isPending ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        'Comprar'
+                      )}
+                    </Button>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <h3 className="self-center text-xl font-semibold">{perk.name}</h3>
+            <p className="max-w-72 text-center text-muted-foreground">
+              {perk.description}
+            </p>
+          </div>
         ))}
       </div>
     </section>
