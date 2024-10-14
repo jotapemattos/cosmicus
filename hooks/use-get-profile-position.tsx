@@ -51,19 +51,16 @@ export default function useGetProfilePosition() {
       },
     },
     {
+      id: 'username', // Add this line
       header: 'Nome',
-      accessorFn: (row) => ({
-        username: row.username,
-        picture: row.picture,
-      }),
-      cell: ({ getValue }) => {
-        const { username, picture } = getValue() as {
-          username: string
-          picture: string
-        }
+      accessorFn: (row) => row.username, // Change this line
+      cell: ({ row }) => {
+        // Change this to use row instead of getValue
+        const username = row.getValue('username') as string
+        const picture = row.original.picture
         return (
           <div className="flex items-center gap-2">
-            <Avatar className="group size-8">
+            <Avatar>
               <AvatarImage src={picture ?? undefined} />
               <AvatarFallback>
                 {username.substring(0, 2).toUpperCase()}

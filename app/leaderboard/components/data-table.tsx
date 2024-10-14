@@ -6,6 +6,8 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from '@tanstack/react-table'
 
 import {
@@ -17,26 +19,57 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { ReactNode, useState } from 'react'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  children: ReactNode
+  userPosition: number
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  children,
+  userPosition,
 }: DataTableProps<TData, TValue>) {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      columnFilters,
+    },
   })
 
   return (
-    <div className="w-full">
-      <div className="rounded-md border">
+    <div className="w-full space-y-8">
+      <div className="flex w-full flex-col justify-between gap-8 md:flex-row md:items-center">
+        <p>
+          Você está na posição <strong>#{userPosition}</strong> do ranking
+        </p>
+        <div className="flex w-full flex-col gap-4 md:w-fit md:flex-row md:items-center">
+          <Input
+            placeholder="Buscar jogador"
+            value={
+              (table.getColumn('username')?.getFilterValue() as string) ?? ''
+            }
+            onChange={(event) =>
+              table.getColumn('username')?.setFilterValue(event.target.value)
+            }
+            className="h-8 w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+          />
+          {children}
+        </div>
+      </div>
+      <div className="w-full rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
