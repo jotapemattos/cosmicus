@@ -95,7 +95,7 @@ export default function useGetProfilePosition() {
       accessorKey: 'id',
       header: '',
       cell: ({ row }) => {
-        const userId = parseInt(row.getValue('id'))
+        const userId = row.getValue('id')
 
         return (
           <Button asChild variant={'link'}>
