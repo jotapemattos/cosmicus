@@ -32,7 +32,7 @@ export default async function Header() {
         {/* Mobile Menu */}
         <div className="md:hidden">
           <MobileNav>
-            <div className="border-t pt-4">
+            <div className="border-t py-4">
               <UserSection />
             </div>
           </MobileNav>
