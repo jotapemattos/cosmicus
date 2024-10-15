@@ -49,12 +49,7 @@ const RushHourPage = async ({ params: { id } }: RushHourPageProps) => {
 
       <div className="text-center">
         <h1 className="mb-8 text-4xl font-bold">Hora do Rush</h1>
-        <Board
-          size={6}
-          initialVehicles={initialVehicles}
-          ctProblemId={id}
-          userId={user.id}
-        />
+        <Board size={6} initialVehicles={initialVehicles} ctProblemId={id} />
       </div>
     </div>
   )

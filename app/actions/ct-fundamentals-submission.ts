@@ -22,6 +22,17 @@ export async function createCtSubmission({
 
   if (!user) throw new Error('Não autorizado.')
 
+  // if user already has completed the problems, just return its submission
+  const { data: submission } = await supabase
+    .from('ct_fundamentals_submissions')
+    .select()
+    .eq('ct_fundamentals_problem_id', ctProblemId)
+    .eq('profile_id', user.id)
+
+  if (submission && submission.length > 0) {
+    return submission
+  }
+
   const { data, error } = await supabase
     .from('ct_fundamentals_submissions')
     .insert({

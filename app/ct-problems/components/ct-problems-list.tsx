@@ -69,12 +69,12 @@ const CtProblemsList: React.FC<CtProblemsListProps> = ({ category }) => {
           <AccordionTrigger>
             <div className="flex items-center gap-4">
               {hasCompletedProblem(item.id) ? (
-                <div className="h-6 w-6 rounded-full bg-green-500 flex items-center justify-center">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500">
                   <Check size={18} />
                 </div>
               ) : (
                 <div className="h-6 w-6 rounded-full bg-white p-[1px]">
-                  <div className='rounded-full w-full h-full bg-accent'></div>
+                  <div className="h-full w-full rounded-full bg-accent"></div>
                 </div>
               )}
               {item.name}

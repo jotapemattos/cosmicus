@@ -1,23 +1,21 @@
 'use client'
 
-import ProblemCompletedDialog from '@/app/code-problems/[problemId]/components/problem-completed-dialog'
 import { Vehicle as VehicleType } from '../types/vehicle-type'
 import Vehicle from './vehicle'
 import { Button } from '@/components/ui/button'
 import { useRushHour } from '@/hooks/use-rush-hour'
+import CtProblemCompletedDialog from '@/app/ct-problems/components/ct-problem-completed-dialog'
 
 interface BoardProps {
   size: number
   initialVehicles: VehicleType[]
   ctProblemId: number
-  userId: string
 }
 
 const Board: React.FC<BoardProps> = ({
   size,
   initialVehicles,
   ctProblemId,
-  userId,
 }) => {
   const {
     vehicles,
@@ -66,9 +64,7 @@ const Board: React.FC<BoardProps> = ({
         <Button onClick={() => resetGame()}>Reiniciar</Button>
       </div>
 
-      {gameWon && (
-        <ProblemCompletedDialog problemId={ctProblemId} userId={userId} />
-      )}
+      {gameWon && <CtProblemCompletedDialog category="rush-hour" />}
     </>
   )
 }
