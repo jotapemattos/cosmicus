@@ -10,6 +10,10 @@ interface GetUserCtSubmissionByCategoryProps {
   category: string
 }
 
+interface GetUserTotalCtSubmissionsRequest {
+  profileId: string
+}
+
 const supabase = createClient()
 
 export async function createCtSubmission({
@@ -69,4 +73,19 @@ export async function getUserCtSubmissionByCategory({
   }
 
   return data
+}
+
+export async function getUserTotalCtSubmissions({
+  profileId,
+}: GetUserTotalCtSubmissionsRequest) {
+  const { data, error } = await supabase
+    .from('ct_fundamentals_submissions')
+    .select('*')
+    .eq('profile_id', profileId)
+
+  if (error) {
+    throw new Error('Não foi possivel encontrar o total.')
+  }
+
+  return data.length
 }

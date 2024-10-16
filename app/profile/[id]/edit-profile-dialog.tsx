@@ -17,7 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { type Profile } from '@/db/custom-types'
 import { toast } from 'sonner'
-import { Loader2 } from 'lucide-react'
+import { Loader2, SquarePen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 import { Textarea } from '@/components/ui/textarea'
@@ -31,14 +31,6 @@ const usernameSchema = z.object({
     .url({ message: 'URL inválida.' })
     .includes('github.com', {
       message: 'Este link para o github está inválido.',
-    })
-    .nullable()
-    .or(z.literal('')),
-  linkedinUrl: z
-    .string()
-    .url({ message: 'URL inválida.' })
-    .includes('linkedin.com', {
-      message: 'Este link para o linkedin está inválido.',
     })
     .nullable()
     .or(z.literal('')),
@@ -73,7 +65,6 @@ const EditProfileDialog = ({ id }: { id: string }) => {
   const username = watch('username')
   const bio = watch('bio')
   const githubUrl = watch('githubUrl')
-  const linkedinUrl = watch('linkedinUrl')
 
   const { mutateAsync: updateProfileFn, isPending } = useMutation({
     mutationFn: updateProfile,
@@ -84,7 +75,6 @@ const EditProfileDialog = ({ id }: { id: string }) => {
           username,
           bio,
           github_url: githubUrl,
-          linkedin_url: linkedinUrl,
         }
       })
 
@@ -97,7 +87,6 @@ const EditProfileDialog = ({ id }: { id: string }) => {
   const handleUpdateUsername = async ({
     username,
     githubUrl,
-    linkedinUrl,
     bio,
   }: UsernameSchema) => {
     if (!errors.root) {
@@ -105,7 +94,6 @@ const EditProfileDialog = ({ id }: { id: string }) => {
         await updateProfileFn({
           username,
           githubUrl,
-          linkedinUrl,
           bio,
         })
       } catch (error) {
@@ -119,7 +107,10 @@ const EditProfileDialog = ({ id }: { id: string }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Editar Pefil</Button>
+        <Button size={'icon'} variant={'outline'} className="p-2">
+          <SquarePen />
+          <span className="sr-only">Editar pefil</span>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -171,21 +162,6 @@ const EditProfileDialog = ({ id }: { id: string }) => {
             />
             {errors.githubUrl && (
               <p className="my-2 text-red-500">{errors.githubUrl?.message}</p>
-            )}
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="linkedin-url">Link para o linkedin</Label>
-            <Input
-              id="linkedin-url"
-              defaultValue={profile?.linkedin_url ?? ''}
-              {...register('linkedinUrl')}
-              className={cn({
-                'ring-2 ring-red-500 focus-visible:ring-red-500':
-                  errors.linkedinUrl,
-              })}
-            />
-            {errors.linkedinUrl && (
-              <p className="my-2 text-red-500">{errors.linkedinUrl?.message}</p>
             )}
           </div>
           <div className="flex w-full justify-end gap-4">

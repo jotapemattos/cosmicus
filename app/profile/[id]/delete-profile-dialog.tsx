@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { deleteProfile } from '@/app/actions/profile'
 import { useMutation } from '@tanstack/react-query'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
@@ -40,7 +40,10 @@ const DeleteProfileDialog = () => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant={'destructive'}>Excluir Conta</Button>
+        <Button variant={'destructive'} size={'icon'} className="p-2">
+          <Trash2 />
+          <span className="sr-only">Excluir Conta</span>
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

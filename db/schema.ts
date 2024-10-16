@@ -239,7 +239,6 @@ export type Database = {
           experience_points: number
           github_url: string | null
           id: string
-          linkedin_url: string | null
           picture: string | null
           picture_filename: string | null
           streak: number
@@ -252,7 +251,6 @@ export type Database = {
           experience_points?: number
           github_url?: string | null
           id?: string
-          linkedin_url?: string | null
           picture?: string | null
           picture_filename?: string | null
           streak?: number
@@ -265,7 +263,6 @@ export type Database = {
           experience_points?: number
           github_url?: string | null
           id?: string
-          linkedin_url?: string | null
           picture?: string | null
           picture_filename?: string | null
           streak?: number

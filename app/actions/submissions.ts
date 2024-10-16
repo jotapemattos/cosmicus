@@ -24,6 +24,10 @@ interface GetSubmissionByProblemIdAndProfileIdRequest {
   problemId: number
 }
 
+interface GetUserTotalSubmissionsRequest {
+  profileId: string
+}
+
 const supabase = createClient()
 
 export async function createSubmission({
@@ -205,4 +209,19 @@ export async function getLastProblemIdCompletedByUser() {
   if (!data) return 0
 
   return data.problem_id as number
+}
+
+export async function getUserTotalSubmissions({
+  profileId,
+}: GetUserTotalSubmissionsRequest) {
+  const { data, error } = await supabase
+    .from('submissions')
+    .select('*')
+    .eq('profile_id', profileId)
+
+  if (error) {
+    throw new Error('Não foi possivel encontrar o total.')
+  }
+
+  return data.length
 }

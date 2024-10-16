@@ -4,7 +4,6 @@ import { createClient } from '@/utils/supabase/server'
 interface UpdateProfileRequest {
   username: string
   githubUrl: string | null
-  linkedinUrl: string | null
   bio: string | null
 }
 
@@ -50,7 +49,6 @@ export async function getUserProfile() {
 export async function updateProfile({
   username,
   githubUrl,
-  linkedinUrl,
   bio,
 }: UpdateProfileRequest) {
   const {
@@ -61,7 +59,7 @@ export async function updateProfile({
 
   const { data: profile, error } = await supabase
     .from('profile')
-    .update({ username, github_url: githubUrl, linkedin_url: linkedinUrl, bio })
+    .update({ username, github_url: githubUrl, bio })
     .eq('id', user.id)
 
   if (error?.message.includes('unique constraint')) {

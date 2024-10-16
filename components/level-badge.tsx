@@ -2,9 +2,10 @@ import { cn } from '@/lib/utils'
 
 interface LevelBadgeProps {
   userLevel: number
+  className?: string
 }
 
-export default function LevelBadge({ userLevel }: LevelBadgeProps) {
+export default function LevelBadge({ userLevel, className }: LevelBadgeProps) {
   return (
     <div
       className={cn(
@@ -23,9 +24,9 @@ export default function LevelBadge({ userLevel }: LevelBadgeProps) {
             userLevel > 50 && userLevel <= 60,
           'border-indigo-900 bg-indigo-900/50':
             userLevel > 60 && userLevel <= 70,
-          'border-indigo-950 bg-indigo-950/50':
-            userLevel > 70 && userLevel <= 80,
+          'border-indigo-950 bg-indigo-950/50': userLevel > 70,
         },
+        className,
       )}
     >
       {userLevel}
