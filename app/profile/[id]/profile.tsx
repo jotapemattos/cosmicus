@@ -238,7 +238,7 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
     },
   ]
   return (
-    <main className="min-h-screen w-screen overflow-x-hidden p-4">
+    <main className="min-h-screen w-full overflow-x-hidden p-4">
       {userOwnsProfile && (
         <section className="relative mx-auto my-24 flex w-full max-w-screen-2xl items-center justify-end gap-4">
           <EditProfileDialog id={profileId} />
