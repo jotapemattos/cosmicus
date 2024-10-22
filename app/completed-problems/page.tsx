@@ -14,11 +14,7 @@ export default async function Page() {
   }
 
   return (
-    <main className="min-h-screen w-screen space-y-10">
-      <section className="mx-auto mt-36 max-w-screen-2xl space-y-4">
-        <h1 className="text-4xl font-extrabold">Desafios realizados</h1>
-        <p>Veja por quais desafios ja passou e refaca-os se quiser</p>
-      </section>
+    <main className="min-h-screen w-screen space-y-10 p-4 md:p-0">
       <CompletedProblems userId={user.id} />
     </main>
   )

@@ -5,18 +5,24 @@ import React from 'react'
 
 interface DifficultyBadgeProps {
   difficulty: 'easy' | 'medium' | 'hard'
+  className?: string
 }
 
-const DifficultyBadge = ({ difficulty }: DifficultyBadgeProps) => {
+const DifficultyBadge = ({ difficulty, className }: DifficultyBadgeProps) => {
   return (
     <Badge
-      className={cn('w-fit', {
-        'bg-red-500/10 text-red-500 hover:bg-red-500/10': difficulty === 'hard',
-        'bg-green-500/10 text-green-500 hover:bg-green-500/10':
-          difficulty === 'easy',
-        'bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/10':
-          difficulty === 'medium',
-      })}
+      className={cn(
+        'w-fit',
+        {
+          'bg-red-500/10 text-red-500 hover:bg-red-500/10':
+            difficulty === 'hard',
+          'bg-green-500/10 text-green-500 hover:bg-green-500/10':
+            difficulty === 'easy',
+          'bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/10':
+            difficulty === 'medium',
+        },
+        className,
+      )}
     >
       {getDifficultyInPortuguese({
         difficulty,
