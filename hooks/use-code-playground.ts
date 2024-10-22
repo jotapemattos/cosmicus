@@ -129,7 +129,7 @@ export default function useCodePlayground({
 
       setIsFirstTry(false)
       playError() // Add error sound
-      toast.error('Codigo errado')
+      toast.error('Código errado')
     }
 
     // eslint-disable-next-line

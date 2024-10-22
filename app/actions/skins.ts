@@ -8,7 +8,10 @@ interface GetSkinByIdRequest {
 const supabase = createClient()
 
 export async function getSkins() {
-  const { data: skins, error } = await supabase.from('skins').select()
+  const { data: skins, error } = await supabase
+    .from('skins')
+    .select()
+    .order('price')
   if (error) {
     throw new Error('Não foi possivel encontrar os itens da loja')
   }

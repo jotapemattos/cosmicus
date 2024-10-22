@@ -28,12 +28,12 @@ export const Meteors = ({ number = 20 }: MeteorsProps) => {
         <span
           key={idx}
           className={clsx(
-            'animate-meteor pointer-events-none absolute left-1/2 top-1/2 h-0.5 w-0.5 rotate-[215deg] rounded-[9999px] bg-emerald-400 shadow-[0_0_0_1px_#ffffff10]',
+            'pointer-events-none absolute left-1/2 top-1/2 h-0.5 w-0.5 rotate-[215deg] animate-meteor rounded-[9999px] bg-indigo-400 shadow-[0_0_0_1px_#ffffff10]',
           )}
           style={style}
         >
           {/* Meteor Tail */}
-          <div className="pointer-events-none absolute top-1/2 -z-10 h-[1px] w-[50px] -translate-y-1/2 bg-gradient-to-r from-emerald-400 to-transparent" />
+          <div className="pointer-events-none absolute top-1/2 -z-10 h-[1px] w-[50px] -translate-y-1/2 bg-gradient-to-r from-indigo-400 to-transparent" />
         </span>
       ))}
     </>

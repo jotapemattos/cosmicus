@@ -33,11 +33,10 @@ const TestCases = ({
           <Button
             key={item}
             onClick={() => setActiveIndex(index)}
-            // variant={activeIndex === index ? 'default' : 'secondary'}
             className={cn({
-              'bg-red-500/10 text-black transition-colors duration-300 hover:bg-red-500/20':
+              'bg-red-500/10 text-red-500 transition-colors duration-300 hover:bg-red-500/20':
                 expectedOutputs[index] !== receivedOutputs[index],
-              'bg-green-500/10 text-black transition-colors duration-300 hover:bg-green-500/20':
+              'bg-green-500/10 text-green-500 transition-colors duration-300 hover:bg-green-500/20':
                 expectedOutputs[index] === receivedOutputs[index],
             })}
           >
@@ -52,16 +51,16 @@ const TestCases = ({
         })}
         id="test-cases"
       >
-        <p>
-          <strong>Input: </strong>
+        <p className="text-muted-foreground">
+          <strong className="text-white">Input: </strong>
           {input.filter((_, index) => index === activeIndex)}
         </p>
-        <p>
-          <strong>Esperado: </strong>
+        <p className="text-muted-foreground">
+          <strong className="text-white">Esperado: </strong>
           {expectedOutputs.filter((_, index) => index === activeIndex)}
         </p>
-        <p>
-          <strong>Recebido: </strong>
+        <p className="text-muted-foreground">
+          <strong className="text-white">Recebido: </strong>
           {receivedOutputs.filter((_, index) => index === activeIndex)}
         </p>
       </div>

@@ -3,7 +3,7 @@
 import TokyoNightStorm from '@/utils/editor-themes/tokyo-night-storm.json'
 import { Editor, type Monaco } from '@monaco-editor/react'
 import { Button } from '../../../../components/ui/button'
-import { Coins, Loader2, Sparkles } from 'lucide-react'
+import { Loader2, Play } from 'lucide-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getProblemById } from '@/app/actions/problems'
 import { getTestCasesByProblemId } from '@/app/actions/test-cases'
@@ -18,9 +18,55 @@ import ProblemCompletedDialog from '@/app/code-problems/[problemId]/components/p
 import Perks from './perks'
 import { useParams } from 'next/navigation'
 import { UsePerks } from '@/hooks/use-perks'
+import DifficultyBadge from '@/components/ui/difficulty-badge'
+import Coin from '@/components/icons/coin'
+import Star from '@/components/icons/star'
+import ProblemTopics from './problem-topics'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface EditorProps {
   userId: string
+}
+
+const CodePlayGroundSkeleton = () => {
+  return (
+    <main className="mx-auto my-20 flex w-full max-w-screen-2xl flex-col items-center gap-8">
+      <header className="flex w-full items-center justify-center gap-4">
+        <Skeleton className="h-8 w-36" />
+        <Skeleton className="h-8 w-8" />
+        <Skeleton className="h-8 w-8" />
+        <Skeleton className="h-8 w-8" />
+      </header>
+      <div className="flex w-full flex-col justify-between gap-4 lg:flex-row">
+        <aside className="w-full space-y-4">
+          <Skeleton className="h-12 w-24" />
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-6 w-10" />
+            <div className="flex items-center gap-2">
+              <Coin />
+              <Skeleton className="h-6 w-12" />
+            </div>
+            <div className="flex items-center gap-2">
+              <Star />
+              <Skeleton className="h-6 w-12" />
+            </div>
+          </div>
+          <Skeleton className="h-6 w-72" />
+          {/* Showing only first two test cases */}
+          <Skeleton className="h-6 w-72" />
+          <Skeleton className="h-6 w-72" />
+          <div>
+            <Skeleton className="h-6 w-8" />
+            <Skeleton className="h-6 w-72" />
+          </div>
+          <Skeleton className="h-12 w-full" />
+        </aside>
+        <div className="flex w-full max-w-3xl flex-col gap-2">
+          <Skeleton className="h-[60vh] w-full" />
+        </div>
+      </div>
+    </main>
+  )
 }
 
 const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
@@ -40,33 +86,30 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
     })
   }
 
-  const { data: problem } = useQuery({
+  const { data: problem, isLoading: isProblemLoading } = useQuery({
     queryKey: ['problem', problemId],
     queryFn: () => getProblemById({ problemId }),
   })
 
-  const { data: testCases } = useQuery({
+  const { data: testCases, isLoading: isTestCasesLoading } = useQuery({
     queryKey: ['testCases', problemId],
     queryFn: () => getTestCasesByProblemId({ problemId }),
   })
 
-  const { data: submission } = useQuery({
+  const { data: submission, isLoading: isSubmissionsLoading } = useQuery({
     queryKey: ['submissions', problemId, userId],
     queryFn: () => getSubmissionByProblemIdAndProfileId({ problemId }),
   })
 
+  const isLoading =
+    isProblemLoading || isTestCasesLoading || isSubmissionsLoading
+
   const { mutateAsync: createSubmissionFn } = useMutation({
     mutationFn: createSubmission,
-    onSuccess: () => {
-      console.log('god gau')
-    },
   })
 
   const { mutateAsync: updateSubmissionFn } = useMutation({
     mutationFn: updateSubmission,
-    onSuccess: () => {
-      console.log('god gau')
-    },
   })
 
   const prop = useCodePlayground({
@@ -78,45 +121,73 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
     usedPerks,
   })
 
+  if (isLoading) {
+    return <CodePlayGroundSkeleton />
+  }
+
   if (testCases === undefined || problem === undefined) return
 
   return (
-    <main className="mx-auto mb-20 mt-32 flex w-full max-w-screen-2xl flex-col items-center gap-8">
+    <main className="mx-auto my-20 flex w-full max-w-screen-2xl flex-col items-center gap-8">
       <header className="flex w-full items-center justify-center gap-4">
-        <h1 className="text-2xl font-bold">{problem.name}</h1>
-        <span className="text-xl">Categoria - {problem.category}</span>
-        <hr className="h-6 w-px bg-white" />
-        <div className="flex items-center gap-2">
-          <Coins className="size-4" />
-          <span>{problem.coins_reward}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Sparkles className="size-4" />
-          <span>{problem.experience_reward}</span>
-        </div>
-        <hr className="h-6 w-px bg-white" />
+        <Button
+          disabled={prop?.isPending}
+          onClick={prop?.handleClick}
+          variant={'secondary'}
+        >
+          {prop?.isPending ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <>
+              <Play className="text-muted-foreground" />
+              <span className="ml-2 text-muted-foreground">Executar</span>
+            </>
+          )}
+        </Button>
         <Perks userId={userId} />
       </header>
-      <div className="flex w-full justify-between gap-4">
-        <aside className="space-y-4">
-          <p>{problem.description}</p>
-          {testCases.map((testCase) => (
-            <div key={testCase.id}>
-              <div className="flex items-center gap-4">
-                <h3 className="text-md font-medium">Entrada:</h3>
-                <p>{testCase.input}</p>
-              </div>
-              <div className="flex items-center gap-4">
-                <h3 className="text-md font-medium">Saída Esperada:</h3>
-                <p>{testCase.expected_output}</p>
-              </div>
+      <div className="flex w-full flex-col justify-between gap-4 lg:flex-row">
+        <aside className="w-full space-y-4">
+          <h1 className="text-3xl font-bold">{problem.name}</h1>
+          <div className="flex items-center gap-4">
+            <DifficultyBadge difficulty={problem.difficulty} />
+            <div className="flex items-center gap-2">
+              <Coin />
+              <p className="text-muted-foreground">{problem.coins_reward}</p>
             </div>
-          ))}
+            <div className="flex items-center gap-2">
+              <Star />
+              <p className="text-muted-foreground">
+                {problem.experience_reward}
+              </p>
+            </div>
+          </div>
+          <p className="text-muted-foreground">{problem.description}</p>
+          {/* Showing only first two test cases */}
+          {testCases.map(
+            (testCase, index) =>
+              index <= 1 && (
+                <div key={testCase.id} className="prose">
+                  <div>
+                    <div className="flex items-center gap-4">
+                      <h3 className="text-md font-medium">Entrada:</h3>
+                      <p className="text-muted-foreground">{testCase.input}</p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <h3 className="text-md font-medium">Saída Esperada:</h3>
+                      <p className="text-muted-foreground">
+                        {testCase.expected_output}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ),
+          )}
           <div>
             <h3 className="text-md font-bold">Dica</h3>
             <div
               dangerouslySetInnerHTML={{ __html: problem.hint as string }}
-              className="prose max-w-2/3 prose-code:rounded-md prose-code:bg-secondary prose-code:p-2 prose-code:text-sm prose-code:text-violet-500"
+              className="prose max-w-2/3 leading-10 text-muted-foreground prose-code:rounded-md prose-code:bg-secondary prose-code:p-2 prose-code:text-sm prose-code:text-violet-500"
             />
           </div>
           {hasUsedSpecialHint && (
@@ -126,15 +197,16 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
                 dangerouslySetInnerHTML={{
                   __html: problem.special_hint as string,
                 }}
-                className="prose max-w-2/3 prose-code:rounded-md prose-code:bg-secondary prose-code:p-2 prose-code:text-sm prose-code:text-violet-500"
+                className="prose max-w-2/3 leading-10 text-muted-foreground prose-code:rounded-md prose-code:bg-secondary prose-code:p-2 prose-code:text-sm prose-code:text-violet-500"
               />
             </div>
           )}
+          <ProblemTopics topics={problem.topics} />
         </aside>
-        <div className="flex flex-col gap-2">
+        <div className="flex w-full max-w-3xl flex-col gap-2">
           <Editor
             height={'60vh'}
-            width={'40vw'}
+            // width={'40vw'}
             defaultLanguage="python"
             defaultValue={
               submission
@@ -144,21 +216,9 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
             onChange={prop?.handleOnChange}
             theme="TokyoNightStorm"
             beforeMount={handleEditorDidMount}
+            className="w-full"
           />
         </div>
-      </div>
-      <div className="flex w-full items-center justify-end gap-4">
-        <Button
-          disabled={prop?.isPending}
-          onClick={prop?.handleClick}
-          className="bg-green-500/10 text-green-500 hover:bg-green-500/15"
-        >
-          {prop?.isPending ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            'Enviar'
-          )}
-        </Button>
       </div>
       {prop?.codeResults && (
         <TestCases

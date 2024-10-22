@@ -194,7 +194,6 @@ export type Database = {
       }
       problems: {
         Row: {
-          category: string
           coins_reward: number | null
           description: string | null
           difficulty: Database['public']['Enums']['problems-difficulty']
@@ -204,9 +203,9 @@ export type Database = {
           initial_value: string | null
           name: string | null
           special_hint: string
+          topics: string[]
         }
         Insert: {
-          category?: string
           coins_reward?: number | null
           description?: string | null
           difficulty: Database['public']['Enums']['problems-difficulty']
@@ -216,9 +215,9 @@ export type Database = {
           initial_value?: string | null
           name?: string | null
           special_hint?: string
+          topics?: string[]
         }
         Update: {
-          category?: string
           coins_reward?: number | null
           description?: string | null
           difficulty?: Database['public']['Enums']['problems-difficulty']
@@ -228,6 +227,7 @@ export type Database = {
           initial_value?: string | null
           name?: string | null
           special_hint?: string
+          topics?: string[]
         }
         Relationships: []
       }

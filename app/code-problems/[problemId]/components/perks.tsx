@@ -21,6 +21,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { Button } from '@/components/ui/button'
 
 interface PerksProps {
   userId: string
@@ -86,12 +87,14 @@ const Perks = ({ userId }: PerksProps) => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Image
-                    src={perk.perks?.picture as string}
-                    alt={`Image of ${perk.perks?.name}`}
-                    width={32}
-                    height={32}
-                  />
+                  <Button variant={'secondary'} size={'icon'}>
+                    <Image
+                      src={perk.perks?.picture as string}
+                      alt={`Image of ${perk.perks?.name}`}
+                      width={32}
+                      height={32}
+                    />
+                  </Button>
                 </TooltipTrigger>
                 <TooltipContent className="flex max-w-md flex-col items-center gap-4">
                   <Image

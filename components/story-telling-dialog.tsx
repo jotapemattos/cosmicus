@@ -42,17 +42,18 @@ const StoryTellingDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="w-screen max-w-screen-lg">
-        <div className="relative flex items-start justify-start gap-4 overflow-hidden p-4">
+        <div className="relative flex flex-col items-center justify-start gap-4 overflow-hidden p-4">
           <Meteors number={100} />
           <Image
             src={character.image ?? ''}
             alt={character.name ?? ''}
-            width={64}
-            height={64}
+            width={400}
+            height={400}
+            className="z-50"
           />
           <DialogDescription>
             <TypingAnimation
-              className="w-full text-justify text-lg font-medium text-black dark:text-white"
+              className="w-full text-justify text-lg font-medium"
               text={storyTelling.text ?? ''}
               duration={50}
             />
