@@ -16,15 +16,15 @@ const Page = async () => {
     return redirect('/sign-in')
   }
   return (
-    <main className="min-h-screen w-full space-y-24 py-32">
-      <section className="mx-auto mt-12 max-w-screen-2xl space-y-4">
+    <main className="min-h-screen w-full space-y-24 p-4 py-32 lg:px-0">
+      <section className="mx-auto mt-12 max-w-screen-2xl flex-col space-y-4 md:flex-row">
         <h1 className="text-4xl font-extrabold">Inventário</h1>
-        <div className="flex w-full items-center justify-between">
-          <p>
-            Estes são os itens que você possui no seu{' '}
-            <strong>inventário</strong>.
+        <div className="flex w-full flex-col items-center justify-between gap-4 md:flex-row">
+          <p className="text-muted-foreground">
+            Aqui estão os itens atualmente disponíveis no seu{' '}
+            <strong className="text-white">inventário</strong>.
           </p>
-          <Button asChild variant={'secondary'}>
+          <Button asChild variant={'secondary'} className="w-full md:w-fit">
             <Link href="/shop">Adquira itens na loja</Link>
           </Button>
         </div>

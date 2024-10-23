@@ -22,15 +22,44 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Inventory as InventoryType } from '@/db/custom-types'
 import { toast } from 'sonner'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface InventoryProps {
   user: User
 }
 
+const InventorySkeleton = () => {
+  return (
+    <section className="mx-auto grid w-full max-w-screen-2xl grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      {Array.from({ length: 8 }).map((_, index) => (
+        <Card key={index} className="w-72">
+          <CardHeader className="space-y-4">
+            {/* Title skeleton */}
+            <Skeleton className="h-6 w-3/4" />
+
+            {/* Badge skeleton */}
+            <Skeleton className="h-5 w-24" />
+          </CardHeader>
+
+          <CardContent className="flex w-full flex-col items-center justify-center gap-4">
+            {/* Image skeleton */}
+            <Skeleton className="aspect-square w-full" />
+          </CardContent>
+
+          <CardFooter>
+            {/* Button skeleton */}
+            <Skeleton className="h-10 w-full" />
+          </CardFooter>
+        </Card>
+      ))}
+    </section>
+  )
+}
+
 const Inventory = ({ user }: InventoryProps) => {
   const queryClient = useQueryClient()
 
-  const { data: inventories } = useQuery({
+  const { data: inventories, isLoading } = useQuery({
     queryKey: ['user-inventory', user.id],
     queryFn: () => getInventoriesAndSkinsByUserId(),
   })
@@ -56,14 +85,18 @@ const Inventory = ({ user }: InventoryProps) => {
     },
   })
 
+  if (isLoading) {
+    return <InventorySkeleton />
+  }
+
   if (inventories === undefined) {
     return
   }
 
   return (
-    <section className="mx-auto flex w-full max-w-screen-2xl flex-wrap gap-8">
+    <section className="mx-auto grid w-full max-w-screen-2xl grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
       {inventories?.map((inventory) => (
-        <Card key={inventory.id} className="w-72">
+        <Card key={inventory.id} className="w-full md:w-72">
           <CardHeader className="space-y-4">
             <CardTitle>
               <h1>{inventory.skins?.name}</h1>
