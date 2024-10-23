@@ -14,7 +14,7 @@ const CtProblemSymbol: React.FC<CtProblemSymbolProps> = ({ category }) => {
           alt="Imagem de Carro"
           width={120}
           height={120}
-          className="aspect-square h-40 w-40 rounded-xl border bg-gradient-to-tr from-background to-primary/20"
+          className="aspect-square h-40 w-40 rounded-xl border bg-gradient-to-r from-background to-primary/20"
         />
       )
     }

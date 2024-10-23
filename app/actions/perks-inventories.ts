@@ -55,8 +55,9 @@ export async function getUserPerks() {
 
   const { data, error } = await supabase
     .from('perks_inventories')
-    .select('*, perks (*)')
+    .select('*, perks!inner (*)')
     .eq('profile_id', user.id)
+    .order('id')
 
   if (error) {
     throw new Error('O usuário não possui habilidades.')

@@ -23,6 +23,7 @@ import Coin from '@/components/icons/coin'
 import Star from '@/components/icons/star'
 import ProblemTopics from './problem-topics'
 import { Skeleton } from '@/components/ui/skeleton'
+import ProblemTimer from './problem-timer'
 
 interface EditorProps {
   userId: string
@@ -33,6 +34,7 @@ const CodePlayGroundSkeleton = () => {
     <main className="mx-auto my-20 flex w-full max-w-screen-2xl flex-col items-center gap-8">
       <header className="flex w-full items-center justify-center gap-4">
         <Skeleton className="h-8 w-36" />
+        <Skeleton className="h-8 w-8" />
         <Skeleton className="h-8 w-8" />
         <Skeleton className="h-8 w-8" />
         <Skeleton className="h-8 w-8" />
@@ -76,6 +78,7 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
 
   const hasUsedSpecialHint = usedPerks[1] || false
   // const hasUsedDoubleCoints = usedPerks[2] || false
+  const hasFrozenTimer = usedPerks[4] || false
 
   const handleEditorDidMount = (monaco: Monaco) => {
     monaco.editor.defineTheme('TokyoNightStorm', {
@@ -129,22 +132,32 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
 
   return (
     <main className="mx-auto my-20 flex w-full max-w-screen-2xl flex-col items-center gap-8">
-      <header className="flex w-full items-center justify-center gap-4">
-        <Button
-          disabled={prop?.isPending}
-          onClick={prop?.handleClick}
-          variant={'secondary'}
-        >
-          {prop?.isPending ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <>
-              <Play className="text-muted-foreground" />
-              <span className="ml-2 text-muted-foreground">Executar</span>
-            </>
-          )}
-        </Button>
-        <Perks userId={userId} />
+      <header className="flex w-full flex-col items-center justify-center gap-4 md:flex-row">
+        <ProblemTimer
+          userId={userId}
+          problemId={problem.id}
+          hasFrozenTimer={hasFrozenTimer}
+        />
+        <div className="flex w-full flex-col items-center gap-4 md:w-fit md:flex-row">
+          <Button
+            disabled={prop?.isPending}
+            onClick={prop?.handleClick}
+            variant={'secondary'}
+            className="w-full md:w-fit"
+          >
+            {prop?.isPending ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <>
+                <Play className="text-muted-foreground" />
+                <span className="ml-2 text-muted-foreground">Executar</span>
+              </>
+            )}
+          </Button>
+          <div className="flex items-center gap-4">
+            <Perks userId={userId} />
+          </div>
+        </div>
       </header>
       <div className="flex w-full flex-col justify-between gap-4 lg:flex-row">
         <aside className="w-full space-y-4">

@@ -69,17 +69,17 @@ const Perks = ({ userId }: PerksProps) => {
     <>
       {perksInventory?.map((perk) => (
         <AlertDialog
-          key={perk.id}
-          open={openDialogId === perk.id}
+          key={perk.perks.id}
+          open={openDialogId === perk.perks.id}
           onOpenChange={(isOpen) =>
-            isOpen ? openDialog(perk.id) : closeDialog()
+            isOpen ? openDialog(perk.perks.id) : closeDialog()
           }
         >
           <AlertDialogTrigger
-            onClick={() => openDialog(perk.id)}
+            onClick={() => openDialog(perk.perks.id)}
             disabled={
               !isPerkUsable({
-                perkId: perk.id,
+                perkId: perk.perks.id,
                 quantity: perk.quantity,
               })
             }

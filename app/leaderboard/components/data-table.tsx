@@ -52,8 +52,9 @@ export function DataTable<TData, TValue>({
   return (
     <div className="w-full space-y-8">
       <div className="flex w-full flex-col justify-between gap-8 md:flex-row md:items-center">
-        <p>
-          Você está na posição <strong>#{userPosition}</strong> do ranking
+        <p className="text-muted-foreground">
+          Você está na posição{' '}
+          <strong className="text-white">#{userPosition}</strong> do ranking
         </p>
         <div className="flex w-full flex-col gap-4 md:w-fit md:flex-row md:items-center">
           <Input
