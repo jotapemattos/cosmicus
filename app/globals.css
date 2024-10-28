@@ -44,6 +44,32 @@
     body {
       @apply bg-background text-foreground;
     }
+
+    ::selection {
+      @apply text-white;
+      background: #4F46E5;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 5px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+  }
   }
 
 .animate-bg-gradient-to-center-title {

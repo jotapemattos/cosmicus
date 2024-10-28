@@ -25,10 +25,10 @@ export default async function Page() {
         <div className="flex flex-col items-center justify-center gap-2 text-center text-7xl font-extrabold md:flex-row">
           <h1>Comece</h1>
           <div>
-            <span className="absolute box-content flex w-fit select-none border bg-gradient-to-r from-indigo-400 to-indigo-600 bg-clip-text py-4 text-center text-transparent blur-xl">
+            <span className="absolute box-content flex w-fit select-none border bg-gradient-to-r from-indigo-500 to-indigo-700 bg-clip-text py-4 text-center text-transparent blur-xl">
               sua jornada
             </span>
-            <span className="relative top-0 flex h-auto w-fit select-auto items-center justify-center bg-gradient-to-r from-indigo-400 to-indigo-600 bg-clip-text py-4 text-center   text-transparent">
+            <span className="relative top-0 flex h-auto w-fit select-auto items-center justify-center bg-gradient-to-r from-indigo-500 to-indigo-700 bg-clip-text py-4 text-center   text-transparent">
               sua jornada
             </span>
           </div>
@@ -44,7 +44,7 @@ export default async function Page() {
         </div>
         <div className=" flex flex-col items-center justify-center gap-12 md:flex-row">
           <CardContainer className="inter-var" href="/ct-problems">
-            <CardBody className="group/card relative h-auto w-auto rounded-xl border border-black/[0.1] bg-gradient-to-tr from-indigo-400 to-indigo-600 p-8">
+            <CardBody className="group/card relative h-auto w-auto rounded-xl border border-black/[0.1] bg-gradient-to-tr from-indigo-500 to-indigo-700 p-8">
               <CardItem translateZ="100" className="mt-4 w-full">
                 <Image
                   src="/3d-spaceship.png"
@@ -60,7 +60,7 @@ export default async function Page() {
             </CardBody>
           </CardContainer>
           <CardContainer className="inter-var" href="/code-problems">
-            <CardBody className="group/card relative h-auto w-auto rounded-xl border border-black/[0.1] bg-gradient-to-tr from-indigo-400 to-indigo-600 p-8">
+            <CardBody className="group/card relative h-auto w-auto rounded-xl border border-black/[0.1] bg-gradient-to-tr from-indigo-500 to-indigo-700 p-8">
               <CardItem translateZ="100" className="mt-4 w-full">
                 <Image
                   src="/3d-planet.png"

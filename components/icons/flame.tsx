@@ -16,8 +16,8 @@ const Flame: React.FC<FlameProps> = (props) => {
       {...props}
       src="/flame.png"
       alt="Imagem de estrela"
-      width={64}
-      height={64}
+      width={120}
+      height={120}
     />
   )
 }

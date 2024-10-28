@@ -105,7 +105,7 @@ const PerksShop = ({ user }: PerksShopProps) => {
       </div>
       <div className="lg:grix-cols-3 mx-auto flex grid w-full max-w-screen-2xl grid-cols-1 justify-between gap-12 md:grid-cols-2 2xl:grid-cols-4">
         {perks.map((perk) => (
-          <div key={perk.id} className="flex w-fit flex-col">
+          <div key={perk.id} className="flex w-fit flex-col gap-2">
             <Card
               className={cn('w-72', {
                 'opacity-50': perk.price! > profile.coins_amount,
@@ -160,10 +160,8 @@ const PerksShop = ({ user }: PerksShopProps) => {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <h3 className="self-center text-xl font-semibold">{perk.name}</h3>
-            <p className="max-w-72 text-center text-muted-foreground">
-              {perk.description}
-            </p>
+            <h3 className="text-xl font-semibold">{perk.name}</h3>
+            <p className="max-w-72 text-muted-foreground">{perk.description}</p>
           </div>
         ))}
       </div>

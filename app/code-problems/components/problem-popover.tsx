@@ -1,6 +1,5 @@
 import { Problem } from '@/db/custom-types'
 import { cn } from '@/lib/utils'
-import { Star } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
@@ -13,19 +12,22 @@ import { Button } from '@/components/ui/button'
 import DifficultyBadge from '@/components/ui/difficulty-badge'
 import Image from 'next/image'
 import Coin from '@/components/icons/coin'
+import { getPlanet } from '@/utils/get-planet'
+import Star from '@/components/icons/star'
+import { Badge } from '@/components/ui/badge'
 
 interface ProblemPopoverProps {
   problem: Problem
   lastProblemIdCompletedByUser: number
   currentProblemId: number
-  skinPicture: string
+  className?: string
 }
 
 const ProblemPopover = ({
   problem,
   lastProblemIdCompletedByUser,
   currentProblemId,
-  skinPicture,
+  className,
 }: ProblemPopoverProps) => {
   const isProblemAvailable =
     problem.id <= (lastProblemIdCompletedByUser as number) + 1
@@ -34,38 +36,47 @@ const ProblemPopover = ({
 
   const isProblemCompleted = (currentProblemId as number) > problem.id
 
+  const planet = getPlanet(problem.id)
+
   return (
-    <div className="flex flex-col items-center">
-      {isCurrentProblem && (
-        <Image
-          src={skinPicture}
-          alt="Imagem de Skin"
-          width={100}
-          height={100}
-          className="relative top-4"
-        />
-      )}
+    <div className="flex items-center gap-4">
       <Popover>
-        <PopoverTrigger
-          className={cn('w-fit rounded-full bg-sky-400 p-8', {
-            'bg-sky-950': isCurrentProblem,
-            'bg-green-500': isProblemCompleted,
-            grayscale: !isProblemAvailable,
-          })}
-        >
-          <Star className="fill-white stroke-white" />
+        <PopoverTrigger className={className}>
+          <div>
+            {isCurrentProblem && (
+              <div className="relative top-12 flex animate-bounce flex-col items-center">
+                <Badge className="text-md z-50 font-normal text-white hover:bg-primary">
+                  Começar
+                </Badge>
+                <div className="relative bottom-4 h-5 w-5 rotate-45 bg-primary" />
+              </div>
+            )}
+            <Image
+              src={planet}
+              alt={`imagem de Planeta`}
+              width={250}
+              height={250}
+              className={cn({
+                grayscale: !isProblemCompleted && !isCurrentProblem,
+              })}
+            />
+          </div>
         </PopoverTrigger>
         <PopoverContent
-          className={cn('space-y-8', {
+          className={cn('relative bottom-16 space-y-8', {
             grayscale: !isProblemAvailable,
           })}
         >
-          <div>
-            <h3 className="font-semibold">{problem.name}</h3>
-            <p className="text-sm">{problem.description}</p>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <h3 className="text-2xl font-bold">{problem.name}</h3>
+              <DifficultyBadge difficulty={problem.difficulty} />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {problem.description}
+            </p>
           </div>
           <div className="space-y-4">
-            <DifficultyBadge difficulty={problem.difficulty} />
             <div className="flex items-center gap-8">
               <div className="flex items-center gap-2">
                 <Coin />
@@ -76,6 +87,13 @@ const ProblemPopover = ({
                 {problem.experience_reward}
               </div>
             </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {problem.topics.map((item) => (
+              <Badge key={item} variant={'secondary'}>
+                {item}
+              </Badge>
+            ))}
           </div>
           <Button
             className={cn('w-full', {
