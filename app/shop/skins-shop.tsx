@@ -201,6 +201,7 @@ const SkinsShop = ({ user }: SkinsShopProps) => {
           inventory={inventoryItem}
           open={openBuyDialog}
           setOpen={setOpenBuyDialog}
+          userId={user.id}
         />
       )}
     </>
