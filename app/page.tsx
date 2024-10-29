@@ -1,3 +1,4 @@
+import About from '@/components/about'
 import {
   CardContainer,
   CardBody,
@@ -20,7 +21,7 @@ export default async function Page() {
     return redirect('/sign-in')
   }
   return (
-    <main className="min-h-screen w-screen">
+    <main className="min-h-screen w-screen py-12">
       <section className="mx-auto h-full max-w-screen-2xl space-y-12 pt-36">
         <div className="flex flex-col items-center justify-center gap-2 text-center text-7xl font-extrabold md:flex-row">
           <h1>Comece</h1>
@@ -34,7 +35,7 @@ export default async function Page() {
           </div>
         </div>
         <div className="mx-auto flex w-fit items-center gap-4">
-          <Button variant="outline">Sobre</Button>
+          <About />
           <Button asChild variant="outline">
             <Link href="/leaderboard">Ver Ranking</Link>
           </Button>
