@@ -39,7 +39,7 @@ const ProfileSkeleton = () => {
   ]
 
   return (
-    <main className="min-h-screen w-screen overflow-x-hidden p-4">
+    <main className="min-h-screen w-full overflow-x-hidden p-4">
       <section className="relative mx-auto my-24 w-full max-w-screen-2xl space-y-8">
         <div className="flex w-full flex-col items-center gap-8">
           <Skeleton className="h-48 w-48 rounded-full" />

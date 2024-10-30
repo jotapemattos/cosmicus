@@ -3,8 +3,16 @@ import Image from 'next/image'
 import NavLinks from './nav-links'
 import UserSection from './user-section'
 import MobileNav from './mobile-nav'
+import { CommandMenu } from './command-menu'
+import { createClient } from '@/utils/supabase/server'
 
 export default async function Header() {
+  const supabase = createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
   return (
     <header className="absolute top-0 flex w-full items-center justify-center border-b bg-background py-2">
       <nav className="mx-auto flex w-full max-w-screen-2xl items-center justify-between gap-4 px-2 md:px-0">
@@ -23,6 +31,8 @@ export default async function Header() {
             <NavLinks />
           </div>
         </div>
+
+        <CommandMenu user={user} />
 
         {/* Desktop User Section */}
         <div className="hidden items-center md:flex">

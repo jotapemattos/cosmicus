@@ -10,9 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Rocket } from 'lucide-react'
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
