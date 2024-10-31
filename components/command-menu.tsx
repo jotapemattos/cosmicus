@@ -10,6 +10,8 @@ import {
   CommandSeparator,
 } from '@/components/ui/command'
 import {
+  Code,
+  Gamepad2,
   LogOut,
   Medal,
   Shirt,
@@ -82,7 +84,7 @@ export function CommandMenu({ user }: CommandMenuProps) {
             <CommandItem asChild className="hover:cursor-pointer">
               <Link href="/completed-problems" onClick={() => setOpen(!open)}>
                 <Sword />
-                Desafios
+                Desafios realizados
               </Link>
             </CommandItem>
             <CommandItem asChild className="hover:cursor-pointer">
@@ -95,6 +97,21 @@ export function CommandMenu({ user }: CommandMenuProps) {
               <Link href="/shop" onClick={() => setOpen(!open)}>
                 <Store />
                 Loja
+              </Link>
+            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Áreas para explorar">
+            <CommandItem asChild className="hover:cursor-pointer">
+              <Link href="/code-problems" onClick={() => setOpen(!open)}>
+                <Code />
+                Laboratório de Códigos Espaciais
+              </Link>
+            </CommandItem>
+            <CommandItem asChild className="hover:cursor-pointer">
+              <Link href="/ct-problems" onClick={() => setOpen(!open)}>
+                <Gamepad2 />
+                Academia de Jogos Galácticos
               </Link>
             </CommandItem>
           </CommandGroup>
