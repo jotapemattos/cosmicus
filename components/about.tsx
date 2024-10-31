@@ -110,7 +110,7 @@ const About = () => {
       </Sheet>
       <Drawer>
         <DrawerTrigger className="flex md:hidden" asChild>
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="w-full gap-2">
             <Rocket className="h-4 w-4" />
             Sobre o Jogo
           </Button>

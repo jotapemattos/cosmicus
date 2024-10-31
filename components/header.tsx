@@ -15,7 +15,7 @@ export default async function Header() {
 
   return (
     <header className="absolute top-0 flex w-full items-center justify-center border-b bg-background py-2">
-      <nav className="mx-auto flex w-full max-w-screen-2xl items-center justify-between gap-4 px-2 md:px-0">
+      <nav className="mx-auto flex w-full items-center justify-between gap-4 px-2 md:max-w-screen-md md:px-0 lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <div className="flex items-center justify-between gap-4">
           <Link href={'/'}>
             <Image
