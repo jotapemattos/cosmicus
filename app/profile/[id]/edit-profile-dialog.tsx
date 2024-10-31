@@ -25,7 +25,8 @@ import { Textarea } from '@/components/ui/textarea'
 const usernameSchema = z.object({
   username: z
     .string()
-    .max(30, 'O nome do usuário não pode passar de 30 caracteres.'),
+    .max(30, 'O nome do usuário não pode passar de 30 caracteres.')
+    .min(3, 'O nome do usuário deve ter ao menos 3 caracteres.'),
   githubUrl: z
     .string()
     .url({ message: 'URL inválida.' })
