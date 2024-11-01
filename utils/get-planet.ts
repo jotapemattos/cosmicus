@@ -59,7 +59,15 @@ const planets = [
   pinkPlanet3,
   pinkPlanet4,
 ]
-export function getPlanet(index: number): string {
+export function getPlanet(index: number): { src: string; color: string } {
   const wrappedIndex = (index + 1) % planets.length
-  return planets[wrappedIndex].src
+
+  // Each color has 4 variants, so we can determine the color by dividing the index by 4
+  const colorIndex = Math.floor(wrappedIndex / 4)
+  const colors = ['blue', 'purple', 'green', 'yellow', 'red', 'pink']
+
+  return {
+    src: planets[wrappedIndex].src,
+    color: colors[colorIndex],
+  }
 }
