@@ -22,7 +22,7 @@ interface InventoryProps {
 
 const PerksInventorySkeleton = () => {
   return (
-    <section className="mx-auto grid w-full max-w-screen-2xl grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+    <section className="mx-auto grid w-full grid-cols-1 gap-8 md:max-w-screen-md md:grid-cols-2 lg:max-w-screen-lg xl:max-w-screen-xl xl:grid-cols-3 2xl:max-w-screen-2xl 2xl:grid-cols-4">
       {Array.from({ length: 8 }).map((_, index) => (
         <Card key={index} className="w-72">
           <CardHeader className="space-y-4">
@@ -66,9 +66,9 @@ const PerksInventory = ({ user }: InventoryProps) => {
   }
 
   return (
-    <section className="mx-auto w-full max-w-screen-2xl gap-8 space-y-10">
+    <section className="mx-auto w-full gap-8 space-y-10 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
       <h1 className="text-4xl font-extrabold">Habilidades Especiais</h1>
-      <div className="grid w-full max-w-screen-2xl grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {perks?.map((perk) => (
           <Card
             key={perk.id}

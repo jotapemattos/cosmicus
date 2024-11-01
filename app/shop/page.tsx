@@ -15,8 +15,8 @@ export default async function Page() {
     return redirect('/sign-in')
   }
   return (
-    <main className="h-full w-full space-y-10 py-32">
-      <div className="mx-auto mt-12 flex max-w-screen-2xl items-center gap-4">
+    <main className="h-full w-full space-y-10 px-4 py-32 md:px-0">
+      <div className="mx-auto mt-12 flex items-center gap-4 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <Shop />
         <h1 className="text-4xl font-extrabold">Loja</h1>
       </div>

@@ -14,9 +14,7 @@ interface CompletedProblemsProps {
 
 const CompletedProblemsSkeleton = () => {
   return (
-    <div className="mx-auto mt-36 max-w-screen-2xl space-y-4">
-      <Skeleton className="h-12 w-72" />
-      <Skeleton className="h-8 w-96" />
+    <div className="mx-auto mt-36 space-y-4 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
       {[...Array(10)].map((_, index) => (
         <Skeleton key={index} className="h-14 w-full" />
       ))}
@@ -72,13 +70,7 @@ const CompletedProblems = ({ userId }: CompletedProblemsProps) => {
 
   return (
     <>
-      <section className="mx-auto mt-36 max-w-screen-2xl space-y-4">
-        <h1 className="text-4xl font-extrabold">Desafios concluídos</h1>
-        <p className="text-muted-foreground">
-          Confira os desafios que você já completou e refaça-os se desejar.
-        </p>
-      </section>
-      <section className="mx-auto mt-36 max-w-screen-2xl space-y-4">
+      <section className="mx-auto mt-36 space-y-4 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         {submissions.map((submission) => (
           <Link
             href={`code-problems/${submission.problem_id}`}

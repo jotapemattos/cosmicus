@@ -76,11 +76,13 @@ export default function Page() {
   ]
 
   return (
-    <section className="mx-auto mt-36 flex w-full max-w-screen-2xl flex-col justify-center">
+    <section className="mx-auto mt-36 flex w-full flex-col justify-center p-4 md:max-w-screen-md md:p-0 lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
       {categories.map((category) => (
         <div key={category.pillar} className="my-16 space-y-5">
-          <h2 className="text-3xl font-bold">{category.pillar}</h2>
-          <div className="flex w-full flex-wrap items-center justify-start gap-12">
+          <h2 className="text-center text-3xl font-bold md:text-start">
+            {category.pillar}
+          </h2>
+          <div className="flex w-full flex-wrap items-center justify-center gap-12 md:justify-start">
             {category.categories.map((item) => (
               <CardContainer
                 className="inter-var"

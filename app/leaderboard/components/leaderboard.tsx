@@ -21,7 +21,7 @@ interface LeaderboardProps {
 }
 
 const LeaderboardSkeleton = () => (
-  <section className="mx-auto flex max-w-screen-2xl flex-col items-end gap-4">
+  <section className="mx-auto flex flex-col items-end gap-4 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
     <div className="w-full space-y-8">
       {/* Placeholder for search and filters */}
       <div className="flex w-full flex-col justify-between gap-8 md:flex-row md:items-center">
@@ -76,7 +76,7 @@ const Leaderboard = ({ user }: LeaderboardProps) => {
   const userPosition = positions[user.id] || null
 
   return (
-    <section className="mx-auto flex max-w-screen-2xl flex-col items-end gap-4">
+    <section className="mx-auto flex flex-col items-end gap-4 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
       <DataTable
         columns={columns}
         data={profiles}

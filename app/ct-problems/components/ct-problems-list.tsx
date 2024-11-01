@@ -56,7 +56,7 @@ const CtProblemsList: React.FC<CtProblemsListProps> = ({ category }) => {
 
   return (
     <Accordion
-      className="mx-auto my-32 max-w-screen-2xl space-y-2"
+      className="mx-auto my-32 space-y-2 md:max-w-screen-md md:p-0 lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl"
       type="single"
       collapsible
     >

@@ -17,9 +17,9 @@ const Page = async () => {
   }
   return (
     <main className="min-h-screen w-full space-y-24 p-4 py-32 lg:px-0">
-      <section className="mx-auto mt-12 max-w-screen-2xl flex-col space-y-4 md:flex-row">
+      <section className="mx-auto mt-12 flex-col space-y-4 md:max-w-screen-md md:flex-row lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <h1 className="text-4xl font-extrabold">Inventário</h1>
-        <div className="flex w-full flex-col items-center justify-between gap-4 md:flex-row">
+        <div className="flex w-full flex-col justify-between gap-4 md:flex-row md:items-center">
           <p className="text-muted-foreground">
             Aqui estão os itens atualmente disponíveis no seu{' '}
             <strong className="text-white">inventário</strong>.

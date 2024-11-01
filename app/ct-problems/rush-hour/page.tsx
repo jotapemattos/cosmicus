@@ -5,7 +5,7 @@ import CtProblemSymbol from '../components/ct-problem-symbol'
 const RushHourPage = () => {
   return (
     <main className="h-full w-full p-4 md:p-0">
-      <section className="mx-auto my-32 max-w-screen-2xl">
+      <section className="mx-auto my-32 md:max-w-screen-md md:p-0 lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <div className="flex flex-col gap-12 md:flex-row">
           <CtProblemSymbol category="rush-hour" />
           <div className="max-w-3xl space-y-4">

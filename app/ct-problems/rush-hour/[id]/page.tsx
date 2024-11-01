@@ -34,11 +34,11 @@ const RushHourPage = async ({ params: { id } }: RushHourPageProps) => {
   if (!initialVehicles) return notFound()
 
   return (
-    <div className="flex min-h-screen w-full max-w-screen-2xl flex-col items-center justify-center gap-16 bg-background">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center gap-16 bg-background md:max-w-screen-md md:p-0 lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
       <Alert className="w-fit">
         <Lightbulb className="h-4 w-4" />
         <AlertTitle>Dica</AlertTitle>
-        <AlertDescription className="flex">
+        <AlertDescription className="flex flex-col md:flex-row">
           Para mover um veículo, clique nele e use as setas (
           <span className="flex items-center text-primary">
             <ArrowBigDown /> <ArrowBigLeft /> <ArrowBigRight /> <ArrowBigUp />

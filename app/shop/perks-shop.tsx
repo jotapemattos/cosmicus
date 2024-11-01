@@ -82,7 +82,7 @@ const PerksShop = ({ user }: PerksShopProps) => {
 
   if (isLoading) {
     return (
-      <section className="mx-auto my-32 w-full max-w-screen-2xl space-y-10">
+      <section className="mx-auto my-32 w-full space-y-10 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <Skeleton className="mb-10 h-10 w-64" />
         <div className="lg:grix-cols-3 mx-auto flex grid w-full max-w-screen-2xl grid-cols-1 justify-between gap-12 md:grid-cols-2 2xl:grid-cols-4">
           {[...Array(4)].map((_, index) => (
@@ -98,12 +98,12 @@ const PerksShop = ({ user }: PerksShopProps) => {
   }
 
   return (
-    <section className="mx-auto my-32 w-full max-w-screen-2xl space-y-10">
-      <div className="flex items-center gap-2">
+    <section className="mx-auto my-32 w-full space-y-10 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+      <div className="flex flex-col items-center gap-2 text-center md:flex-row">
         <Rocket />
         <h1 className="text-4xl font-extrabold">Habilidades especiais</h1>
       </div>
-      <div className="lg:grix-cols-3 mx-auto flex grid w-full max-w-screen-2xl grid-cols-1 justify-between gap-12 md:grid-cols-2 2xl:grid-cols-4">
+      <div className="mx-auto grid w-full grid-cols-1 place-items-start justify-items-center gap-12 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
         {perks.map((perk) => (
           <div key={perk.id} className="flex w-fit flex-col gap-2">
             <Card

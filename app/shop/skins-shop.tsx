@@ -81,13 +81,13 @@ const SkinsShop = ({ user }: SkinsShopProps) => {
   if (isLoading) {
     return (
       <>
-        <div className="mx-auto max-w-screen-2xl">
+        <div className="mx-auto md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
           <div className="flex items-center gap-2">
             <Skeleton className="h-6 w-6" />
             <Skeleton className="h-6 w-16" />
           </div>
         </div>
-        <section className="lg:grix-cols-3 mx-auto flex grid w-full max-w-screen-2xl grid-cols-1 justify-between gap-12 md:grid-cols-2 2xl:grid-cols-4">
+        <section className="mx-auto flex grid w-full grid-cols-1 justify-between gap-12 sm:grid-cols-2 md:max-w-screen-md lg:max-w-screen-lg lg:grid-cols-3 xl:max-w-screen-xl 2xl:max-w-screen-2xl 2xl:grid-cols-4">
           {[...Array(8)].map((_, index) => (
             <SkeletonSkinItem key={index} />
           ))}
@@ -115,14 +115,14 @@ const SkinsShop = ({ user }: SkinsShopProps) => {
 
   return (
     <>
-      <div className="mx-auto max-w-screen-2xl">
+      <div className="mx-auto md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <div className="flex items-center gap-2">
           <span className="sr-only">Seu dinheiro:</span>
           <Coin />
           <p>{profile.coins_amount}</p>
         </div>
       </div>
-      <section className="lg:grix-cols-3 mx-auto flex grid w-full max-w-screen-2xl grid-cols-1 justify-between gap-12 md:grid-cols-2 2xl:grid-cols-4">
+      <section className="mx-auto grid w-full grid-cols-1 place-items-center gap-12 sm:grid-cols-2 md:max-w-screen-md md:place-items-start lg:max-w-screen-lg lg:grid-cols-3 xl:max-w-screen-xl 2xl:max-w-screen-2xl 2xl:grid-cols-4">
         {skins.map((skin) => (
           <div key={skin.id} className="flex w-fit flex-col">
             <Card

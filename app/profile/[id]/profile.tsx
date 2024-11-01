@@ -40,7 +40,7 @@ const ProfileSkeleton = () => {
 
   return (
     <main className="min-h-screen w-full overflow-x-hidden p-4">
-      <section className="relative mx-auto my-24 w-full max-w-screen-2xl space-y-8">
+      <section className="relative mx-auto my-24 w-full space-y-8 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <div className="flex w-full flex-col items-center gap-8">
           <Skeleton className="h-48 w-48 rounded-full" />
           <Skeleton className="h-8 w-48" />
@@ -178,15 +178,15 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
       header: (
         <div className="flex h-full w-full items-center justify-center text-center text-muted-foreground">
           <Image
-            src="/trophy.png"
-            alt="Imagem de Troféu"
+            src="/flame.png"
+            alt="Imagem de Fogo"
             width={120}
             height={120}
             className="aspect-square h-40 w-40 transition-all duration-300 group-hover/bento:scale-110"
           />
         </div>
       ),
-      className: 'bg-gradient-to-tr from-background to-primary/10',
+      className: 'bg-gradient-to-tr from-background to-orange-500/10',
     },
     {
       title: 'Carteira',
@@ -240,12 +240,12 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
   return (
     <main className="min-h-screen w-full overflow-x-hidden p-4">
       {userOwnsProfile && (
-        <section className="relative mx-auto my-24 flex w-full max-w-screen-2xl items-center justify-end gap-4">
+        <section className="relative mx-auto my-24 flex w-full items-center justify-end gap-4 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
           <EditProfileDialog id={profileId} />
           <DeleteProfileDialog />
         </section>
       )}
-      <section className="relative mx-auto my-24 w-full max-w-screen-2xl space-y-8">
+      <section className="relative mx-auto my-24 w-full space-y-8 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <div className="flex w-full flex-col items-center gap-8">
           <Avatar className="group size-48">
             <AvatarImage src={profile?.picture ?? undefined} />
