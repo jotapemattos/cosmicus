@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
 import Link from 'next/link'
 import React, {
   createContext,
@@ -37,12 +38,12 @@ export const CardContainer = ({
     containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`
   }
 
-  const handleMouseEnter = () => {
-    if (!containerRef.current) return
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsMouseEntered(true)
+    if (!containerRef.current) return
   }
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return
     setIsMouseEntered(false)
     containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`
@@ -119,14 +120,13 @@ export const CardItem = ({
   rotateX?: number | string
   rotateY?: number | string
   rotateZ?: number | string
-  [key: string]: unknown
+  [key: string]: any
 }) => {
   const ref = useRef<HTMLDivElement>(null)
   const [isMouseEntered] = useMouseEnter()
 
   useEffect(() => {
     handleAnimations()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMouseEntered])
 
   const handleAnimations = () => {
