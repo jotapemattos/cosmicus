@@ -241,7 +241,7 @@ export default function SignUp() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Criando...</span>
+                      <span className="ml-2">Criando...</span>
                     </>
                   ) : (
                     <span>Criar conta</span>
