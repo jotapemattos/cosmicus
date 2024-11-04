@@ -30,6 +30,7 @@ export default function TypingAnimation({
     return () => {
       clearInterval(typingEffect)
     }
+    // eslint-disable-next-line
   }, [duration, i])
 
   return (

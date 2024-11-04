@@ -26,6 +26,7 @@ export function useSoundEffects(): SoundEffects {
       startTime = 0,
       gainValue = 0.2,
       gainAttack = 0.01,
+      // eslint-disable-next-line
       gainRelease = 0.1,
     ) => {
       const audioContext = createAudioContext()
@@ -37,7 +38,6 @@ export function useSoundEffects(): SoundEffects {
       const safeStartTime = Math.max(0, currentTime + startTime)
       const safeDuration = Math.max(0.01, duration)
       const safeAttack = Math.max(0.01, gainAttack)
-      const safeRelease = Math.max(0.01, gainRelease)
 
       oscillator.type = type
       oscillator.frequency.setValueAtTime(frequency, safeStartTime)
@@ -79,8 +79,6 @@ export function useSoundEffects(): SoundEffects {
   }, [playTone])
 
   const playCelebration = useCallback(() => {
-    const audioContext = createAudioContext()
-    const startTime = audioContext.currentTime
     const baseDuration = 2.5
 
     // Fanfare theme - Main melody (brass-like)
@@ -159,12 +157,10 @@ export function useSoundEffects(): SoundEffects {
         playTone(freq, 0.8, type as OscillatorType, 0, 0.1, 0.05, 0.4)
       })
     }, finalChordDelay * 1000)
+    // eslint-disable-next-line
   }, [playTone, createAudioContext])
 
   const playPurchase = useCallback(() => {
-    const audioContext = createAudioContext()
-    const currentTime = audioContext.currentTime
-
     // Enhanced metallic sound function with more parameters
     const playMetallicSound = (
       baseFreq: number,
@@ -287,6 +283,7 @@ export function useSoundEffects(): SoundEffects {
         )
       }
     }, 900)
+    // eslint-disable-next-line
   }, [playTone, createAudioContext])
 
   return { playSuccess, playError, playClick, playCelebration, playPurchase }

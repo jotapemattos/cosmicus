@@ -95,7 +95,7 @@ const CtProblemsList: React.FC<CtProblemsListProps> = ({ category }) => {
               <Star />
               {item.experience_reward}
             </div>
-            <Button asChild variant={'accent'} className="w-fit">
+            <Button asChild className="w-fit">
               <Link href={`/ct-problems/${item.category}/${item.id}`}>
                 Começar
               </Link>

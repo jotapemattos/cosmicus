@@ -60,6 +60,7 @@ export function UsePerks({ userId, problemId }: UsePerksProps) {
       })
       setUsedPerks((prev) => ({ ...prev, ...initialUsedPerks }))
     }
+    // eslint-disable-next-line
   }, [perksInventory])
 
   const { mutateAsync: decreaseUserPerksQuantityFn } = useMutation({

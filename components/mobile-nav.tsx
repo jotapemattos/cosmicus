@@ -22,7 +22,7 @@ const MobileNav: React.FC<MobileNavProps> = ({ children }) => {
           <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className='w-full overflow-y-scroll'>
+      <SheetContent side="left" className="w-full overflow-y-scroll">
         <SheetTitle>
           <Button asChild variant={'ghost'} onClick={() => setOpen(false)}>
             <Link href={'/'}>

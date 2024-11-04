@@ -9,7 +9,7 @@ const UserSection = async () => {
     data: { user },
   } = await supabase.auth.getUser()
   return user ? (
-    <div className="flex items-center gap-4 flex-col sm:flex-row md:items-center">
+    <div className="flex flex-col items-center gap-4 sm:flex-row md:items-center">
       <UserLevel user={user} />
       <UserNav user={user} />
     </div>
