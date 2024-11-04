@@ -72,7 +72,7 @@ export default function SignIn() {
             height={1024}
             className="aspect-square size-12 object-contain"
           />
-          <h3 className="text-xl font-bold">Name</h3>
+          <h3 className="font-serif text-4xl font-bold italic">Cosmicus</h3>
         </div>
         <Image
           src="/login.png"
@@ -82,14 +82,14 @@ export default function SignIn() {
           className="aspect-square h-[500px] w-fit self-center"
         />
       </div>
-      <div className="flex items-center justify-center lg:w-1/2">
-        <Card className="mx-auto h-[500px] w-full max-w-md">
+      <div className="flex w-full items-center justify-center lg:w-1/2">
+        <Card className="mx-auto h-fit w-full max-w-md">
           <CardHeader>
             <CardTitle>Continue sua jornada!</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                 <GithubAuthButton />
                 <GoogleAuthButton />
               </div>
@@ -175,11 +175,11 @@ export default function SignIn() {
               <p className="bg-muted p-4 text-center text-sm">{message}</p>
             )}
           </CardContent>
-          <CardFooter className="flex items-center justify-center">
+          <CardFooter className="flex items-center justify-center gap-1">
             <p className="text-sm">Não possui uma conta?</p>
             <Button
               variant="link"
-              className="text-sm font-bold text-white"
+              className="p-0 text-sm font-bold text-white"
               asChild
             >
               <Link href="/sign-up">Criar agora</Link>
