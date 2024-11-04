@@ -27,7 +27,7 @@ export default async function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden items-center gap-4 md:flex">
+          <div className="hidden items-center gap-4 lg:flex">
             <NavLinks />
           </div>
         </div>
@@ -35,12 +35,12 @@ export default async function Header() {
         <CommandMenu user={user} />
 
         {/* Desktop User Section */}
-        <div className="hidden items-center md:flex">
+        <div className="hidden items-center lg:flex">
           <UserSection />
         </div>
 
         {/* Mobile Menu */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <MobileNav>
             <div className="border-t py-4">
               <UserSection />
