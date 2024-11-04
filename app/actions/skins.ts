@@ -46,6 +46,7 @@ export async function getUserSkin() {
     .single()
 
   if (error) {
+    // skin default eh apresentada
     console.log('Não foi possivel encontrar o item')
   }
 
