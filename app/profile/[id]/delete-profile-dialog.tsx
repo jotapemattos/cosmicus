@@ -41,7 +41,7 @@ const DeleteProfileDialog = () => {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant={'destructive'} size={'icon'} className="p-2">
-          <Trash2 />
+          <Trash2 className="size-5" />
           <span className="sr-only">Excluir Conta</span>
         </Button>
       </AlertDialogTrigger>
