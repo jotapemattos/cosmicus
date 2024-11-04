@@ -109,7 +109,7 @@ const EditProfileDialog = ({ id }: { id: string }) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size={'icon'} variant={'outline'} className="p-2">
-          <SquarePen className="size-5" />
+          <SquarePen />
           <span className="sr-only">Editar pefil</span>
         </Button>
       </DialogTrigger>
