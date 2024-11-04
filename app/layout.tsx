@@ -5,12 +5,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { ReactQueryClientProvider } from '@/components/react-query-client-provider'
 import { createClient } from '@/utils/supabase/server'
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000'
-
 export const metadata = {
-  metadataBase: new URL(defaultUrl),
   title: 'Cosmicus',
   description: '',
   icons: {
