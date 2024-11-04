@@ -26,7 +26,7 @@ export function useSoundEffects(): SoundEffects {
       startTime = 0,
       gainValue = 0.2,
       gainAttack = 0.01,
-      gainRelease = 0.1,
+      // gainRelease = 0.1,
     ) => {
       const audioContext = createAudioContext()
       const currentTime = audioContext.currentTime
@@ -37,7 +37,7 @@ export function useSoundEffects(): SoundEffects {
       const safeStartTime = Math.max(0, currentTime + startTime)
       const safeDuration = Math.max(0.01, duration)
       const safeAttack = Math.max(0.01, gainAttack)
-      const safeRelease = Math.max(0.01, gainRelease)
+      // const safeRelease = Math.max(0.01, gainRelease)
 
       oscillator.type = type
       oscillator.frequency.setValueAtTime(frequency, safeStartTime)
@@ -79,8 +79,8 @@ export function useSoundEffects(): SoundEffects {
   }, [playTone])
 
   const playCelebration = useCallback(() => {
-    const audioContext = createAudioContext()
-    const startTime = audioContext.currentTime
+    // const audioContext = createAudioContext()
+    // const startTime = audioContext.currentTime
     const baseDuration = 2.5
 
     // Fanfare theme - Main melody (brass-like)
@@ -94,9 +94,9 @@ export function useSoundEffects(): SoundEffects {
     // Play fanfare with "brass" sound
     fanfare.forEach((note) => {
       // Main brass sound
-      playTone(note.freq, note.duration, 'sawtooth', note.time, 0.15, 0.05, 0.1)
+      playTone(note.freq, note.duration, 'sawtooth', note.time, 0.15, 0.05)
       // Layered square wave for richness
-      playTone(note.freq, note.duration, 'square', note.time, 0.08, 0.05, 0.1)
+      playTone(note.freq, note.duration, 'square', note.time, 0.08, 0.05)
     })
 
     // Orchestral sustain (strings-like pad)
@@ -109,12 +109,12 @@ export function useSoundEffects(): SoundEffects {
 
     // Layer string-like pads
     chordNotes.forEach((freq) => {
-      playTone(freq, baseDuration, 'sine', 0.8, 0.08, 0.4, 0.8)
+      playTone(freq, baseDuration, 'sine', 0.8, 0.08, 0.4)
     })
 
     // Timpani-like bass hits
-    playTone(130.81, 0.5, 'sine', 0, 0.3, 0.01, 0.3) // C3
-    playTone(130.81, 0.5, 'sine', 1.2, 0.3, 0.01, 0.3) // C3
+    playTone(130.81, 0.5, 'sine', 0, 0.3, 0.01) // C3
+    playTone(130.81, 0.5, 'sine', 1.2, 0.3, 0.01) // C3
 
     // Cymbal-like crescendo
     for (let i = 0; i < 8; i++) {
@@ -138,7 +138,6 @@ export function useSoundEffects(): SoundEffects {
         sparkleTime,
         0.03,
         0.01,
-        0.1,
       )
     }
 
@@ -156,15 +155,12 @@ export function useSoundEffects(): SoundEffects {
       ]
 
       finalChordNotes.forEach(({ freq, type }) => {
-        playTone(freq, 0.8, type as OscillatorType, 0, 0.1, 0.05, 0.4)
+        playTone(freq, 0.8, type as OscillatorType, 0, 0.1, 0.05)
       })
     }, finalChordDelay * 1000)
-  }, [playTone, createAudioContext])
+  }, [playTone])
 
   const playPurchase = useCallback(() => {
-    const audioContext = createAudioContext()
-    const currentTime = audioContext.currentTime
-
     // Enhanced metallic sound function with more parameters
     const playMetallicSound = (
       baseFreq: number,
@@ -173,7 +169,7 @@ export function useSoundEffects(): SoundEffects {
       gainValue: number = 0.3,
     ) => {
       // Main tone with longer sustain
-      playTone(baseFreq, duration, 'triangle', startTime, gainValue, 0.01, 0.1)
+      playTone(baseFreq, duration, 'triangle', startTime, gainValue, 0.01)
 
       // Rich metallic overtones
       const overtones = [1.5, 2, 2.5, 3, 4.16, 5.43, 6.79]
@@ -185,14 +181,13 @@ export function useSoundEffects(): SoundEffects {
           startTime,
           (gainValue * 0.15) / (i + 1),
           0.01,
-          0.08,
         )
       })
     }
 
     // Initial dramatic swoosh
     for (let i = 0; i < 8; i++) {
-      playTone(2000 - i * 200, 0.1, 'sine', i * 0.02, 0.05, 0.01, 0.05)
+      playTone(2000 - i * 200, 0.1, 'sine', i * 0.02, 0.05, 0.01)
     }
 
     // Sequence of epic coin sounds
@@ -206,18 +201,10 @@ export function useSoundEffects(): SoundEffects {
       const frequency = 3000 + Math.random() * 2000
 
       // Main sparkle
-      playTone(frequency, 0.15, 'sine', sparkleTime, 0.04, 0.01, 0.1)
+      playTone(frequency, 0.15, 'sine', sparkleTime, 0.04, 0.01)
 
       // Sparkle echo
-      playTone(
-        frequency * 1.5,
-        0.1,
-        'sine',
-        sparkleTime + 0.05,
-        0.02,
-        0.01,
-        0.05,
-      )
+      playTone(frequency * 1.5, 0.1, 'sine', sparkleTime + 0.05, 0.02, 0.01)
     }
 
     // Triumphant chord progression
@@ -242,13 +229,13 @@ export function useSoundEffects(): SoundEffects {
 
       // Play first chord
       chordProgression[0].forEach(({ freq, type }) => {
-        playTone(freq, 0.3, type as OscillatorType, 0, 0.12, 0.05, 0.2)
+        playTone(freq, 0.3, type as OscillatorType, 0, 0.12, 0.05)
       })
 
       // Play resolution chord
       setTimeout(() => {
         chordProgression[1].forEach(({ freq, type }) => {
-          playTone(freq, 0.5, type as OscillatorType, 0, 0.15, 0.05, 0.3)
+          playTone(freq, 0.5, type as OscillatorType, 0, 0.15, 0.05)
         })
 
         // Add bass note for extra richness
@@ -259,7 +246,6 @@ export function useSoundEffects(): SoundEffects {
           0,
           0.2,
           0.05,
-          0.3,
         )
       }, 300)
     }, 400)
@@ -268,7 +254,7 @@ export function useSoundEffects(): SoundEffects {
     setTimeout(() => {
       for (let i = 0; i < 8; i++) {
         const freq = 1000 + i * 200
-        playTone(freq, 0.1, 'sine', i * 0.02, 0.04, 0.01, 0.05)
+        playTone(freq, 0.1, 'sine', i * 0.02, 0.04, 0.01)
       }
     }, 700)
 
@@ -283,11 +269,10 @@ export function useSoundEffects(): SoundEffects {
           sparkleTime,
           0.05,
           0.01,
-          0.1,
         )
       }
     }, 900)
-  }, [playTone, createAudioContext])
+  }, [playTone])
 
   return { playSuccess, playError, playClick, playCelebration, playPurchase }
 }
