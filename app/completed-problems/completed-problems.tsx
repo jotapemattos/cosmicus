@@ -34,7 +34,7 @@ const CompletedProblems = ({ userId }: CompletedProblemsProps) => {
 
   if (submissions === undefined || submissions.length === 0)
     return (
-      <main className="flex h-screen w-full flex-col items-center justify-center gap-8 gap-8 py-12">
+      <main className="flex w-full flex-col items-center justify-center gap-8 gap-8 py-12">
         <div>
           <div className="m-auto flex w-[300px] gap-4 rounded-3xl border bg-white bg-opacity-[.03] p-2 text-card-foreground shadow-sm backdrop-blur-xl backdrop-filter md:m-0">
             <div className="h-16 w-16 flex-none rounded-2xl  bg-white bg-opacity-5 bg-opacity-5"></div>

@@ -118,8 +118,10 @@ const SkinsShop = ({ user }: SkinsShopProps) => {
       <div className="mx-auto md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
         <div className="flex items-center gap-2">
           <span className="sr-only">Seu dinheiro:</span>
-          <Coin />
-          <p>{profile.coins_amount}</p>
+          <p className="donate-btn relative flex items-center gap-2 overflow-hidden rounded-md border border-[#bea74b66] bg-[#eed15f]/90 px-6 py-px text-amber-950 duration-300">
+            <Coin />
+            {profile.coins_amount}
+          </p>
         </div>
       </div>
       <section className="mx-auto grid w-full grid-cols-1 place-items-center gap-12 sm:grid-cols-2 md:max-w-screen-md md:place-items-start lg:max-w-screen-lg lg:grid-cols-3 xl:max-w-screen-xl 2xl:max-w-screen-2xl 2xl:grid-cols-4">
@@ -153,7 +155,7 @@ const SkinsShop = ({ user }: SkinsShopProps) => {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button
-                    className="relative bottom-6 w-fit self-center border-primary"
+                    className="donate-btn relative bottom-6 w-fit self-center overflow-hidden border-primary"
                     disabled={skin.price! > profile.coins_amount}
                     variant={'outline'}
                   >

@@ -81,3 +81,31 @@
     background-position: center;
   }
 }
+
+.donate-btn:before {
+  content: '';
+  background: #ffffff80;
+  filter: blur(8px);
+  width: 150%;
+  height: 1rem;
+  position: absolute;
+  top: 50%;
+  transform: rotate(-30deg) translateX(-100%) translateY(-25%);
+  opacity: 0;
+  animation: shimmer 1.69s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    opacity: 1;
+    transform: translateX(-100%) translateY(0rem) rotate(-30deg);
+  }
+  42% {
+    opacity: 1;
+    transform: translateX(0%) translateY(0rem) rotate(-30deg);
+  }
+  69% {
+    opacity: 0;
+    transform: translateX(100%) translateY(-1rem) rotate(-30deg);
+  }
+}
