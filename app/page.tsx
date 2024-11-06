@@ -18,7 +18,7 @@ export default async function Page() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return redirect('/sign-in')
+    return redirect('/login')
   }
   return (
     <main className="min-h-screen w-screen p-4 py-12 md:px-0">

@@ -11,7 +11,7 @@ const Page = async ({ params: { id } }: { params: { id: string } }) => {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return redirect('/sign-in')
+    return redirect('/login')
   }
 
   return <Profile profileId={id} currentUserId={user.id} />

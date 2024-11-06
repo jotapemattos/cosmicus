@@ -13,7 +13,7 @@ const Page = async () => {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return redirect('/sign-in')
+    return redirect('/login')
   }
   return (
     <main className="min-h-screen w-full space-y-24 p-4 py-32 lg:px-0">
