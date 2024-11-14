@@ -4,7 +4,7 @@ import {
   hasCompletedProblem,
 } from '@/app/actions/submissions'
 import { Problem, TestCase } from '@/db/custom-types'
-import { UseMutateAsyncFunction } from '@tanstack/react-query'
+import { UseMutateAsyncFunction, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 import { useSoundEffects } from './use-sound-effects'
@@ -48,6 +48,7 @@ export default function useCodePlayground({
   createSubmissionFn,
   updateSubmissionFn,
   usedPerks,
+  userId,
 }: UseCodePlaygroundProps) {
   const [code, setCode] = useState('')
   const [isPending, startTransition] = useTransition()
@@ -58,6 +59,7 @@ export default function useCodePlayground({
   const [hasCompleted, setHasCompleted] = useState(false)
   const [isFirstTry, setIsFirstTry] = useState(true)
   const { playSuccess, playError, playClick } = useSoundEffects() // Add this line
+  const queryClient = useQueryClient()
 
   const handleOnChange = (value?: string) => {
     setCode(value || '')
@@ -95,6 +97,9 @@ export default function useCodePlayground({
         if (createdSubmisstion) {
           setHasCompleted(true)
           playSuccess() // Add success sound
+          queryClient.invalidateQueries({
+            queryKey: ['submissions', problem.id, userId],
+          })
         }
       } catch (error) {
         playError() // Add error sound
