@@ -3,7 +3,7 @@ interface GetUserLevelProps {
 }
 
 export const getUserLevel = ({ experiencePoints }: GetUserLevelProps) => {
-  let level = 1
+  let level = 1 // start level
   let xpForNextLevel = 250 // Increased base XP requirement
   const baseGrowthFactor = 1.15 // Steeper base growth factor
 
