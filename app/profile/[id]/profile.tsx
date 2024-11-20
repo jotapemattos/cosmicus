@@ -249,13 +249,15 @@ const Profile = ({ profileId, currentUserId }: ProfileProps) => {
         <div className="flex w-full flex-col items-center gap-8">
           <Avatar className="group size-48">
             <AvatarImage src={profile?.picture ?? undefined} />
-            <span className="absolute hidden h-full w-full items-center justify-center bg-zinc-900/50 p-1 text-center text-sm font-bold text-zinc-100 transition-all duration-300 group-hover:flex group-hover:cursor-pointer">
-              <ChangeProfilePicDialog
-                id={profileId}
-                profilePicture={profile?.picture ?? null}
-                profilePictureFileName={profile?.picture_filename ?? null}
-              />
-            </span>
+            {userOwnsProfile && (
+              <span className="absolute hidden h-full w-full items-center justify-center bg-zinc-900/50 p-1 text-center text-sm font-bold text-zinc-100 transition-all duration-300 group-hover:flex group-hover:cursor-pointer">
+                <ChangeProfilePicDialog
+                  id={profileId}
+                  profilePicture={profile?.picture ?? null}
+                  profilePictureFileName={profile?.picture_filename ?? null}
+                />
+              </span>
+            )}
             <AvatarFallback>
               {profile?.username?.substring(0, 2).toUpperCase()}
             </AvatarFallback>
