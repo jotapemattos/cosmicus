@@ -18,10 +18,6 @@ import Link from 'next/link'
 import Coin from '@/components/icons/coin'
 import { useSoundEffects } from '@/hooks/use-sound-effects'
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import Flame from '@/components/icons/flame'
-import { BorderBeam } from '@/components/magic-ui/border-beam'
-
 interface ProblemCompletedDialogProps {
   problemId: number
 }
@@ -100,27 +96,6 @@ const ProblemCompletedDialog = ({ problemId }: ProblemCompletedDialogProps) => {
             </h2>
           </div>
         </div>
-        {profile?.streak !== undefined && profile?.streak >= 3 && (
-          <Alert className="relative w-full">
-            <div className="p-2">
-              <div className="flex w-full items-center justify-between">
-                <AlertTitle>Continue assim!</AlertTitle>
-                <Flame className="size-12" />
-              </div>
-              <AlertDescription>
-                Você está em uma sequência estelar de {profile.streak} missões
-                concluídas! Continue assim e conquiste o universo!
-              </AlertDescription>
-            </div>
-            <BorderBeam
-              size={250}
-              duration={12}
-              delay={9}
-              colorFrom="#ff5c00"
-              colorTo="#f00"
-            />
-          </Alert>
-        )}
         <div className="flex w-full items-center justify-between gap-4">
           <Button asChild variant={'secondary'}>
             <Link href="/code-problems">Voltar para o mapa</Link>

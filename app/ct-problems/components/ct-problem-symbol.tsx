@@ -12,8 +12,30 @@ const CtProblemSymbol: React.FC<CtProblemSymbolProps> = ({ category }) => {
         <Image
           src="/car.png"
           alt="Imagem de Carro"
-          width={120}
-          height={120}
+          width={500}
+          height={500}
+          className="aspect-square h-40 w-40 rounded-xl border bg-gradient-to-r from-background to-primary/20"
+        />
+      )
+    }
+    case 'space-mission-planner': {
+      return (
+        <Image
+          src="/clipboard.png"
+          alt="Imagem de uma prancheta"
+          width={500}
+          height={500}
+          className="aspect-square h-40 w-40 rounded-xl border bg-gradient-to-r from-background to-primary/20"
+        />
+      )
+    }
+    case 'space-resource-management': {
+      return (
+        <Image
+          src="/numbers-soup.png"
+          alt="Imagem de uma sopa de numeros"
+          width={500}
+          height={500}
           className="aspect-square h-40 w-40 rounded-xl border bg-gradient-to-r from-background to-primary/20"
         />
       )

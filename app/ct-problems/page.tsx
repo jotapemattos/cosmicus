@@ -31,35 +31,15 @@ export default function Page() {
           image: '/car.png',
           name: 'Hora do Rush',
         },
-        {
-          href: 'rush-hour',
-          image: '/car.png',
-          name: 'Hora do Rush',
-        },
-        {
-          href: 'rush-hour',
-          image: '/car.png',
-          name: 'Hora do Rush',
-        },
-        {
-          href: 'rush-hour',
-          image: '/car.png',
-          name: 'Hora do Rush',
-        },
-        {
-          href: 'rush-hour',
-          image: '/car.png',
-          name: 'Hora do Rush',
-        },
       ],
     },
     {
       pillar: 'Decomposição de Problemas',
       categories: [
         {
-          href: 'rush-hour',
-          image: '/car.png',
-          name: 'Hora do Rush',
+          href: 'space-mission-planner',
+          image: '/clipboard.png',
+          name: 'Planejador de missão espacial',
         },
       ],
     },
@@ -67,25 +47,37 @@ export default function Page() {
       pillar: 'Abstração',
       categories: [
         {
-          href: 'rush-hour',
-          image: '/car.png',
-          name: 'Hora do Rush',
+          href: 'space-resource-management',
+          image: '/numbers-soup.png',
+          name: 'Gerenciamento de material espacial',
         },
       ],
     },
   ]
 
   return (
-    <section className="mx-auto mt-36 flex w-full flex-col justify-center p-4 md:max-w-screen-md md:p-0 lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+    <section className="mx-auto mt-24 flex w-full flex-col justify-center p-4 md:max-w-screen-md md:p-0 lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl">
+      <div className="space-y-4">
+        <h1 className="text-4xl font-bold">Academia de Jogos Galácticos</h1>
+        <p className="text-muted-foreground md:max-w-[600px]">
+          Enfrente desafios de{' '}
+          <strong className="text-white">
+            Reconhecimento de Padrões, Abstração e Decomposição de Problemas{' '}
+          </strong>{' '}
+          para desenvolver seu raciocínio como tripulante. Cada problema é uma
+          nova missão que coloca suas capacidades à prova e o aproxima de se
+          tornar um verdadeiro mestre em comandar uma nave espacial!
+        </p>
+      </div>
       {categories.map((category) => (
-        <div key={category.pillar} className="my-16 space-y-5">
-          <h2 className="text-center text-3xl font-bold md:text-start">
+        <div key={category.pillar} className="my-10 space-y-5">
+          <h2 className="text-center text-3xl font-medium md:text-start">
             {category.pillar}
           </h2>
           <div className="flex w-full flex-wrap items-center justify-center gap-12 md:justify-start">
             {category.categories.map((item) => (
               <CardContainer
-                className="inter-var"
+                className="inter-var max-w-72"
                 href={`/ct-problems/${item.href}`}
                 key={item.name}
               >
@@ -101,7 +93,9 @@ export default function Page() {
                       />
                     </CardItem>
                     <CardItem translateZ="100" className="mx-auto mt-4">
-                      <h2 className="text-2xl font-bold">{item.name}</h2>
+                      <h2 className="text-wrap text-2xl font-bold">
+                        {item.name}
+                      </h2>
                     </CardItem>
                   </CardBody>
                 </div>
