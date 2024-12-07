@@ -1,6 +1,6 @@
 'use client'
 
-import TokyoNightStorm from '@/utils/editor-themes/tokyo-night-storm.json'
+// import dracula from '@/utils/editor-themes/dracula.json'
 import { Editor, type Monaco } from '@monaco-editor/react'
 import { Button } from '../../../../components/ui/button'
 import { Loader2, Play } from 'lucide-react'
@@ -24,6 +24,9 @@ import Star from '@/components/icons/star'
 import ProblemTopics from './problem-topics'
 import { Skeleton } from '@/components/ui/skeleton'
 import ProblemTimer from './problem-timer'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { dracula as draculaSyntax } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import dracula from '@/utils/editor-themes/dracula.json'
 
 interface EditorProps {
   userId: string
@@ -81,12 +84,21 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
   const hasFrozenTimer = usedPerks[4] || false
 
   const handleEditorDidMount = (monaco: Monaco) => {
-    monaco.editor.defineTheme('TokyoNightStorm', {
-      base: 'vs-dark',
+    monaco.editor.defineTheme('Dracula', {
+      base: 'vs-dark', // Use one of the built-in base themes
       inherit: true,
-      ...TokyoNightStorm,
-      rules: [],
+      rules: [
+        // Your custom color rules from the dracula.json
+        ...dracula.rules.map((rule) => ({
+          token: rule.token,
+          foreground: rule.foreground,
+          background: rule.background,
+          fontStyle: rule.fontStyle,
+        })),
+      ],
+      colors: dracula.colors,
     })
+    monaco.editor.setTheme('Dracula')
   }
 
   const { data: problem, isLoading: isProblemLoading } = useQuery({
@@ -198,20 +210,20 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
           )}
           <div>
             <h3 className="text-md font-bold">Dica</h3>
-            <div
+            {/* <div
               dangerouslySetInnerHTML={{ __html: problem.hint as string }}
               className="prose max-w-2/3 leading-10 text-muted-foreground prose-code:rounded-md prose-code:bg-secondary prose-code:p-2 prose-code:text-sm prose-code:text-violet-500"
-            />
+            /> */}
+            <SyntaxHighlighter language="python" style={draculaSyntax}>
+              {(problem.hint as string).trim()}
+            </SyntaxHighlighter>
           </div>
           {hasUsedSpecialHint && (
             <div>
               <h3 className="text-md font-bold">Dica Especial</h3>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: problem.special_hint as string,
-                }}
-                className="prose max-w-2/3 leading-10 text-muted-foreground prose-code:rounded-md prose-code:bg-secondary prose-code:p-2 prose-code:text-sm prose-code:text-violet-500"
-              />
+              <SyntaxHighlighter language="python" style={draculaSyntax}>
+                {(problem.special_hint as string).trim()}
+              </SyntaxHighlighter>
             </div>
           )}
           <ProblemTopics topics={problem.topics} />
@@ -227,7 +239,7 @@ const CodePlayground: React.FC<EditorProps> = ({ userId }: EditorProps) => {
                 : (problem.initial_value as string)
             }
             onChange={prop?.handleOnChange}
-            theme="TokyoNightStorm"
+            theme="Dracula"
             beforeMount={handleEditorDidMount}
             className="w-full"
           />

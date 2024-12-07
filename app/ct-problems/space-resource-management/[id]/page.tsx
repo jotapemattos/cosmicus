@@ -5,6 +5,7 @@ import CtProblemCompletedDialog from '@/app/ct-problems/components/ct-problem-co
 
 // Abstract base class representing a space resource
 abstract class SpaceResource {
+  // eslint-disable-next-line
   constructor(
     public id: string,
     public type: string,
@@ -88,6 +89,7 @@ const SpaceResourceProblem: React.FC = () => {
           resources.reduce((total, resource) => total + resource.process(), 0) +
           newResource.process()
 
+        // eslint-disable-next-line
         const averageComplexity =
           resources.reduce(
             (total, resource) => total + resource.complexity,
