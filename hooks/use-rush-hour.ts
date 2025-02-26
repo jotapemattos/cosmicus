@@ -22,11 +22,6 @@ export function useRushHour({
 
   const { mutateAsync: createCtSubmissionFn } = useMutation({
     mutationFn: createCtSubmission,
-    onSuccess: () => {
-      toast.success('God gau')
-
-      //   setOpen(false)
-    },
     onError: (error) => {
       toast.error(error.message)
     },

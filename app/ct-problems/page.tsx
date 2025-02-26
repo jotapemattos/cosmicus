@@ -24,7 +24,7 @@ type PillarCategories = {
 export default function Page() {
   const categories: PillarCategories[] = [
     {
-      pillar: 'Reconhecimento de Padrões',
+      pillar: 'Decomposição de Problemas',
       categories: [
         {
           href: 'rush-hour',
@@ -34,7 +34,7 @@ export default function Page() {
       ],
     },
     {
-      pillar: 'Decomposição de Problemas',
+      pillar: 'Reconhecimento de Padrões',
       categories: [
         {
           href: 'space-mission-planner',

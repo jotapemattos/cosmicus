@@ -86,6 +86,7 @@ export async function deleteProfile() {
     .match({ id: user.id })
 
   if (error) {
+    console.log(error)
     throw new Error('Não foi possível excluir a conta.')
   }
 }
